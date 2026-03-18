@@ -22,6 +22,7 @@ const PUBLIC_ROUTES = [
 
 const PROTECTED_USER_ROUTES = ['/user'];
 const PROTECTED_LAWYER_ROUTES = ['/lawyer'];
+const PROTECTED_ADMIN_ROUTES = ['/admin'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -46,6 +47,10 @@ export async function middleware(request: NextRequest) {
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
 
+  const isProtectedAdminRoute = PROTECTED_ADMIN_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
   const isPublicRoute = PUBLIC_ROUTES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   ) || 
@@ -56,7 +61,7 @@ export async function middleware(request: NextRequest) {
   pathname.includes('.');
 
   // Redirect unauthenticated users to signin page for protected routes
-  if ((isProtectedUserRoute || isProtectedLawyerRoute) && !session) {
+  if ((isProtectedUserRoute || isProtectedLawyerRoute || isProtectedAdminRoute) && !session) {
     const signInUrl = new URL('/auth/signin', request.url);
     // Add the original URL as a return parameter
     signInUrl.searchParams.set('returnTo', pathname);
@@ -74,22 +79,36 @@ export async function middleware(request: NextRequest) {
 
     const role = userData?.role || 'user';
 
-    if (role === 'lawyer') {
+    if (role === 'admin') {
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+    } else if (role === 'lawyer') {
       return NextResponse.redirect(new URL('/lawyer/dashboard', request.url));
     }
     return NextResponse.redirect(new URL('/user/dashboard', request.url));
   }
 
   // Role-based access control
-  if (session && isProtectedLawyerRoute) {
-    // Check if user has lawyer role
+  if (session) {
+    // Check user role
     const { data: userData } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', session.user.id)
       .single();
 
-    if (userData?.role !== 'lawyer') {
+    const role = userData?.role || 'user';
+
+    // Admin route protection
+    if (isProtectedAdminRoute && role !== 'admin') {
+      // Redirect non-admins based on their role
+      if (role === 'lawyer') {
+        return NextResponse.redirect(new URL('/lawyer/dashboard', request.url));
+      }
+      return NextResponse.redirect(new URL('/user/dashboard', request.url));
+    }
+
+    // Lawyer route protection
+    if (isProtectedLawyerRoute && role !== 'lawyer' && role !== 'admin') {
       // Redirect non-lawyers to user dashboard
       return NextResponse.redirect(new URL('/user/dashboard', request.url));
     }
