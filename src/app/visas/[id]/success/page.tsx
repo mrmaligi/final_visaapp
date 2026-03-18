@@ -93,7 +93,7 @@ export default function VisaSuccessPage() {
 
             {/* What's Next */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-slate-900 mb-4">What's Next?</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-4">What&apos;s Next?</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">

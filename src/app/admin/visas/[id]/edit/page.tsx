@@ -70,7 +70,7 @@ export default function VisaEditPage() {
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

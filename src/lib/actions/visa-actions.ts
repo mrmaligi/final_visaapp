@@ -1,6 +1,32 @@
 import { createClient } from "@supabase/supabase-js";
 import { Visa } from "@/types";
 
+export interface VisaPurchase {
+  id: string;
+  user_id: string;
+  visa_id: string;
+  status: string;
+  access_status?: string;
+  progress: number;
+  created_at: string;
+  updated_at: string;
+  visa: Visa | null;
+}
+
+export interface Consultation {
+  id: string;
+  user_id: string;
+  lawyer_id: string;
+  scheduled_at: string;
+  status: string;
+  notes?: string;
+  lawyer: {
+    full_name: string;
+    profile_photo_url?: string;
+    average_rating: number;
+  } | null;
+}
+
 export async function getVisas(category?: string): Promise<{ data: Visa[] | null; error: Error | null }> {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -55,7 +81,7 @@ export async function getVisaById(id: string): Promise<{ data: Visa | null; erro
   }
 }
 
-export async function getUserApplications(userId: string): Promise<{ data: any[] | null; error: Error | null }> {
+export async function getUserApplications(userId: string): Promise<{ data: VisaPurchase[] | null; error: Error | null }> {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -75,14 +101,14 @@ export async function getUserApplications(userId: string): Promise<{ data: any[]
       return { data: null, error: new Error(error.message) };
     }
 
-    return { data, error: null };
+    return { data: data as unknown as VisaPurchase[], error: null };
   } catch (err) {
     console.error("Unexpected error fetching applications:", err);
     return { data: null, error: err as Error };
   }
 }
 
-export async function getUserConsultations(userId: string): Promise<{ data: any[] | null; error: Error | null }> {
+export async function getUserConsultations(userId: string): Promise<{ data: Consultation[] | null; error: Error | null }> {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -102,7 +128,7 @@ export async function getUserConsultations(userId: string): Promise<{ data: any[
       return { data: null, error: new Error(error.message) };
     }
 
-    return { data, error: null };
+    return { data: data as unknown as Consultation[], error: null };
   } catch (err) {
     console.error("Unexpected error fetching consultations:", err);
     return { data: null, error: err as Error };

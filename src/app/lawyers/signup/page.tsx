@@ -211,7 +211,7 @@ export default function LawyerSignupPage() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold text-slate-900 mb-2">Basic Information</h2>
-                <p className="text-slate-600">Let's start with your contact details.</p>
+                <p className="text-slate-600">Let&apos;s start with your contact details.</p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -391,7 +391,7 @@ export default function LawyerSignupPage() {
                 <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#0052cc] transition-colors">
                   <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                   <h3 className="font-semibold text-slate-900 mb-1">ID Document *</h3>
-                  <p className="text-sm text-slate-600 mb-4">Upload your passport or driver's license (PDF, JPG, PNG)</p>
+                  <p className="text-sm text-slate-600 mb-4">Upload your passport or driver&apos;s license (PDF, JPG, PNG)</p>
                   <input
                     type="file"
                     accept=".pdf,.jpg,.jpeg,.png"

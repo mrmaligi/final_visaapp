@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
             </div>
             <h1 className="text-5xl font-black leading-tight">Check Your Email</h1>
             <p className="text-lg text-white/80 leading-relaxed">
-              We've sent you instructions to reset your password.
+              We&apos;ve sent you instructions to reset your password.
             </p>
           </div>
         </div>
@@ -67,14 +67,14 @@ export default function ForgotPasswordPage() {
             <div className="flex flex-col gap-2">
               <h2 className="text-3xl font-extrabold text-slate-900">Email Sent!</h2>
               <p className="text-slate-500">
-                We've sent password reset instructions to{' '}
+                We&apos;ve sent password reset instructions to{' '}
                 <span className="font-medium text-slate-900">{email}</span>
               </p>
             </div>
 
             <div className="space-y-4">
               <p className="text-sm text-slate-600">
-                Didn't receive the email? Check your spam folder or try again.
+                Didn&apos;t receive the email? Check your spam folder or try again.
               </p>
 
               <button
@@ -119,7 +119,7 @@ export default function ForgotPasswordPage() {
           </div>
           <h1 className="text-5xl font-black leading-tight">Reset Your Password</h1>
           <p className="text-lg text-white/80 leading-relaxed">
-            Don't worry, we'll help you get back into your account.
+            Don&apos;t worry, we&apos;ll help you get back into your account.
           </p>
         </div>
       </div>
@@ -136,7 +136,7 @@ export default function ForgotPasswordPage() {
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-extrabold text-slate-900">Forgot password?</h2>
             <p className="text-slate-500">
-              Enter your email address and we'll send you instructions to reset your password.
+              Enter your email address and we&apos;ll send you instructions to reset your password.
             </p>
           </div>
 

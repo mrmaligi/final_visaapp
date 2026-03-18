@@ -6,10 +6,12 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { toast } from "sonner";
 import { getUserApplications, getUserConsultations } from "@/lib/actions/visa-actions";
 
+import { VisaPurchase, Consultation } from "@/lib/actions/visa-actions";
+
 export default function UserDashboardPage() {
   const { user } = useAuth();
-  const [applications, setApplications] = useState<any[]>([]);
-  const [consultations, setConsultations] = useState<any[]>([]);
+  const [applications, setApplications] = useState<VisaPurchase[]>([]);
+  const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

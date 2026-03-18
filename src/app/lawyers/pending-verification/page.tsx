@@ -57,10 +57,10 @@ export default function PendingVerificationPage() {
               <Mail className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: '#0052cc' }} />
               <div>
                 <p className="text-sm font-medium" style={{ color: '#0052cc' }}>
-                  We'll notify you via email
+                  We&apos;ll notify you via email
                 </p>
                 <p className="text-sm mt-1" style={{ color: '#0052cc', opacity: 0.8 }}>
-                  Once your verification is complete, you'll receive an email with instructions 
+                  Once your verification is complete, you&apos;ll receive an email with instructions 
                   to access your lawyer dashboard.
                 </p>
               </div>

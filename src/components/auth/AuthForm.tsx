@@ -146,7 +146,7 @@ export default function AuthForm({
           <p className="text-sm text-slate-500">
             {mode === 'signin' ? (
               <React.Fragment>
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/auth/signup" className="text-blue-600 font-medium hover:underline">
                   Sign up
                 </Link>

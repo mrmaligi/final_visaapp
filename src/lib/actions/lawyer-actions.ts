@@ -1,6 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 import { Lawyer } from "@/types";
 
+export interface Review {
+  id: string;
+  lawyer_id: string;
+  user_id: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+  user: {
+    display_name: string;
+    profile_picture_url: string;
+  } | null;
+}
+
 export async function getLawyers(filters?: {
   verifiedOnly?: boolean;
   acceptingNewClients?: boolean;
@@ -66,7 +79,7 @@ export async function getLawyerById(id: string): Promise<{ data: Lawyer | null; 
   }
 }
 
-export async function getLawyerReviews(lawyerId: string): Promise<{ data: any[] | null; error: Error | null }> {
+export async function getLawyerReviews(lawyerId: string): Promise<{ data: Review[] | null; error: Error | null }> {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;

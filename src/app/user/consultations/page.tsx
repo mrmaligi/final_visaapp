@@ -287,7 +287,7 @@ export default function UserConsultationsPage() {
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                               <span className="font-medium text-slate-900">{consultation.review.rating}</span>
                             </div>
-                            <p className="text-sm text-slate-600 max-w-xs truncate">"{consultation.review.comment}"</p>
+                            <p className="text-sm text-slate-600 max-w-xs truncate">&quot;{consultation.review.comment}&quot;</p>
                           </div>
                         ) : (
                           <button

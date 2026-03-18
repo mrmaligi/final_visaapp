@@ -21,7 +21,7 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-4xl font-bold text-white mb-4">Contact Us</h1>
             <p className="text-blue-100 text-lg max-w-2xl mx-auto">
-              We\'re here to help with your visa journey.
+              We&apos;re here to help with your visa journey.
             </p>
           </div>
         </div>

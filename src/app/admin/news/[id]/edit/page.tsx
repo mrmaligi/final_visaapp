@@ -86,7 +86,7 @@ export default function EditArticlePage() {
   
   const [formData, setFormData] = useState(mockArticle);
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

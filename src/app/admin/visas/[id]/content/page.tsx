@@ -117,10 +117,12 @@ export default function VisaContentPage() {
   // Form builder state
   const [formFields, setFormFields] = useState(mockFormFields);
   const [expandedField, setExpandedField] = useState<string | null>(null);
+  const [fieldCounter, setFieldCounter] = useState(mockFormFields.length);
   
   // Document requirements state
   const [documents, setDocuments] = useState(mockDocuments);
   const [newDocCategory, setNewDocCategory] = useState('');
+  const [docCounter, setDocCounter] = useState(mockDocuments.length);
   
   // Guide editor state
   const [guideContent, setGuideContent] = useState(mockGuideContent);
@@ -141,8 +143,9 @@ export default function VisaContentPage() {
   };
 
   const addFormField = (type: string) => {
+    const newId = `${type}-${fieldCounter}`;
     const newField = {
-      id: Date.now().toString(),
+      id: newId,
       type,
       label: 'New Field',
       placeholder: '',
@@ -151,6 +154,7 @@ export default function VisaContentPage() {
       options: type === 'select' ? ['Option 1'] : undefined,
     };
     setFormFields([...formFields, newField]);
+    setFieldCounter(prev => prev + 1);
   };
 
   const removeFormField = (id: string) => {

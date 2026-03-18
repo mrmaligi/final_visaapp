@@ -207,7 +207,7 @@ export default async function VisaDetailPage({ params }: VisaDetailPageProps) {
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span>Enroll in Medicare, Australia's public healthcare scheme</span>
+                        <span>Enroll in Medicare, Australia&apos;s public healthcare scheme</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
