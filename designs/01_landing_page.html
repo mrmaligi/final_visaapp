@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaHelper - Simplify Your Australian Visa Application</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0052cc",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 transition-colors duration-300">
+<!-- Header / Nav -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl">architecture</span>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-display">VisaHelper</span>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Services</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Resources</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors" href="#">Legal</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-sm font-semibold text-slate-700 dark:text-slate-200">Log in</button>
+<button class="bg-primary text-white px-5 py-2.5 rounded-lg text-sm font-bold hover:bg-primary/90 transition-all shadow-sm">
+                        Sign In
+                    </button>
+</div>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative overflow-hidden py-20 lg:py-32">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
+<div class="lg:col-span-6 flex flex-col gap-8">
+<div class="space-y-4">
+<span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-sm font-semibold text-primary">
+                                #1 Australian Visa Partner
+                            </span>
+<h1 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white leading-[1.1] tracking-tight font-display">
+                                Simplify Your <span class="text-primary">Australian</span> Visa Application
+                            </h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+                                Step-by-step guidance from submission to approval. Get your visa with confidence through our AI-powered platform and legal network.
+                            </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold hover:shadow-lg hover:shadow-primary/30 transition-all">
+                                Start Your Application
+                            </button>
+<button class="flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-slate-200 dark:border-slate-700 text-lg font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<span class="material-symbols-outlined">play_circle</span>
+                                Watch Demo
+                            </button>
+</div>
+</div>
+<div class="mt-16 lg:mt-0 lg:col-span-6 relative">
+<div class="relative rounded-2xl overflow-hidden shadow-2xl">
+<div class="aspect-[4/3] w-full bg-slate-200 dark:bg-slate-800 bg-cover bg-center" data-alt="Sydney Opera House skyline at sunset with harbor" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZ4bZQcUNMhmFnRL5U_k3E6CjgGVqHcHCLAXN7WfDnLjtL4yNKqKuUmAS4vIJtuU1FXONVsiIIXZK94FkteHqrK0zjnCjsI45o5dDX_skmbVMOiew4iz7yhdgIxCVm9SSDw_yyEmdmaNcOpWDg5UCW3pWj7ZR9KJStwQXy26ks_Vl6ds5g3NKZwLE8DWkiYKekyTt56XF26t3DuQg0YU9Vu0d_DK7AjZTENujFjsTjgvxlkQVzTqUZt16eNRbErGdr8j9IEEhlhaBb')">
+</div>
+<!-- Notification Toast Overlay -->
+<div class="absolute bottom-6 left-6 right-6 sm:left-auto sm:w-80 animate-bounce-subtle">
+<div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-4 rounded-xl border border-primary/20 shadow-xl flex items-center gap-4">
+<div class="size-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<p class="text-xs font-bold text-primary uppercase tracking-wider">Recent Approval</p>
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Subclass 189 Granted</p>
+<p class="text-xs text-slate-500">2 minutes ago • Melbourne</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-24 bg-white dark:bg-slate-900/50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 font-display">Why Choose VisaHelper</h2>
+<p class="text-slate-600 dark:text-slate-400 mb-16 max-w-2xl mx-auto">We've automated the complex parts of migration law to make your application seamless.</p>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Feature 1 -->
+<div class="group p-8 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-background-dark hover:border-primary/30 transition-all hover:shadow-xl">
+<div class="size-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">assignment_turned_in</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Guided Applications</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                            Complete your forms with our intelligent, step-by-step guidance system that prevents common mistakes.
+                        </p>
+</div>
+<!-- Feature 2 -->
+<div class="group p-8 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-background-dark hover:border-primary/30 transition-all hover:shadow-xl">
+<div class="size-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">gavel</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Expert Lawyers</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                            Your application is reviewed by registered migration agents (MARA) and legal professionals for peace of mind.
+                        </p>
+</div>
+<!-- Feature 3 -->
+<div class="group p-8 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-background-dark hover:border-primary/30 transition-all hover:shadow-xl">
+<div class="size-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">monitoring</span>
+</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Processing Tracker</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">
+                            Real-time updates and tracking for every stage of your visa process. Know exactly where you stand.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="py-24">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 font-display">Your Journey to Australia</h2>
+<p class="text-slate-600 dark:text-slate-400">Simple 4-step process to get your visa approved.</p>
+</div>
+<div class="relative">
+<!-- Connector Line -->
+<div class="hidden md:block absolute top-10 left-0 w-full h-0.5 bg-slate-200 dark:bg-slate-800"></div>
+<div class="grid md:grid-cols-4 gap-12 md:gap-4">
+<!-- Step 1 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="size-20 rounded-full bg-white dark:bg-slate-900 border-4 border-primary flex items-center justify-center text-primary z-10 mb-6 shadow-lg">
+<span class="material-symbols-outlined text-3xl">person_add</span>
+</div>
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">Create Account</h4>
+<p class="text-sm text-slate-500 mt-2">Set up your profile in seconds</p>
+</div>
+<!-- Step 2 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="size-20 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 z-10 mb-6 shadow-sm">
+<span class="material-symbols-outlined text-3xl">cloud_upload</span>
+</div>
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">Upload Documents</h4>
+<p class="text-sm text-slate-500 mt-2">Securely host your credentials</p>
+</div>
+<!-- Step 3 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="size-20 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 z-10 mb-6 shadow-sm">
+<span class="material-symbols-outlined text-3xl">rule</span>
+</div>
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">Expert Review</h4>
+<p class="text-sm text-slate-500 mt-2">Agent validation &amp; feedback</p>
+</div>
+<!-- Step 4 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="size-20 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 z-10 mb-6 shadow-sm">
+<span class="material-symbols-outlined text-3xl">celebration</span>
+</div>
+<h4 class="text-lg font-bold text-slate-900 dark:text-white">Visa Grant</h4>
+<p class="text-sm text-slate-500 mt-2">Ready for your new life!</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-24 bg-slate-50 dark:bg-background-dark/30">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+<div class="text-center mb-16">
+<h2 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4 font-display">Transparent Pricing</h2>
+<p class="text-slate-600 dark:text-slate-400">Professional support without the professional price tag.</p>
+</div>
+<div class="w-full max-w-md">
+<div class="bg-white dark:bg-slate-900 rounded-3xl p-8 border-2 border-primary shadow-2xl relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-primary text-white text-[10px] uppercase font-bold px-4 py-1.5 rounded-bl-xl tracking-widest">
+                            Most Popular
+                        </div>
+<div class="mb-8">
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Premium Visa Unlock</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-5xl font-black text-slate-900 dark:text-white">$9</span>
+<span class="text-slate-500 font-medium">/one-time</span>
+</div>
+</div>
+<ul class="space-y-4 mb-8">
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span>No hidden fees</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span>99% Success rate</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span>Support in 12 languages</span>
+</li>
+<li class="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+<span>Priority document review</span>
+</li>
+</ul>
+<button class="w-full bg-primary text-white py-4 rounded-xl text-lg font-bold hover:bg-primary/90 transition-all">
+                            Unlock Premium Access
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-20">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-primary rounded-[2.5rem] p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8 overflow-hidden relative">
+<div class="relative z-10 max-w-xl">
+<h2 class="text-3xl md:text-5xl font-black text-white mb-6 font-display">Ready to start your journey?</h2>
+<p class="text-primary/10 text-lg mb-0 text-white/90">Join 50,000+ applicants who successfully migrated using VisaHelper.</p>
+</div>
+<button class="relative z-10 bg-white text-primary px-10 py-5 rounded-2xl text-xl font-bold hover:shadow-2xl transition-all whitespace-nowrap">
+                        Apply Now
+                    </button>
+<!-- Decorative Circle -->
+<div class="absolute -right-20 -bottom-20 size-80 bg-white/10 rounded-full blur-3xl"></div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-16">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">architecture</span>
+<span class="text-xl font-bold text-slate-900 dark:text-white font-display">VisaHelper</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-xs">
+                        Making Australian migration accessible, transparent, and fast for everyone across the globe.
+                    </p>
+</div>
+<div class="col-span-1">
+<h5 class="text-slate-900 dark:text-white font-bold mb-6">Services</h5>
+<ul class="space-y-4">
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Skilled Visas</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Student Visas</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Partner Visas</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h5 class="text-slate-900 dark:text-white font-bold mb-6">Resources</h5>
+<ul class="space-y-4">
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Blog</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Eligibility Test</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Case Studies</a></li>
+</ul>
+</div>
+<div class="col-span-2 lg:col-span-2">
+<h5 class="text-slate-900 dark:text-white font-bold mb-6">Legal</h5>
+<ul class="space-y-4">
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Terms of Service</a></li>
+<li><a class="text-slate-500 hover:text-primary text-sm" href="#">Cookie Settings</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-400 text-xs">© 2024 VisaHelper. Not affiliated with the Australian Department of Home Affairs.</p>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-xl">language</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-xl">mail</span></a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

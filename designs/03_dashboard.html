@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaDirect - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="layout-container flex flex-col min-h-screen">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 lg:px-20 py-4 bg-white dark:bg-slate-900">
+<div class="flex items-center gap-4">
+<div class="size-8 flex items-center justify-center bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined">description</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">VisaDirect</h2>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 dark:text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 placeholder:text-slate-500 px-4 text-sm font-normal" placeholder="Search applications..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="User profile avatar smiling professional man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCubkx1jLf6ltZ5JUXb3Jro4htK9McJXvITf-sUfVnufEX41QlDduJWKYLRprNbRvoTGfbGa9porb_tSnXXJXieC1tlG81AB08gLTlARczMBCofXU_OAzr3hprorK0yPtcJIoDuzMc3BY5SBN5vdFWr_Sb8NbUnUbLDxq9jIBiojDXZHFZxVT26jB9zZFqLKTaOPMqwnV7t9wuYj53xiNThAgZuOemClXTgIvn6TrTmIxYoELqn3P66bFcrGCq0un9S6qi4_NEPwzeO"/>
+</div>
+</div>
+</header>
+<main class="flex-1 px-6 lg:px-20 py-8 max-w-[1440px] mx-auto w-full">
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white">Welcome back, Alex</h1>
+<p class="text-slate-600 dark:text-slate-400 mt-1">Manage your global mobility and visa status from one place.</p>
+</div>
+<div class="flex gap-3">
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+                        New Application
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-5">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Active Applications</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">2</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-5">
+<div class="size-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+<span class="material-symbols-outlined">folder_open</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Documents Uploaded</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">14</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-5">
+<div class="size-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500">
+<span class="material-symbols-outlined">event</span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Upcoming Consultations</p>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">1</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<div class="xl:col-span-2 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">My Visa Applications</h2>
+<a class="text-primary font-semibold text-sm hover:underline" href="#">View All</a>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-8 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img class="w-8" data-alt="Canada flag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQQu8fzWE6cLqLZ_Qt0LoXMjhyWpE3u8DXv3w3GjjM4Ex09nus4x9lCNiMCOgMryLKckcwjS645EnePGO2S64mrGjEe84yX451yZVUKpOlyvSSFZFhdgeA4DMyIirGX7RVDH2m8SI39sUSDCCFxDv57KT6m2HYR94c8Jbk8IL8xstRX6Xt3Ll5H6d24jit1Kb-Fkvnv9aaGcIejSzHxPPAh9LqroqfXOC5Z2-9-67J1oUbmG_rcT80VLVdit3teK94rZhx3ULfEDeS"/>
+</div>
+<div>
+<h3 class="font-bold text-lg">Canada Express Entry</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: VIS-2024-001 • Last updated 2 days ago</p>
+</div>
+</div>
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold self-start md:self-center uppercase">In Review</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
+<span>Application</span>
+<span>Review</span>
+<span>Payment</span>
+<span>Decision</span>
+</div>
+<div class="relative w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary rounded-full" style="width: 50%;"></div>
+</div>
+<div class="flex justify-between">
+<div class="flex items-center gap-1 text-xs text-green-500 font-medium">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Complete
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-primary font-medium">
+<span class="material-symbols-outlined text-[14px]">pending</span> Processing
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+<span class="material-symbols-outlined text-[14px]">radio_button_unchecked</span> Pending
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+<span class="material-symbols-outlined text-[14px]">radio_button_unchecked</span> Pending
+                                    </div>
+</div>
+</div>
+</div>
+<div class="p-6">
+<div class="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-8 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+<img class="w-8" data-alt="USA flag" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB93X2if4Dk7_rAiCKA0Sewcyx9w5VKzQq6GZf5mSpVOBDJhCcqfMxHT3QcTz0THXl0iPtL7knO6lC33el43maePw6H5gjawliBiI7pUdAgdZTvUqSeFj80OeqRDVaeDOoi17v_2HJhdztjBldJDYpLyc7b25EPMdFbMyvpqwYirNDZS6KTvk2RbRIDp5M6vO7ttppZ9PwjNm_b8J22oXBUta4QKhXmq5ny1iUhkqI6eJbAZoI2_3owOHDVWnO5rK-W9QCyPVXVWy_K"/>
+</div>
+<div>
+<h3 class="font-bold text-lg">US Business Visa (B1)</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400">ID: VIS-2024-082 • Last updated 5 hours ago</p>
+</div>
+</div>
+<span class="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 px-3 py-1 rounded-full text-xs font-bold self-start md:self-center uppercase">Application</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider text-slate-400">
+<span>Application</span>
+<span>Review</span>
+<span>Payment</span>
+<span>Decision</span>
+</div>
+<div class="relative w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-blue-500 rounded-full" style="width: 25%;"></div>
+</div>
+<div class="flex justify-between">
+<div class="flex items-center gap-1 text-xs text-blue-500 font-medium">
+<span class="material-symbols-outlined text-[14px]">pending</span> Active
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+<span class="material-symbols-outlined text-[14px]">radio_button_unchecked</span> Pending
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+<span class="material-symbols-outlined text-[14px]">radio_button_unchecked</span> Pending
+                                    </div>
+<div class="flex items-center gap-1 text-xs text-slate-400 font-medium">
+<span class="material-symbols-outlined text-[14px]">radio_button_unchecked</span> Pending
+                                    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Consultations</h2>
+<a class="text-primary font-semibold text-sm hover:underline" href="#">Schedule</a>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col gap-6">
+<div class="flex gap-4 items-start p-4 rounded-xl bg-primary/5 border border-primary/10">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Expert consultant Maria Garcia" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDHsuJL78fETXAIy2mfYcFhdtQZxiyME4IUDNMVKn15xiLrendifOptEq99XgUCMtNSZrAoASfdWq6G55BYm-Bw_XwxbhdVY2EcJ4qzdBHBgbou4JIHql4DHAFQHbxf3rGFgunsI64wBKLbKIdqH1yFUtgBEuIUmmVrWq8KW64jnIj1AYsuHxuz1jK2az3fAZ6aDD6hM9zd0-dBEXDZdCu74X116LxqKdepbhjxq81EFgkaAbic73ej7ApCAhdkKVAlF0mhnTH9fzT"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Maria Garcia</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Tomorrow • 10:30 AM</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-[10px] uppercase font-bold text-primary tracking-widest">Upcoming</span>
+<button class="text-primary text-xs font-bold hover:bg-primary/10 px-2 py-1 rounded">Join Call</button>
+</div>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Expert consultant Robert Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAamQ52lR6uA6-tzK5EM25kshkgyWIwEMmZaPuWuTUak3xeAK9VOEiIH1KL1TG80A4jOwxu_w4cLOESniAXAlUu2OBFlIbdHVm3gxI1X3OvU9oq9t87OsJpWpgK5ZJEPKQTy6IqYurxygnq9dGh3YnT-9a4O-upSmTV7CbCv9O4jLjbGVraOZzmwa5t5AxhlEBcmckBzK5AqyMFaekYBMY3EhcoNdbURSMRnnSDqZ_mXb-8wv_oZ_nptS4XuGKKepAg9fNav8F4DuZi"/>
+</div>
+<div class="flex-1 border-b border-slate-100 dark:border-slate-800 pb-4">
+<h4 class="font-bold text-sm">Robert Chen</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">May 12, 2024 • 2:00 PM</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Completed</span>
+<button class="text-slate-400 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 px-2 py-1 rounded">View Notes</button>
+</div>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="size-10 rounded-full bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Expert consultant Sarah Miller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO4Ow2k5FDMh10RjmglWV4WMHfJ2HTnnvmiseM63IriPB1Sb-qL7I9hcRkXECftauQeEqfy0VCbBOH8XsL7QzmJnMRnsnalUlAeB1z94KuDslK5iyPKouLWAGsX_eya0yHwQSd4guFbciH6sQibSh2JK0rq6wrtGchNRhLL2L8DcVPUt9p6OeokAtub6R8qQ_CDhjmf8kMRwbvLlEYi46o7_qHWgRujnydh_suJO4XRxni5WR3ceEb0Dbok4Zm98mqOQmc43aA2e3r"/>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-sm">Sarah Miller</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400">Apr 28, 2024 • 9:15 AM</p>
+<div class="mt-2 flex items-center justify-between">
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Completed</span>
+<button class="text-slate-400 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 px-2 py-1 rounded">View Notes</button>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-8 opacity-20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-6xl">help</span>
+</div>
+<h4 class="text-lg font-bold mb-2">Need Help?</h4>
+<p class="text-slate-400 text-sm mb-4 leading-relaxed">Our immigration experts are ready to guide you through every step.</p>
+<button class="w-full bg-white text-slate-900 font-bold py-2 rounded-lg text-sm hover:bg-slate-100">Live Chat</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto px-6 lg:px-20 py-10 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-[1440px] mx-auto w-full">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-primary rounded-md"></div>
+<span class="font-bold text-slate-900 dark:text-white">VisaDirect</span>
+<span class="text-slate-400 text-sm">© 2024 All rights reserved.</span>
+</div>
+<div class="flex gap-6 text-sm text-slate-500 font-medium">
+<a class="hover:text-primary" href="#">Help Center</a>
+<a class="hover:text-primary" href="#">Privacy Policy</a>
+<a class="hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>
