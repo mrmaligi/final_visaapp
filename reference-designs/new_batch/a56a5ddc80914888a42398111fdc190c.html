@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lawyer Account Settings - VisaHelper</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-72 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark flex flex-col sticky top-0 h-screen">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none tracking-tight">VisaHelper</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Lawyer Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-white font-semibold transition-all shadow-md shadow-primary/10" href="#">
+<span class="material-symbols-outlined text-[22px]">person</span>
+<span class="text-sm">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+<span class="text-sm">Credentials</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">calendar_month</span>
+<span class="text-sm">Availability</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="text-sm">Notifications</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all" href="#">
+<span class="material-symbols-outlined text-[22px]">security</span>
+<span class="text-sm">Security</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50">
+<div class="w-10 h-10 rounded-full bg-slate-200 overflow-hidden">
+<img alt="User" data-alt="Professional lawyer profile headshot portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5HcypAr-uK3DQqPLz9srabGnwtXUgtS4xxo-PQ24dYYaoG_B85WEQkFoUFQbUVbic15XsK4SaduMh137uCHmNY9oyzSZR4T53NIul8MmhjGeLPYptQlWzaFVujL0N5cr10q8fFVH1BqAxRNV17mOWn8XIH0-FLdrx26OZZTHH_o6LAbrImTur7PJsICJ0RB0OoPghz6BHqZTCZ0YCZQv531pp1Lm2tDUvJiAqkZsuNHawUVqJxQtluU5ZL_o4Xcbc5f-w6TpnwZXc"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">David Sterling</p>
+<p class="text-xs text-slate-500 truncate">Senior Partner</p>
+</div>
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 min-w-0 bg-background-light dark:bg-background-dark p-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto space-y-12">
+<!-- Header Section -->
+<header>
+<h2 class="text-3xl font-extrabold tracking-tight">Account Settings</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage your professional identity and consultation preferences.</p>
+</header>
+<!-- Profile Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+<h3 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+                        Profile Information
+                    </h3>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex flex-col md:flex-row gap-8">
+<div class="flex flex-col items-center gap-4">
+<div class="relative group">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-slate-800 shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Professional male lawyer profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhO542oSllWXwpb9c6RInRyv9I2vEmbJjWWl5LGYUCPiJv4vPUbwWs8SrAYTedzsqVJ7PfpeT1R6w9RMs1HqoE5opm-lZdYLSNZRZhwKLXmFqoTD50qRYDBogmejeGGvAatm6U4eqtK3uoTdOhMcKf7WUuBgI41iShToGBx8cunjrgJoa2H4vR8ds7BMtIFr93xgAgP760wBEa3Z8XXaUF9l8BR0tnTlStzLfjzNtVM0dBBXRskxQ3szoO4uK7Zr0r6vD_BDSdWwll"/>
+</div>
+<button class="absolute bottom-1 right-1 bg-primary text-white p-2 rounded-full shadow-lg hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<div class="text-center">
+<button class="text-primary text-sm font-bold hover:underline">Change Photo</button>
+<p class="text-[10px] text-slate-400 mt-1 uppercase tracking-widest font-bold">JPG/PNG 5MB MAX</p>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Full Name</label>
+<input class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" type="text" value="David Sterling"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email Address</label>
+<input class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" type="email" value="d.sterling@lawfirm.com"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Phone Number</label>
+<input class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" type="tel" value="+1 (555) 012-3456"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Location</label>
+<input class="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all" type="text" value="New York, NY"/>
+</div>
+</div>
+</div>
+<div class="mt-8 space-y-3">
+<label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Professional Bio</label>
+<div class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
+<div class="bg-slate-50 dark:bg-slate-800 p-2 flex gap-1 border-b border-slate-200 dark:border-slate-700">
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors text-slate-600 dark:text-slate-300"><span class="material-symbols-outlined text-[18px]">format_bold</span></button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors text-slate-600 dark:text-slate-300"><span class="material-symbols-outlined text-[18px]">format_italic</span></button>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors text-slate-600 dark:text-slate-300"><span class="material-symbols-outlined text-[18px]">format_list_bulleted</span></button>
+<div class="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+<button class="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors text-slate-600 dark:text-slate-300"><span class="material-symbols-outlined text-[18px]">link</span></button>
+</div>
+<textarea class="w-full p-4 bg-white dark:bg-slate-900 border-none focus:ring-0 outline-none resize-none text-sm leading-relaxed" placeholder="Write about your professional background, experience, and key accomplishments..." rows="5">Dedicated immigration attorney with over 15 years of experience helping individuals and businesses navigate complex visa processes. Specializing in EB-1, H-1B, and O-1 talent visas.</textarea>
+</div>
+</div>
+</div>
+</section>
+<!-- Specializations Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+<h3 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified</span>
+                        Practice Area Specializations
+                    </h3>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input checked="" class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Immigration Law</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Family Law</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input checked="" class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Business Visas</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Criminal Defense</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Real Estate</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-all">
+<input checked="" class="w-5 h-5 rounded text-primary border-slate-300 dark:border-slate-700 focus:ring-primary" type="checkbox"/>
+<span class="text-sm font-medium">Citizenship</span>
+</label>
+</div>
+</div>
+</section>
+<!-- Availability Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+<h3 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event_available</span>
+                        Consultation Availability
+                    </h3>
+</div>
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="grid grid-cols-1 lg:grid-cols-12">
+<!-- Calendar View Area -->
+<div class="lg:col-span-7 p-6 border-r border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-bold">October 2023</h4>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-sm">chevron_left</span></button>
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 transition-colors"><span class="material-symbols-outlined text-sm">chevron_right</span></button>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 mb-2">
+<div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+</div>
+<div class="grid grid-cols-7 gap-1">
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">24</div>
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">25</div>
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">26</div>
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">27</div>
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">28</div>
+<div class="aspect-square flex items-center justify-center text-slate-300 text-sm">29</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">1</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">2</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">3</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">4</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">5</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">6</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">7</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">8</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">9</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium bg-primary text-white rounded cursor-pointer font-bold shadow-md shadow-primary/20">10</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">11</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">12</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">13</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">14</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">15</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">16</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">17</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">18</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">19</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">20</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">21</div>
+<div class="aspect-square flex items-center justify-center text-sm font-medium hover:bg-primary/10 rounded cursor-pointer">22</div>
+</div>
+</div>
+<!-- Time Slots Area -->
+<div class="lg:col-span-5 p-6 bg-slate-50 dark:bg-slate-900/40">
+<h4 class="font-bold text-sm mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">schedule</span>
+                                Slots for Oct 10
+                            </h4>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm">
+<span class="text-sm font-medium">09:00 AM - 10:00 AM</span>
+<button class="text-primary hover:text-primary/70 transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm">
+<span class="text-sm font-medium">11:00 AM - 12:00 PM</span>
+<button class="text-primary hover:text-primary/70 transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-sm border-dashed text-slate-400 hover:text-primary hover:border-primary transition-all cursor-pointer">
+<span class="text-sm font-medium">+ Add New Time Slot</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+<h4 class="font-bold text-sm mb-4">Buffer Settings</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-xs font-medium text-slate-500">Between Sessions</label>
+<select class="text-xs font-bold bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-1 px-3 outline-none focus:border-primary">
+<option>15 min</option>
+<option selected="">30 min</option>
+<option>45 min</option>
+<option>60 min</option>
+</select>
+</div>
+<div class="flex items-center justify-between">
+<label class="text-xs font-medium text-slate-500">Notice Period</label>
+<select class="text-xs font-bold bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg py-1 px-3 outline-none focus:border-primary">
+<option>2 hours</option>
+<option selected="">24 hours</option>
+<option>48 hours</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sticky Save Footer -->
+<footer class="sticky bottom-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xl flex items-center justify-between">
+<div class="flex items-center gap-2 text-slate-500 text-sm">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+                    All changes are autosaved
+                </div>
+<div class="flex gap-4">
+<button class="px-6 py-2 rounded-xl text-slate-600 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Discard</button>
+<button class="px-8 py-2 rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-[1.02] active:scale-95">Save Changes</button>
+</div>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaFlow - User Dashboard</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="typography">
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style data-purpose="custom-colors">
+    /* Custom primary blue color as requested */
+    .bg-visaflow-primary {
+      background-color: #0052cc;
+    }
+    .text-visaflow-primary {
+      color: #0052cc;
+    }
+    .border-visaflow-primary {
+      border-color: #0052cc;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- BEGIN: MainHeader -->
+<header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<!-- Logo -->
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-visaflow-primary rounded-lg flex items-center justify-center text-white font-bold italic">V</div>
+<span class="text-xl font-bold text-gray-900 tracking-tight">VisaFlow</span>
+</div>
+<!-- User Actions -->
+<div class="flex items-center gap-6">
+<button class="hidden sm:inline-flex items-center px-4 py-2 bg-visaflow-primary hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm" data-purpose="new-application-btn">
+            + New Application
+          </button>
+<div class="flex items-center gap-3 border-l pl-6 border-gray-200" data-purpose="user-profile">
+<span class="hidden md:block text-sm font-medium text-gray-700">Sarah</span>
+<img alt="Sarah's Profile Avatar" class="h-9 w-9 rounded-full object-cover border border-gray-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSILnjZRRtMC8IzclNGp1OtGMPSXYmUVYzXC-G5rpKWKAv2uXg9rZ2jP4enGXoTbM7Gu1YoP1gW2f9MF4sMV_czBy-0KOHvRf4sVzduN5jufsZvZ92n4cluagm0XtDCLYQPHg95BDsuCU37UH2RediDaPACq3mmH6Y5ttoR-Ba7PbZWICwQtIb--UPL69PXEDKCaeHl6TgpmG-HdeDprgdTKG350p4JecmU3OvN5xEXxCO5U7sbtLM5zWOzHRv8wSKGlz5AL6Uu42z"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- BEGIN: WelcomeSection -->
+<div class="mb-8">
+<h1 class="text-2xl font-bold text-gray-900">Welcome back, Sarah</h1>
+<p class="text-gray-500 text-sm mt-1">Here is what's happening with your applications today.</p>
+</div>
+<!-- END: WelcomeSection -->
+<!-- BEGIN: StatsGrid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10" data-purpose="statistics-overview">
+<!-- Active Applications -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+<span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Active Applications</span>
+<span class="text-3xl font-bold text-gray-900 mt-2">2</span>
+</div>
+<!-- Documents Uploaded -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+<span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Documents Uploaded</span>
+<span class="text-3xl font-bold text-gray-900 mt-2">12</span>
+</div>
+<!-- Upcoming Consultations -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+<span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Upcoming Consultations</span>
+<span class="text-3xl font-bold text-gray-900 mt-2 text-visaflow-primary">1</span>
+</div>
+<!-- Completed Visas -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+<span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Completed Visas</span>
+<span class="text-3xl font-bold text-gray-900 mt-2">1</span>
+</div>
+</section>
+<!-- END: StatsGrid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- BEGIN: ApplicationsSection -->
+<section class="lg:col-span-2 space-y-6" data-purpose="visa-applications-list">
+<div class="flex items-center justify-between">
+<h2 class="text-lg font-bold text-gray-900">My Visa Applications</h2>
+<button class="text-visaflow-primary text-sm font-medium hover:underline">View All</button>
+</div>
+<!-- Application Card 1 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-md font-semibold text-gray-900">Skilled Independent Visa</h3>
+<p class="text-sm text-gray-500 mt-1">Subclass 189</p>
+</div>
+<span class="px-3 py-1 bg-blue-50 text-visaflow-primary text-xs font-bold rounded-full uppercase">In Progress</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-gray-600">Overall Progress</span>
+<span class="font-medium text-gray-900">65%</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-gray-100 rounded-full h-2">
+<div class="bg-visaflow-primary h-2 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+<span class="text-xs text-gray-400">Last update: 2 hours ago</span>
+<button class="text-sm font-medium text-visaflow-primary hover:text-blue-700">View Details</button>
+</div>
+</div>
+<!-- Application Card 2 -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-md font-semibold text-gray-900">Partner Visa</h3>
+<p class="text-sm text-gray-500 mt-1">Subclass 309/100</p>
+</div>
+<span class="px-3 py-1 bg-blue-50 text-visaflow-primary text-xs font-bold rounded-full uppercase">In Progress</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm">
+<span class="text-gray-600">Overall Progress</span>
+<span class="font-medium text-gray-900">30%</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-gray-100 rounded-full h-2">
+<div class="bg-visaflow-primary h-2 rounded-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-gray-50 flex justify-between items-center">
+<span class="text-xs text-gray-400">Last update: 3 days ago</span>
+<button class="text-sm font-medium text-visaflow-primary hover:text-blue-700">View Details</button>
+</div>
+</div>
+</section>
+<!-- END: ApplicationsSection -->
+<!-- BEGIN: ConsultationsSection -->
+<section class="space-y-6" data-purpose="upcoming-consultations">
+<h2 class="text-lg font-bold text-gray-900">Upcoming Consultations</h2>
+<!-- Consultation Card -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+<div class="flex items-center gap-4 mb-6">
+<img alt="Michael R. - Immigration Lawyer" class="h-14 w-14 rounded-full object-cover bg-gray-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBRSNxxTemmmoH2Pu1Fci3XpO-PsL4O9TpyvI5AIDSDzcRFG9lDBVsiiiY1POXsneh0ZkMdk-AwieWfJvQGp5vi6Oh53cmu57eZJZqzVVFp1UXQxkumAbuBZOiFA5CFdqbyTKsLpgm94v-G45qOG9B_Y1KmhytvwUMROQFb3Iw917OZuRbs61E0vLi3nv2GC9NKXWItbpfxDZ-NVfETes0oVXDfp1DsR-DzfxU2DhhWVssCtQ4usCvdZRtJYPWhj4vRa7ZOkC6T6HB"/>
+<div>
+<h3 class="font-bold text-gray-900">Michael R.</h3>
+<p class="text-xs text-gray-500">Immigration Lawyer</p>
+</div>
+</div>
+<div class="bg-blue-50 rounded-lg p-4 mb-6">
+<div class="flex items-center gap-3 text-visaflow-primary">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-sm font-semibold">Tomorrow at 2:00 PM</span>
+</div>
+<p class="text-xs text-blue-600/70 mt-1 ml-8 italic">Initial Case Review</p>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="px-4 py-2 border border-gray-200 text-gray-700 text-xs font-bold rounded-lg hover:bg-gray-50 transition-colors">Reschedule</button>
+<button class="px-4 py-2 bg-visaflow-primary text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-colors">Join Meeting</button>
+</div>
+</div>
+<!-- Quick Help Card -->
+<div class="bg-gray-900 rounded-xl p-6 text-white overflow-hidden relative" data-purpose="help-banner">
+<div class="relative z-10">
+<h4 class="font-bold text-lg mb-2">Need help?</h4>
+<p class="text-gray-400 text-xs leading-relaxed mb-4">Our dedicated support team is available 24/7 to assist with your documents.</p>
+<button class="text-sm font-bold border-b-2 border-visaflow-primary pb-0.5">Contact Support</button>
+</div>
+<!-- Decorative circle -->
+<div class="absolute -bottom-8 -right-8 w-32 h-32 bg-visaflow-primary/20 rounded-full blur-2xl"></div>
+</div>
+</section>
+<!-- END: ConsultationsSection -->
+</div>
+</main>
+<!-- BEGIN: Footer -->
+<footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-12 border-t border-gray-200">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-xs uppercase tracking-widest font-medium">
+<div class="flex items-center gap-2">
+<span class="font-bold text-gray-900">VisaFlow</span> Â© 2023
+      </div>
+<div class="flex gap-8">
+<a class="hover:text-visaflow-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-visaflow-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-visaflow-primary transition-colors" href="#">Help Center</a>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ID Verification Sandbox</title>
+<!-- BEGIN: Tailwind CSS Integration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- END: Tailwind CSS Integration -->
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="technical-aesthetic">
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    body {
+      background-color: #0f172a;
+      background-image: radial-gradient(#1e293b 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .mono-font {
+      font-family: 'JetBrains+Mono', monospace;
+    }
+
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .scan-line {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: #3b82f6;
+      box-shadow: 0 0 15px #3b82f6;
+      top: 0;
+      left: 0;
+      animation: scan 3s linear infinite;
+      display: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .status-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .5; }
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="text-slate-200 min-h-screen p-6 lg:p-12">
+<!-- BEGIN: Page Container -->
+<main class="max-w-7xl mx-auto space-y-8">
+<!-- BEGIN: MainHeader -->
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-700 pb-6" data-purpose="header-section">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+<svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          ID Verification Sandbox
+        </h1>
+<p class="text-slate-400 mt-1 mono-font text-sm uppercase tracking-widest">Environment: DEVELOPMENT_V3_STAGING</p>
+</div>
+<div class="flex gap-2">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+<span class="w-2 h-2 bg-green-500 rounded-full mr-2 status-pulse"></span>
+          API Online
+        </span>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: Testing Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- LEFT COLUMN: Upload & Status -->
+<div class="lg:col-span-7 space-y-8">
+<!-- BEGIN: UploadSection -->
+<section class="glass-panel rounded-xl p-8 border-dashed border-2 border-slate-600 hover:border-blue-500 transition-colors group relative overflow-hidden" data-purpose="upload-area">
+<div class="scan-line" id="scanLine"></div>
+<div class="flex flex-col items-center justify-center py-12 text-center">
+<div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<svg class="w-8 h-8 text-slate-400 group-hover:text-blue-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-semibold mb-2">Upload Test Document</h3>
+<p class="text-slate-400 mb-6 max-w-xs">Drop Passport, Driver's License, or National ID image (PNG, JPG up to 10MB)</p>
+<button class="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg transition-colors">
+              Select File
+            </button>
+</div>
+</section>
+<!-- END: UploadSection -->
+<!-- BEGIN: StatusDisplay -->
+<section class="glass-panel rounded-xl p-6" data-purpose="status-tracker">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 mb-6">Live Pipeline Status</h2>
+<div class="space-y-6">
+<!-- Step 1 -->
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-500">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path></svg>
+</div>
+<div class="flex-grow">
+<p class="font-medium">Document Upload</p>
+<p class="text-xs text-slate-500 mono-font">Payload: document_v4_test.jpg</p>
+</div>
+<span class="text-xs text-slate-400 mono-font">0.4s</span>
+</div>
+<!-- Step 2 -->
+<div class="flex items-center gap-4">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-500">
+<svg class="animate-spin h-4 w-4" viewbox="0 0 24 24">
+<circle class="opacity-25" cx="12" cy="12" fill="none" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+</div>
+<div class="flex-grow">
+<p class="font-medium text-blue-400">OCR Extraction in Progress</p>
+<div class="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-blue-500 h-full w-2/3 transition-all duration-500"></div>
+</div>
+</div>
+<span class="text-xs text-slate-400 mono-font">RUNNING</span>
+</div>
+<!-- Step 3 -->
+<div class="flex items-center gap-4 opacity-40">
+<div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="text-xs font-bold">3</span>
+</div>
+<div class="flex-grow">
+<p class="font-medium">Liveness &amp; Biometric Match</p>
+</div>
+<span class="text-xs text-slate-400 mono-font">WAITING</span>
+</div>
+</div>
+</section>
+<!-- END: StatusDisplay -->
+</div>
+<!-- RIGHT COLUMN: Results & Controls -->
+<div class="lg:col-span-5 space-y-8">
+<!-- BEGIN: ResultsPanel -->
+<section class="glass-panel rounded-xl overflow-hidden border border-slate-700" data-purpose="results-display">
+<div class="bg-slate-800/50 px-6 py-4 border-b border-slate-700 flex justify-between items-center">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-300">Extraction Results</h2>
+<div class="text-right">
+<p class="text-[10px] text-slate-500 mono-font uppercase">Confidence Score</p>
+<p class="text-emerald-400 font-bold mono-font">98.2%</p>
+</div>
+</div>
+<div class="p-6 space-y-4 mono-font">
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-[10px] text-slate-500 uppercase mb-1">First Name</label>
+<div class="bg-slate-900/50 p-2 border border-slate-700 rounded text-sm text-blue-400">JANE</div>
+</div>
+<div>
+<label class="block text-[10px] text-slate-500 uppercase mb-1">Last Name</label>
+<div class="bg-slate-900/50 p-2 border border-slate-700 rounded text-sm text-blue-400">DOE</div>
+</div>
+</div>
+<div>
+<label class="block text-[10px] text-slate-500 uppercase mb-1">Document Number</label>
+<div class="bg-slate-900/50 p-2 border border-slate-700 rounded text-sm text-blue-400">P123456789</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-[10px] text-slate-500 uppercase mb-1">Date of Birth</label>
+<div class="bg-slate-900/50 p-2 border border-slate-700 rounded text-sm">1990-01-01</div>
+</div>
+<div>
+<label class="block text-[10px] text-slate-500 uppercase mb-1">Expiry Date</label>
+<div class="bg-slate-900/50 p-2 border border-slate-700 rounded text-sm text-emerald-400">2030-12-31</div>
+</div>
+</div>
+<div class="pt-4 mt-4 border-t border-slate-700">
+<div class="flex items-center justify-between text-xs mb-2">
+<span class="text-slate-500">Security Features:</span>
+<span class="text-emerald-500">VALIDATED</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="text-slate-500">Watchlist Check:</span>
+<span class="text-emerald-500">CLEAR</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ResultsPanel -->
+<!-- BEGIN: ControlActions -->
+<section class="space-y-3" data-purpose="test-controls">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 px-1">Sandbox Controls</h2>
+<div class="grid grid-cols-1 gap-3">
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-emerald-600/10 border border-emerald-500/20 hover:bg-emerald-600/20 transition-all group" onclick="simulateAction('success')">
+<span class="text-emerald-400 font-medium">Simulate Success</span>
+<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] uppercase">Auto-Pass</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-orange-600/10 border border-orange-500/20 hover:bg-orange-600/20 transition-all group" onclick="simulateAction('blur')">
+<span class="text-orange-400 font-medium">Simulate Failure (Blurry)</span>
+<span class="bg-orange-500/20 text-orange-400 px-2 py-0.5 rounded text-[10px] uppercase text-xs">Unreadable</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-red-600/10 border border-red-500/20 hover:bg-red-600/20 transition-all group" onclick="simulateAction('expired')">
+<span class="text-red-400 font-medium">Simulate Failure (Expired)</span>
+<span class="bg-red-500/20 text-red-400 px-2 py-0.5 rounded text-[10px] uppercase text-xs">Invalid</span>
+</button>
+<button class="w-full flex items-center justify-center p-3 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 transition-all mono-font text-sm uppercase tracking-widest text-slate-400" onclick="resetTest()">
+<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Reset Test Environment
+            </button>
+</div>
+</section>
+<!-- END: ControlActions -->
+</div>
+</div>
+<!-- END: Testing Grid -->
+<!-- BEGIN: Footer Logs -->
+<footer class="glass-panel rounded-lg p-4 mono-font text-[10px] text-slate-500 overflow-hidden" data-purpose="footer-logs">
+<div class="flex items-center gap-4 border-b border-slate-800 pb-2 mb-2">
+<span class="text-blue-500">[SYSTEM]</span> Listening for secure POST requests...
+      </div>
+<div class="opacity-70 truncate">
+        [14:22:01] POST /v1/verify/upload - 200 OK - ID_REF: 828-XY-01
+      </div>
+<div class="opacity-50 truncate">
+        [14:21:55] SOCKET_CONNECTED: Client 127.0.0.1 authorized for test session.
+      </div>
+</footer>
+<!-- END: Footer Logs -->
+</main>
+<!-- END: Page Container -->
+<!-- BEGIN: Logic Scripts -->
+<script data-purpose="simulations">
+    function simulateAction(type) {
+      const scanLine = document.getElementById('scanLine');
+      scanLine.style.display = 'block';
+      
+      console.log(`Simulation started: ${type}`);
+      
+      setTimeout(() => {
+        scanLine.style.display = 'none';
+        alert(`Verification Simulator: Executing path for [${type.toUpperCase()}]`);
+      }, 3000);
+    }
+
+    function resetTest() {
+      if(confirm('Are you sure you want to clear the current test session?')) {
+        window.location.reload();
+      }
+    }
+  </script>
+<!-- END: Logic Scripts -->
+</body></html>

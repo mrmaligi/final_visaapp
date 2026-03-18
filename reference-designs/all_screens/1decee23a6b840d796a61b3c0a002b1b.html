@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaFlow | Your Journey Starts Here</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style data-purpose="custom-colors">
+    :root {
+      --visaflow-blue: #0056b3;
+    }
+    .text-visaflow-blue { color: var(--visaflow-blue); }
+    .bg-visaflow-blue { background-color: var(--visaflow-blue); }
+    .border-visaflow-blue { border-color: var(--visaflow-blue); }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+<!-- BEGIN: Navigation -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between" data-purpose="main-nav">
+<!-- Logo -->
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 bg-visaflow-blue rounded-lg flex items-center justify-center">
+<svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-2xl font-bold tracking-tight text-slate-900">VisaFlow</span>
+</div>
+<!-- Navigation Links -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-sm font-medium text-slate-600 hover:text-visaflow-blue transition-colors" href="#services">Services</a>
+<a class="text-sm font-medium text-slate-600 hover:text-visaflow-blue transition-colors" href="#pricing">Pricing</a>
+<a class="text-sm font-medium text-slate-600 hover:text-visaflow-blue transition-colors" href="#about">About</a>
+<button class="px-6 py-2.5 rounded-full text-sm font-semibold border border-gray-200 hover:bg-gray-50 transition-all">Login</button>
+</div>
+<!-- Mobile Menu Toggle -->
+<div class="md:hidden">
+<button class="p-2 text-slate-600">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</nav>
+</header>
+<!-- END: Navigation -->
+<main>
+<!-- BEGIN: Hero Section -->
+<section class="relative overflow-hidden bg-white py-16 lg:py-24">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+<div data-purpose="hero-content">
+<h1 class="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+            Your Journey <br/>Starts Here
+          </h1>
+<p class="text-xl text-slate-600 mb-10 max-w-lg leading-relaxed">
+            Simplifying your visa application process with speed, transparency, and expert guidance. Join thousands of travelers who trust VisaFlow.
+          </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="px-8 py-4 bg-visaflow-blue text-white font-bold rounded-lg shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all transform hover:-translate-y-0.5">
+              Start Application
+            </button>
+<button class="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-lg hover:border-visaflow-blue hover:text-visaflow-blue transition-all">
+              Check Status
+            </button>
+</div>
+</div>
+<!-- Hero Imagery -->
+<div class="relative" data-purpose="hero-image">
+<div class="rounded-3xl overflow-hidden shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500">
+<img alt="Professional global travel" class="w-full h-auto object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLWeym3H_3iYDxTTp6Z51c7oyw70AfSRgG1q-0_XJiyF0-OFCUkZEoid3n0eLxoUTuH0McTxjS8_xXxmrUjiKu4f2w2yv99moTFdYD4AXS27pioJPyE7smZc5wAkFvEYS27QqZpdONRo9UjPUzUsGPNBsvYS3Dlg7nxJZjd1AVJLNZWyeYURZS8EDvfsnUOaODytUzidqLGW-wfQtd__0P4-uC13LkI6HkSx-unlGOQUWluyyfX83yrlrl7iHikQWpi5Rj8znb7IVA"/>
+</div>
+<!-- Decorative element -->
+<div class="absolute -bottom-6 -left-6 w-32 h-32 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+</div>
+</div>
+</section>
+<!-- END: Hero Section -->
+<!-- BEGIN: Trust Section -->
+<section class="py-12 bg-gray-50 border-y border-gray-100">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<p class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-8">Trusted by global travelers &amp; official partners</p>
+<div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+<!-- Trust Badges Placeholders -->
+<img alt="Partner Badge" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSMInZAAU9AzfIi5E59SDITYMfqK3nW9p1iYhE8I2Jo9QgdnJqZyht3Cp5pZFEpBzT4AcXY0MvGbDDkC-rHXMNcsi6dT1n8Sg9FfbtVLqF5B5s64pbZ-2APBQC8ZUL4gbzipOqd0aUCxsSFaWTRzIMd-CPKjRvyWh6A1HJLLOSN-FpgO8RrEk44FnO-2_z1RqUwSEyNYEsUUaOyP76jrW43a0a-fNcYhHCFPaXrt7_LSDnfeC2KKVGf4vXMlAvFYq6xfOSayRx-rpu"/>
+<img alt="Partner Badge" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlwnrvPTdJriKCegV_-FJNKpV-tNtYZEbYw7uRNmgBPsEdssRe2EogHIfF7SNBQENAhY9LJl_PG_QoqgOqTrF7i_1Gt3AAG6HVDryrIauzfXSuX1dbtWOvFz9trgkjyPkh98jLgap9DW84B5sLMhcm-maO0cDw-k-hHDTvshcmJEQVJXdtLDwhSC52pKoUXBbMH7ZXfpyOlyj8pPVVx9sSZp8g4K4xhl5qrtrMI_IdQ5cS25WRUVCYvsse2nqmAb-47TVKOtXa7S09"/>
+<img alt="Partner Badge" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANBSS1_ymlSPRnthpajHKdVvRE6-rMXx6kuJhDP8-DsPNNnI3GpFhN7mWtjRMK10to3vkA9rIMPjj5uuuXueFcZRCw0fGnW-MlMSUQIEUWkCmT4CPi5YHevjrCHpbKQQCmi46cVDR0Ml1TTb4tvjdPSODGfw68lXv6rVh8OQxlm3QjGPfCO0nhZBicGEeEFTp2I02fR8FT7fqDhK-QaWiUx8TzFf20UAfKVT1HRtVO_8e4qz2YHg2HAw-3MKrIiEzNcMeekY06PoHf"/>
+<img alt="Partner Badge" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0BYovO9JIwE8NYxLgDAN9HO9IVgR7tO7YHkmvwqBV192r8EyVPJTL_hcM-2sDv3wHnhe6oIirsSHRTD_eWmQh1Q9oN42iTAGh7-acmwo6bIEhSzD2QNS94vSz6YYm_N2avJR8cYEm1DGgPdz-q_xnC3kSqC5YUlzf5N1KzWwqZL1FZSDNP3iIzZ56Htr8WxlVqCookulspzZLmt35nj-TZdUC1GZmz6jZjUZPSvLBZt0_0kAOdG76xlaCjS_cJ_QivkiAo7QFLqQ2"/>
+<img alt="Security Certification" class="h-8" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsr7p8wJDHtknOYolD-zo3wUIuYcpm1Jo__G3qDONBHbq8-1Cu7doYMpkefGyOOdIel0QptXVX4LsJ_cBFB56qEEn-XRgOQgxR9uT-9kvMdQtJzwU0WSbN9YmlHc447uWT0K7Iz4-Huo2K-pC_4Ma1kYdjAHtAhhtlq21IJKNFjpgQRrC0PWPAjzsnPm8HjQjAyCfeGdCqTLZFlIJV_UT1AZgGQJkryQs3axIGOzy70MJ7xRTBYuq-AYOriwLbT14NvXIi_Yu35bfC"/>
+</div>
+</div>
+</section>
+<!-- END: Trust Section -->
+<!-- BEGIN: Features Section -->
+<section class="py-24 bg-white" id="services">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold text-slate-900 sm:text-4xl">Seamless Visa Solutions</h2>
+<div class="mt-4 h-1.5 w-20 bg-visaflow-blue mx-auto rounded-full"></div>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Card 1: Easy Application -->
+<div class="p-8 rounded-2xl border border-gray-100 bg-white hover:border-visaflow-blue/20 hover:shadow-xl transition-all duration-300 group" data-purpose="feature-card">
+<div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-visaflow-blue transition-colors">
+<svg class="h-8 w-8 text-visaflow-blue group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Easy Application</h3>
+<p class="text-slate-600 leading-relaxed">
+              Fill out your forms in minutes with our intuitive interface. No complex jargon, just clear steps.
+            </p>
+</div>
+<!-- Card 2: Track Progress -->
+<div class="p-8 rounded-2xl border border-gray-100 bg-white hover:border-visaflow-blue/20 hover:shadow-xl transition-all duration-300 group" data-purpose="feature-card">
+<div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-visaflow-blue transition-colors">
+<svg class="h-8 w-8 text-visaflow-blue group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Track Progress</h3>
+<p class="text-slate-600 leading-relaxed">
+              Get real-time updates on your application status every step of the way. Transparency at its best.
+            </p>
+</div>
+<!-- Card 3: Expert Support -->
+<div class="p-8 rounded-2xl border border-gray-100 bg-white hover:border-visaflow-blue/20 hover:shadow-xl transition-all duration-300 group" data-purpose="feature-card">
+<div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-visaflow-blue transition-colors">
+<svg class="h-8 w-8 text-visaflow-blue group-hover:text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h3 class="text-xl font-bold text-slate-900 mb-3">Expert Support</h3>
+<p class="text-slate-600 leading-relaxed">
+              Our team of visa specialists is here to help you 24/7. Expert advice is just a click away.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Features Section -->
+</main>
+<!-- BEGIN: Footer -->
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 bg-visaflow-blue rounded flex items-center justify-center">
+<svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-xl font-bold text-white">VisaFlow</span>
+</div>
+<div class="text-sm">
+          Â© 2023 VisaFlow Inc. All rights reserved. Secure and Private.
+        </div>
+<div class="flex space-x-6 text-sm">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</body></html>

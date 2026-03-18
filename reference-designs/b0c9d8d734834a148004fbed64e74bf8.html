@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consultations Dashboard - LegalConsult</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 flex flex-col bg-white dark:bg-slate-900 sticky top-0 h-screen">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg text-white">
+<span class="material-symbols-outlined text-2xl">balance</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">LegalConsult</h2>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="font-medium text-sm">Calendar</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-xl" href="#">
+<span class="material-symbols-outlined">video_chat</span>
+<span class="font-medium text-sm">Consultations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium text-sm">Clients</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium text-sm">Documents</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Portrait of Sarah Jenkins, Legal Consultant" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6qdC2pqUfIsYXrHPQqYTcZvhzETPyU7KSke6s3KbPrWro15GV1iLKS87xtq4fyKELXAy6pb1U3q6LDvmhsTr0h4gbUtCzAXgBTEHEmh4JXQwYtMhMcsvJJKggVw-b24IIP2KLazxVlpUkj5qFuIL4CdG0NeiQdS0giw6wIUuel-a8qeFUBbbGfTo8bJ-bGW8GJ3EtGnRtggwyuiT9jeddwsAD07SwdfICFMt7NSUKqfZ_0cz_b3vdKmzDy29tqoIz-i_O1jhNTqmU')"></div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Sarah Jenkins</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 truncate">Senior Consultant</p>
+</div>
+<button class="text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-xl">settings</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top Nav -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4 flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search consultations or clients..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-sm">add</span>
+                        Schedule New
+                    </button>
+</div>
+</header>
+<div class="p-8 max-w-6xl mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h1 class="text-3xl font-black tracking-tight mb-2">Consultations</h1>
+<p class="text-slate-500 dark:text-slate-400">Manage your upcoming legal advice sessions and client intake.</p>
+</div>
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+<button class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-slate-700 shadow-sm rounded-lg text-sm font-medium">
+<span class="material-symbols-outlined text-lg">list</span>
+                            List
+                        </button>
+<button class="flex items-center gap-2 px-3 py-1.5 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 text-sm font-medium">
+<span class="material-symbols-outlined text-lg">calendar_view_day</span>
+                            Calendar
+                        </button>
+</div>
+</div>
+<!-- Filters -->
+<div class="flex border-b border-slate-200 dark:border-slate-800 mb-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900">Upcoming</button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-primary text-primary">Today</button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900">Past</button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-900">Cancelled</button>
+</div>
+<!-- Consultation Cards -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Immediate Meeting Card -->
+<div class="bg-white dark:bg-slate-900 border-2 border-primary/20 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+<div class="absolute top-0 right-0 px-4 py-1 bg-primary text-white text-xs font-black rounded-bl-xl uppercase tracking-wider animate-pulse">
+                            Starting Now
+                        </div>
+<div class="flex flex-col lg:flex-row lg:items-center gap-6">
+<div class="flex items-center gap-4 lg:w-1/3">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 bg-cover bg-center" data-alt="Portrait of client Michael Ross" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD2VQ28PWwlIAlxhQ8_HJnC4HLi-Ev1ewNPgDEOip_Li2Q8a-b3D3-V5T4OBdON2haprQJlVwwu4VGdEA-y-xINS4amZjOP0bSuuHpXz-cNKZDG7aJ2tWnGxYw2bdOVFDD9jTyvfb-Cgi2dqUkCEkFuwgr-lQQsZOwi7PAbngDwzp0I7ZxZVwObYU8jVLl_HnVRZjMdxX-MGY4K8tDdDviCqYL5V3YkrEK5defJ_4PINfSZZMRU_nVJkNKQIdN5HuJYPRaWtImxPNG1')"></div>
+<div>
+<h3 class="font-bold text-lg">Michael Ross</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Employment Law Consultation</p>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 border-l border-slate-100 dark:border-slate-800 lg:pl-6">
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Time</p>
+<p class="text-sm font-semibold">10:00 AM - 10:45 AM</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Starts In</p>
+<p class="text-sm font-black text-primary">02:45</p>
+</div>
+<div class="col-span-2 md:col-span-1">
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Platform</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-500 text-lg">videocam</span>
+<p class="text-sm font-semibold">LegalConnect Video</p>
+</div>
+</div>
+</div>
+<div class="lg:w-1/4 flex items-center justify-end">
+<button class="w-full lg:w-auto bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">join_inner</span>
+                                    Join Meeting
+                                </button>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-800 grid md:grid-cols-2 gap-6">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
+<h4 class="text-xs font-bold text-slate-400 uppercase mb-2 flex items-center gap-2 tracking-widest">
+<span class="material-symbols-outlined text-sm">question_answer</span> Client Question
+                                </h4>
+<p class="text-sm italic text-slate-600 dark:text-slate-300">"What are the notice period requirements if my contract doesn't explicitly state a term but mentions industry standards?"</p>
+</div>
+<div class="bg-primary/5 p-4 rounded-xl border border-primary/10">
+<h4 class="text-xs font-bold text-primary/70 uppercase mb-2 flex items-center gap-2 tracking-widest">
+<span class="material-symbols-outlined text-sm">notes</span> Pre-Meeting Notes
+                                </h4>
+<p class="text-sm text-slate-600 dark:text-slate-300">Review Section 8.2 of the Employment Act 2023. Client uploaded draft contract yesterday.</p>
+</div>
+</div>
+</div>
+<!-- Regular Card 1 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col lg:flex-row lg:items-center gap-6">
+<div class="flex items-center gap-4 lg:w-1/3">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 bg-cover bg-center" data-alt="Portrait of client Elena Gilbert" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCpGnra54whli82PkV7Nv7El33I7Lf5yieFKQwaSUnR2XIRCd4htLms5BfK4U3L2ate5MiosbhIQRYAuIR0-5bJZ2kb2a6k_nepBBEoT5JnMt9aDXcEkWEHmVtX0a0AcbzmWiFkuzdj7GL5zWcJci3BwhI-nvrauofUa0uEFGRIwOynpjt2Y2N7lDbf9HcH8rEZoVr5sqv21Q8IvAGUnX-7w4R0hlVPbHl-TQ15KgCeCNF0DWCK9bNItNTGAeo5R8dJ8VOyIsFrC065')"></div>
+<div>
+<h3 class="font-bold text-lg">Elena Gilbert</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Estate Planning Review</p>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 border-l border-slate-100 dark:border-slate-800 lg:pl-6">
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Time</p>
+<p class="text-sm font-semibold">1:30 PM - 2:30 PM</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Status</p>
+<span class="inline-flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                        Confirmed
+                                    </span>
+</div>
+<div class="col-span-2 md:col-span-1">
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Attachments</p>
+<div class="flex items-center gap-1 text-primary text-sm font-semibold">
+<span class="material-symbols-outlined text-lg">attach_file</span>
+                                        3 Documents
+                                    </div>
+</div>
+</div>
+<div class="lg:w-1/4 flex items-center justify-end gap-3">
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="px-6 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800">
+                                    Details
+                                </button>
+</div>
+</div>
+</div>
+<!-- Regular Card 2 -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex flex-col lg:flex-row lg:items-center gap-6">
+<div class="flex items-center gap-4 lg:w-1/3">
+<div class="size-14 rounded-full bg-slate-100 dark:bg-slate-800 flex-shrink-0 bg-cover bg-center" data-alt="Portrait of client David Chen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCu7uIGOC2KwvHmMeYJbUp0uL_Bx0tuPgYpGMaNZr8ukk3CgYdF6JOQV5g4hI-FM6EI8DbkOXG0hMCvSRhjIzfUDTtZv8kDS-fwk8r_4qoP8q1plYVoSq2Nn3UTdVD5JEiehOxaxq2uDCHNs5JULtqH5R8xiaoyuwsf1hl9w-7icuFai07AjQF1loXSs3ssqhTXtXUgP80bEd3HLgkYbXeUlrRs0z8h54cA3gcaBoyAaFumkfQ-SQ_IHByB1twcKN5qt55koMnxgVx5')"></div>
+<div>
+<h3 class="font-bold text-lg">David Chen</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">IP Licensing Strategy</p>
+</div>
+</div>
+<div class="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 border-l border-slate-100 dark:border-slate-800 lg:pl-6">
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Time</p>
+<p class="text-sm font-semibold">4:00 PM - 5:00 PM</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Status</p>
+<span class="inline-flex items-center gap-1.5 py-0.5 px-2.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                        Rescheduled
+                                    </span>
+</div>
+<div class="col-span-2 md:col-span-1">
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-1 tracking-widest">Notes</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 truncate">Follow-up from Q3 session...</p>
+</div>
+</div>
+<div class="lg:w-1/4 flex items-center justify-end gap-3">
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="px-6 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800">
+                                    Details
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sidebar Panel for Scheduling (Floating/Right Sidebar Simulation) -->
+<aside class="w-80 border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 hidden xl:block overflow-y-auto h-screen sticky top-0">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-black text-lg tracking-tight">Quick Schedule</h3>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<form class="space-y-6">
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Select Client</label>
+<div class="relative">
+<select class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/50 appearance-none py-3 px-4">
+<option>Choose a client...</option>
+<option>Michael Ross</option>
+<option>Elena Gilbert</option>
+<option>David Chen</option>
+<option>+ New Client</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Service Type</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="p-3 text-xs border border-primary bg-primary/5 text-primary font-bold rounded-xl text-center" type="button">Initial Consult</button>
+<button class="p-3 text-xs border border-slate-200 dark:border-slate-700 text-slate-500 rounded-xl text-center" type="button">Follow-up</button>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Date &amp; Time</label>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/50 mb-3" type="date"/>
+<div class="grid grid-cols-3 gap-2">
+<button class="py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600" type="button">09:00</button>
+<button class="py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600" type="button">10:00</button>
+<button class="py-2 text-xs border border-primary bg-primary/5 text-primary rounded-lg" type="button">11:00</button>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Consultation Goals</label>
+<textarea class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/50 h-24 p-3" placeholder="Briefly describe the objective..."></textarea>
+</div>
+<div class="pt-4">
+<button class="w-full bg-slate-900 dark:bg-primary text-white py-3 rounded-xl font-bold hover:bg-slate-800 dark:hover:bg-primary/90 transition-colors shadow-lg" type="submit">
+                        Send Invite
+                    </button>
+<p class="text-[10px] text-center text-slate-400 mt-4 leading-relaxed">
+                        An email invitation with a secure meeting link will be sent to the client automatically.
+                    </p>
+</div>
+</form>
+<div class="mt-12 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h4 class="font-bold text-sm">Insights Today</h4>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500">Scheduled</span>
+<span class="text-sm font-bold">8 Sessions</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500">Estimated Revenue</span>
+<span class="text-sm font-bold text-green-600">$2,400</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

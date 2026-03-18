@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaFlow - Find Your Australian Visa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 md:px-20 py-4 bg-white dark:bg-slate-900">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">travel_explore</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">VisaFlow</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+<a class="text-primary text-sm font-semibold transition-colors underline underline-offset-4" href="#">Visas</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">About</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Contact</a>
+</nav>
+<div class="bg-primary/20 rounded-full size-10 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<!-- Hero Section -->
+<section class="px-6 md:px-20 py-12">
+<div class="@container">
+<div class="flex min-h-[400px] flex-col gap-6 bg-gradient-to-br from-primary/10 via-white to-primary/5 dark:from-primary/20 dark:via-background-dark dark:to-primary/10 @[480px]:rounded-xl items-center justify-center p-8 text-center border border-primary/10 shadow-sm relative overflow-hidden" data-alt="Modern geometric background with orange accents">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #ec5b13 1px, transparent 0); background-size: 40px 40px;"></div>
+<div class="flex flex-col gap-4 max-w-2xl relative z-10">
+<h1 class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-6xl">
+                                    Find Your Australian Visa
+                                </h1>
+<p class="text-slate-600 dark:text-slate-300 text-lg md:text-xl font-normal leading-relaxed">
+                                    Explore our comprehensive range of visa categories tailored to your needs.
+                                </p>
+</div>
+<button class="relative z-10 flex min-w-[160px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-primary text-white text-base font-bold transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/30">
+<span class="truncate">Get Started</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Search & Filter Bar -->
+<section class="px-6 md:px-20 py-6">
+<div class="flex flex-col md:flex-row gap-4 items-center bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex-1 w-full">
+<label class="flex flex-col w-full">
+<div class="flex w-full items-stretch rounded-xl h-12 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+<div class="text-slate-400 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full border-none bg-transparent focus:ring-0 text-slate-900 dark:text-white placeholder:text-slate-400 px-4 text-base" placeholder="Search visa types, sub-classes or criteria..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex h-12 items-center justify-between gap-x-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Category</span>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</button>
+<button class="flex-1 md:flex-none flex h-12 items-center justify-between gap-x-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Sort By</span>
+<span class="material-symbols-outlined text-slate-400">swap_vert</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Visa Category Grid -->
+<section class="px-6 md:px-20 py-10">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-slate-900 dark:text-white text-2xl font-bold tracking-tight">Browse by Category</h2>
+<span class="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">38 Total Visas</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Work Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">work</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">12 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Work Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Skilled work, employer sponsorship, and regional opportunities for professionals.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Family Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-pink-600 dark:text-pink-400 group-hover:bg-pink-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">favorite</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">8 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Family Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Partner, parent, and child visas to reunite with your loved ones in Australia.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Student Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">school</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">5 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Student Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Study and training visas for international students seeking Australian education.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Business Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">insights</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">6 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Business Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Investment, innovation, and business talent pathways for global entrepreneurs.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Visitor Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:bg-amber-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">flight_takeoff</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">4 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Visitor Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Tourism, visiting friends, and short-term business trips for global explorers.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Protection Visas -->
+<div class="group flex flex-col p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-primary/50 transition-all hover:shadow-xl hover:-translate-y-1">
+<div class="flex items-start justify-between mb-4">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 group-hover:bg-slate-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-2xl">verified_user</span>
+</div>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full">3 Visas</span>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Protection Visas</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Refugee and humanitarian visas for individuals in need of international protection.
+                            </p>
+<a class="mt-auto flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all" href="#">
+                                Explore Visas <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-20 py-10">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-primary opacity-80">
+<span class="material-symbols-outlined text-xl">travel_explore</span>
+<span class="font-bold">VisaFlow</span>
+</div>
+<p class="text-slate-400 text-sm">Â© 2024 VisaFlow Australia. All rights reserved. Registered Migration Agents.</p>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary transition-colors text-sm" href="#">Privacy Policy</a>
+<a class="text-slate-400 hover:text-primary transition-colors text-sm" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Portal - Lawyer Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-[#2a1b14] border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full z-20">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none">Admin Portal</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Lawyer Management</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px] fill-current">group</span>
+<span class="text-sm font-medium">Lawyers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">description</span>
+<span class="text-sm font-medium">Visas</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">chat_bubble</span>
+<span class="text-sm font-medium">Consultations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+<span class="text-sm font-medium">Revenue</span>
+</a>
+<div class="pt-4 pb-2">
+<div class="h-px bg-slate-200 dark:bg-slate-800 mx-3"></div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="flex items-center gap-3 p-3 bg-slate-100 dark:bg-background-dark rounded-xl">
+<div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Admin user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC10h-m00xkJjYpq_QcS9Y_MZS5wYimei_yH9TVGqJuPOsjYwnONZsDAUb7QO0vR1iGbfXEAIuinSwZLzMufEYUAFaTkze7SRzDW_htLP1iusEZ7aAjfUVPqroMlfvNenrCeaFZIM47KAtOjG50kN8BcKQmBdF6h2rN69xxHjVXU1OwjcbaGrEctJWP-49LFoOGukIRHqOx_nANo9hdWpTY3ZmkULGdaAZTciCiq73ny6DVWPbTKoyQ7km9gOHgsq7008Rktd01O8fF"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Morgan</p>
+<p class="text-xs text-slate-500 truncate">System Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 p-8">
+<!-- Urgency Banner -->
+<div class="mb-8 @container">
+<div class="flex flex-col @[640px]:flex-row items-center justify-between gap-4 p-5 bg-primary/10 border border-primary/20 rounded-xl">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<p class="text-slate-900 dark:text-slate-100 font-bold leading-tight">Urgent: 12 Lawyer applications are pending verification.</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Action required to maintain service standards and response times.</p>
+</div>
+</div>
+<button class="w-full @[640px]:w-auto bg-primary text-white px-6 py-2.5 rounded-xl font-semibold text-sm hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">
+                        Review Now
+                    </button>
+</div>
+</div>
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Lawyer Management</h2>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Review, manage, and verify legal professionals.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="relative min-w-[320px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-sm transition-all" placeholder="Search lawyers, registration numbers..." type="text"/>
+</div>
+<button class="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary/90 transition-all shadow-sm">
+<span class="material-symbols-outlined text-lg">add</span>
+                        Add New Lawyer
+                    </button>
+</div>
+</div>
+<!-- Filters and Actions -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="flex flex-col md:flex-row border-b border-slate-200 dark:border-slate-800">
+<!-- Tabs -->
+<div class="flex flex-1 px-4 overflow-x-auto">
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-primary text-primary whitespace-nowrap">
+                            All Lawyers
+                        </button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 whitespace-nowrap flex items-center gap-2">
+                            Pending
+                            <span class="bg-primary/20 text-primary text-[10px] px-1.5 py-0.5 rounded-full">12</span>
+</button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 whitespace-nowrap">
+                            Approved
+                        </button>
+<button class="px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 whitespace-nowrap">
+                            Rejected
+                        </button>
+</div>
+<!-- Bulk Actions -->
+<div class="p-3 md:border-l border-slate-200 dark:border-slate-800 flex items-center">
+<div class="relative inline-block w-full">
+<select class="appearance-none w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-3 pr-10 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+<option>Bulk Actions</option>
+<option>Approve Selected</option>
+<option>Reject Selected</option>
+<option>Export Data</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 text-lg">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="p-4 w-12 border-b border-slate-200 dark:border-slate-800">
+<input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/>
+</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Lawyer</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Registration</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Specialization</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Applied Date</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">Status</th>
+<th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="p-4"><input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Lawyer headshot James Wilson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHdyqSM-Qtm-hY3SxoTVBFJbGmuneWdFHALfJDvgXegGYgnkdm-BQ9fFFNz_ayIzs9ds6on3ihoa0hCe4_UoxcN9KO5imEqbRZLi8zLMcZCIDH1zq3Zxt1SQZCzQFIMLRWOsAi2L0sZ8W_O-Mdc2gtIgS8o_wCipJQtgfP-ggO1jn3tkNQBB15wZ52ZD4qV-52z0OBrKwesoYxVxGq159Z4tWSRRDkuDWDcBsfu-wXXW9duUDZqF1DZFBXIdJqor5yOiauOTs8U-Ka"/>
+</div>
+<div>
+<p class="text-sm font-bold">James Wilson</p>
+<p class="text-xs text-slate-500">j.wilson@legal.com</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm font-medium">BAR-782391</td>
+<td class="p-4 text-sm">Immigration Law</td>
+<td class="p-4 text-sm">Oct 24, 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></span>
+                                        Pending
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="p-4"><input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Lawyer headshot Sarah Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRltCcoZ55HKDk5O-kbNpLK3r3HKnyeWTZXSi3l6qJdn-6Da1KMj7Qk4D34rixhBEL7HvYRIarr-4fomK9BBKxoARAvvt1lllejs_mY5lviOs4_S_UzlrE7T6ExvJE2Mt7_xOY7WpMhs7Xybuy4e3lFkimsNgdl2wD-z58ynWFqdLRAjgNevyUTUf4mTG6C4p2DM1fNcPS-4An5lbgdspaDKwcgraM9Fq38T42S6mzQOGktg4Ya44CLtB9YBsr_gNFn_P2tPiGPdST"/>
+</div>
+<div>
+<p class="text-sm font-bold">Sarah Chen</p>
+<p class="text-xs text-slate-500">sarah.chen@lawfirm.io</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm font-medium">BAR-441290</td>
+<td class="p-4 text-sm">Family Law</td>
+<td class="p-4 text-sm">Oct 22, 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                        Approved
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="p-4"><input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Lawyer headshot Robert Vance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7pvIdx2fO5O0xnFMOzZE6k9LC-M0uq7Px_YXHWl2uGx9Bc04YON1Wd8J0RD7evKsW_1s1bB_5fbOaniWTdDd4RGVlawhRqPurZCnh21zytBGHGbWgaYhc1jFwam9HWzz6KYTMYW4TTmSwPELtXAg7CEgWBPCJIvwO6NrkTgy1ElzDce_efed2jFb0hMgvJ_f82fhvYpLnPK7aMMTNXBBoHw_LIUGbPMYuyJpZBduhYlrn7lxi6fsp-VqDFj3PyF6_AW8TdVOIrwjd"/>
+</div>
+<div>
+<p class="text-sm font-bold">Robert Vance</p>
+<p class="text-xs text-slate-500">rvance@vancelegal.com</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm font-medium">BAR-990123</td>
+<td class="p-4 text-sm">Corporate Law</td>
+<td class="p-4 text-sm">Oct 21, 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                        Rejected
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="p-4"><input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Lawyer headshot Emily Rodriguez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfSrKPf9tGf3wMFlb9PPvXKu2jMXhyl88PFZQGFCGzBjXtkvbP2ggVo7babaPTXZ-RHLHttR5rg16U4NgqpuhMTx2mdgWLCGCIls9jfoNgHtfVC_El0XDlfRcwrL6f0cYAEGNCEQi1FkNYRunfMXFsx4Cas-NAZfIuHEhfoAA1sKbb5fxK95vG9bPaQMjfVrEfYO73wcxNZvdTFB4BP7ZMeFaE0K3dH4-Y0x6a-PO4Q_cn3__O97CEEEPY2xcvIVQeQ7gtSKxi-y2K"/>
+</div>
+<div>
+<p class="text-sm font-bold">Emily Rodriguez</p>
+<p class="text-xs text-slate-500">e.rodriguez@justice.org</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm font-medium">BAR-112003</td>
+<td class="p-4 text-sm">Civil Rights</td>
+<td class="p-4 text-sm">Oct 20, 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500 mr-2"></span>
+                                        Pending
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="p-4"><input class="rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Lawyer headshot Marcus Thorne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX2GjpmmWto_01m15bSIMPLFAmCK8x6L3x0_dFdSyHeU2GgWehY_2q2N7J3LBt96OETkNCxo7FS9H5oyaWWHXyevkVQoXTl5O7p3WEQSG6tRKUATWO1L7VQ3Be8tuzche9qC0yGGE1B6tMoH7nDeorg8XPeEGtRVt7sPUbLCw6LnRFGTAe8joxyFfCgnHWzjTYd_U3J7PwjxQEEY1y9mCo2WYJqbArFdRFjhfZvl8ysSQVVV4erTeEE7CYqhZJfBHkqs0F_N3WQpml"/>
+</div>
+<div>
+<p class="text-sm font-bold">Marcus Thorne</p>
+<p class="text-xs text-slate-500">mthorne@legal.net</p>
+</div>
+</div>
+</td>
+<td class="p-4 text-sm font-medium">BAR-554432</td>
+<td class="p-4 text-sm">Criminal Defense</td>
+<td class="p-4 text-sm">Oct 19, 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                        Approved
+                                    </span>
+</td>
+<td class="p-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-slate-500 dark:text-slate-400">Showing <span class="font-bold text-slate-900 dark:text-slate-100">1</span> to <span class="font-bold text-slate-900 dark:text-slate-100">10</span> of <span class="font-bold text-slate-900 dark:text-slate-100">128</span> lawyers</p>
+<div class="flex items-center gap-2">
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">1</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">2</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">3</button>
+<span class="px-1 text-slate-400">...</span>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">13</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

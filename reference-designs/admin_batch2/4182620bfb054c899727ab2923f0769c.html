@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Portal - User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 lg:px-10">
+<div class="flex items-center gap-4">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Admin Portal</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-center gap-8">
+<nav class="flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary py-1" href="#">Users</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Reports</a>
+<a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-xl h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 hover:text-primary transition-all">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-10 w-10 rounded-full border-2 border-primary/20 bg-cover bg-center" data-alt="User profile avatar placeholder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhKCECSMXTNQ_OSt8zr7AnbkIMAPjNjlTXvq4Wl6N22n15UmPIQHMYXowckkv9Fze6fGkTdyIinScYIiZhoqdgcwu5x5CKA0p0-TU3FRxJUgXe5u3zBuB_M4g1-7pbNIGPG7aaTcihzCIL0VT8kKrQ_Llu5dqVQBidYQ415pV6TjgvZyOeuq7lutS6Nh9AbjLf4H7HQq2L8_ELURpPpxUNrD4H7qpCL8BGNrTU9ffwJiO7RRNzOAT3SUl6Wkloq2QRg8T-N4VKilRi');"></div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-4 lg:px-8 py-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h1 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">User Management</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Manage and monitor all registered users in the system.</p>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 rounded-xl h-11 px-6 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-all">
+<span class="material-symbols-outlined text-lg">download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 rounded-xl h-11 px-6 bg-primary text-white font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">person_add</span>
+<span>Add New User</span>
+</button>
+</div>
+</div>
+<!-- Metrics Overview -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Users</p>
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined text-xl">group</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">12,482</p>
+<p class="text-xs text-emerald-500 font-bold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12% from last month
+                        </p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Now</p>
+<span class="p-2 bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-lg material-symbols-outlined text-xl">bolt</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">1,204</p>
+<p class="text-xs text-slate-400 font-medium mt-2">Real-time active sessions</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Pending Approvals</p>
+<span class="p-2 bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400 rounded-lg material-symbols-outlined text-xl">hourglass_empty</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">85</p>
+<p class="text-xs text-amber-500 font-bold mt-2">12 required attention</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Flagged Accounts</p>
+<span class="p-2 bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 rounded-lg material-symbols-outlined text-xl">report</span>
+</div>
+<p class="text-3xl font-bold text-slate-900 dark:text-white">12</p>
+<p class="text-xs text-rose-500 font-bold mt-2">Decreased by 4%</p>
+</div>
+</div>
+<!-- Filters Bar -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[280px] relative">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined text-xl">search</span>
+</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary/50 text-slate-900 dark:text-white placeholder-slate-400" placeholder="Search by name, email, or ID..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<button class="flex h-10 items-center gap-2 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-lg">calendar_today</span>
+<span>Join Date</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="flex h-10 items-center gap-2 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-lg">category</span>
+<span>Visa Type: All</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="flex h-10 items-center gap-2 px-4 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined text-lg">shield</span>
+<span>Status: All</span>
+<span class="material-symbols-outlined text-lg">expand_more</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">filter_list_off</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Table Content -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">User Details</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-center">Purchases</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Last Active</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Join Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="Sarah Connor" class="h-full w-full object-cover" data-alt="User avatar for Sarah Connor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCStdrObyTP4PDKjXFYU02WfS0wgXTRqAFs-dggfYe86I_KPL3x7agLdnTCWvogpzD-vqkAb-HmafHwBaV8Ul9RPFcFyXL9P0D6bH2bHpXDKXFa3stnt51ZVmNzNFqtdZuvwooimluKhMXGFFZOuEGuxSmtcDXDa9Nyy8Hpc-KmHHGUp9FF5GUqmAQ-G2v0tJtfJHFygvqmw3iq8PtQuS2tPYGWGx1Oflo3X3PkbPEjMJ5xLuiuRO6QU7ywasTxqDqhLHkUz17OfjK0"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Sarah Connor</p>
+<p class="text-xs text-slate-500 mt-1">sarah.c@techmail.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                            Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">142</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">2 mins ago</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Oct 24, 2023</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="James Miller" class="h-full w-full object-cover" data-alt="User avatar for James Miller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDujNA_LRxF1mqEJi5je3esKL9tX6zCDt1KpnWKaUC-97-CApd4zSnTYWSO2mR1w8c_OnXyIAxeYg0UNbMKfWIuzZ2F6r3b0KbTQdsQbxATT42BAtH10nokm_qMy0Pm7BWegfuSKot_J69sFc9djJezQ2t9jlrboaptZaVnQAWlrPDTma8166p6TFF5clLsju_Rg8QmEKJdaDWYfAxyJtAqNw1X7zCWJkbh7cYCJMcATqZR6yEAPGCFJKGJoyC4aiPLQYSLdoLmaQ4E"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">James Miller</p>
+<p class="text-xs text-slate-500 mt-1">j.miller@skyline.org</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                                            Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">0</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">1 hour ago</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Jan 12, 2024</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="Elena Rodriguez" class="h-full w-full object-cover" data-alt="User avatar for Elena Rodriguez" src="https://lh3.googleusercontent.com/aida-public/AB6AXuArTWik37TeMbt-g2Nl2HYMiKw3sUEIskig8Qb-mQOklqUbixGz-Dgj3r3sG-7X4wxgwqAY6I2WD8Um8O-gN2EPG156PTU8YstCLzJnyPBqREE4AD9kgr4unX51L3tpm_Fq6iGNH7_Fz_vqEZlzwdvoY4PFXVeC7QLkE6EKHOujbRsPLuxA46J_3x2_8NmOWJOfqaPRS2YTozvkU4ZS0uGyvUaxw0Ywi6oL5s4dhWv-4Rb61OCicRak_pojzNSWF4C0J0fuLbuWoCgK"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Elena Rodriguez</p>
+<p class="text-xs text-slate-500 mt-1">elena.rod@global.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400">
+                                            Inactive
+                                        </span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">28</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">3 days ago</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Feb 05, 2024</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="Marcus Thorne" class="h-full w-full object-cover" data-alt="User avatar for Marcus Thorne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCl42A2zlcvGKFm4nuAsSq7DMB2MsrsZjBLnHs2sXULdyyFE-Wk4kP0cHsAg0q61g5EMUxJoU6Hw9lLt4ffqagz3AqUePoNtCTsuEaQv0jCZWZA7RMcJXl7qOlbrrdQBYEDgMvEAwIL2HpRDL9xd9O03yGpnslGahExWVO6cxXRxY2pl2n9rsAbd_j-zldGnDlp3F_6FkvObcZHqsiApx92-tQ7Ahqudc-KfinGQ573-4GrPc4v0gybs97PFXgdaeMVLcE72V8ZrZz_"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Marcus Thorne</p>
+<p class="text-xs text-slate-500 mt-1">m.thorne@secure.net</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400">
+                                            Flagged
+                                        </span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">12</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Just now</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Dec 18, 2023</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center overflow-hidden">
+<img alt="Olivia Chen" class="h-full w-full object-cover" data-alt="User avatar for Olivia Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcc43ZlEuvsw4ouVlZXzY1WFHRdU2GKRpV-mtxj4q_AeNMOXEFZy5ULyy2tewc6Qx9w67lbuQzPEOf1LG-VzHfV2H_x_3G2u1fHm_4ckUnZWCyoXiy8_Eu-RmJuhvirx_H6ak2KWJoIn-XDt2Pzz4YMn1dHQTiaEKEEu79_TGWnEnFBI_svMHVIOvbELl4GZnm-PYEBtA3-W9-uJVmYtmcmSL81fiTcHoYIKZblmnPtq5XBwISvUV0H33ed2jblvA1-iz1-m0L4MF3"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white leading-none">Olivia Chen</p>
+<p class="text-xs text-slate-500 mt-1">o.chen@pacific.io</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                                            Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">542</span>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">5 mins ago</p>
+</td>
+<td class="px-6 py-4">
+<p class="text-sm text-slate-700 dark:text-slate-200">Oct 02, 2022</p>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<p class="text-sm text-slate-500 dark:text-slate-400">Showing <span class="font-bold">1</span> to <span class="font-bold">5</span> of <span class="font-bold">12,482</span> users</p>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center h-8 w-8 rounded bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed">
+<span class="material-symbols-outlined text-base">chevron_left</span>
+</button>
+<button class="flex items-center justify-center h-8 w-8 rounded bg-primary text-white text-sm font-bold">1</button>
+<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-sm text-slate-600 dark:text-slate-400">2</button>
+<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-sm text-slate-600 dark:text-slate-400">3</button>
+<span class="text-slate-400">...</span>
+<button class="flex items-center justify-center h-8 w-8 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-sm text-slate-600 dark:text-slate-400">2497</button>
+<button class="flex items-center justify-center h-8 w-8 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-primary/20 hover:text-primary transition-all">
+<span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-6 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-xs text-slate-400">Â© 2024 Admin Portal Ecosystem. All rights reserved. Built with precision.</p>
+</footer>
+</div>
+</div>
+</body></html>

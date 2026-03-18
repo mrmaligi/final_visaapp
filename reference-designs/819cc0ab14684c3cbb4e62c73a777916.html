@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>VisaFlow - Immigration News &amp; Updates</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-300">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">flight_takeoff</span>
+<h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">VisaFlow</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Services</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="text-sm font-bold text-primary border-b-2 border-primary py-1" href="#">News</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors" href="#">About</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex items-center justify-center rounded-lg bg-primary px-5 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                            Login
+                        </button>
+<button class="md:hidden text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<!-- Hero Section: Featured News -->
+<section class="relative w-full py-12 px-4 sm:px-6 lg:px-8">
+<div class="mx-auto max-w-7xl">
+<div class="relative overflow-hidden rounded-2xl bg-slate-900 dark:bg-black aspect-[16/9] md:aspect-[21/9] lg:aspect-[3/1]">
+<div class="absolute inset-0 z-0 opacity-60">
+<img alt="Modern City Skyline" class="h-full w-full object-cover" data-alt="Modern high-rise city skyline at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVDAAuuJ0rG8GmTjnzjUin02piFvX4o1Lrl-1aGZ6hl4J1U6Xo27op-XepuJSumTOj1-rB5kWLebN6Bh9rqhhEuYQYXBYdKeGYATdyOLiGuVSi8fxPkBwJIinn1ygd55UDqukeDHw1Ez2zPGfpr0b-j20t1cr0RFF6fx_3D3CwaePj1y3dpBJb3hAFmQPHbViOSmb2D2dT5JwRNynOkhBttAqezdzBv0UqyAEJ29O_4dp6mns6oR40U4lsVNLY06iNUYpLen5fVxx7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 flex h-full flex-col justify-end p-6 md:p-12 lg:p-16 max-w-4xl">
+<div class="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary backdrop-blur-md">
+<span class="material-symbols-outlined text-sm">star</span>
+                                Featured News
+                            </div>
+<h1 class="text-3xl font-black leading-tight text-white md:text-5xl lg:text-6xl tracking-tight">
+                                Major Immigration Reform: New Work Visa Pathways Announced for 2026
+                            </h1>
+<p class="mt-4 max-w-2xl text-lg text-slate-200 md:text-xl">
+                                A detailed look into the upcoming changes to global work permit structures and what they mean for skilled professionals.
+                            </p>
+<div class="mt-8 flex flex-wrap gap-4">
+<button class="flex items-center justify-center rounded-xl bg-primary px-8 py-4 text-base font-bold text-white shadow-xl shadow-primary/30 hover:scale-105 transition-transform">
+                                    Read Full Article
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Filter Section -->
+<section class="sticky top-16 z-40 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800 py-4">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
+<button class="whitespace-nowrap rounded-full bg-primary px-6 py-2 text-sm font-bold text-white">All News</button>
+<button class="whitespace-nowrap rounded-full px-6 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">Policy Changes</button>
+<button class="whitespace-nowrap rounded-full px-6 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">Visa Updates</button>
+<button class="whitespace-nowrap rounded-full px-6 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">Legal News</button>
+</div>
+</div>
+</section>
+<!-- News Grid -->
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+<!-- Article Card 1 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Modern workspace with diverse people working together" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz9s4vpRYTI1cTeqXlv080iQfXJLS2YVftevLNZbFr3eHvCgS4l1etMh90NJbWSnmRuvczJrYBZKj1Ren12cSb5Ic6vNNsHYc6fE4vlqt6do4UkQqM5_DkKNXU7p1YF-Ci11RPRiv6nfXD4Zk41tvODHLC9YEAgoIV6O9QImGxknMwm8mtxAm2Yrjg7FZE9N2C_hnCyrcsVoYtdZ5GF_33GcQCSizHSlyvk7jPu5Fh9dL09U1-BKgcDqQgYcL6Qdy_shwza1onBA90"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Policy Change</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 24, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                New Digital Nomad Visa Routes for Remote Workers
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                Several countries are introducing specialized residency permits for telecommuters, simplifying the process for global mobility.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Article Card 2 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Gavel and law books on a table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAreQmU7mOFC0UZLfD1IgWT6v1USGz9wEAHssiWCRq4EMiiOFd7osSrEbuFKHGf9V6KWgkwbu9YGpYQP-AhENWyX4jX-85_KyjXC1xVt3ImAkxWnJkvbhBVRJ4bY-vh33k672wjhYCdcf1iTvYI_g_kIcDqIj-4PLVvGRzOZr8J0NVisOXLG4_OFoTIbN_StOek8ePSTgvzWfd2hJJBExPpR9Wjs9dyZ7Z0fV5wmkZa3aERjUJYlq5FYoIbxsJHwTJh_48oiKvuhYfn"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Visa Updates</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 22, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                Updates to H-1B Cap for the 2026 Fiscal Year
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                Detailed insights into the new selection process and what sponsors need to prepare for the upcoming lottery season.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Article Card 3 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Backpacker looking at a map outdoors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKewoiiroFWy8Q92k_eKd5obH5q4tyooWeMaeUJ6snOStN8KIxMTnRkXg4Ry3DNS0ujh7jQ6Oat7f4Oxjoxmn9qiwXeyWGDIKaZ6_vONQDm81araUro8lX8_ZIdq_8Sv7xDrrUK_U3wlZo3sFWwryad_acjnwq3zTzCxzrihzVDYP7ecyLJPstsa7omlG1cRTubOhNjp2ww3MalCztI2yXt_7jRm0M6_e8W9OmNGx6als_enCfpg3vaC10J5vG1biXjoQrAYfvr1cH"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Legal News</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 21, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                EU Blue Card Requirements: Simplification Expected
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                The European Commission has proposed a series of measures to reduce bureaucratic hurdles for high-potential talents.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Article Card 4 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Modern office building architecture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUwpXLsaCkJCI0qNmP3KZHUISryQlk6C3UbPuOPPTLi8prDb7slzEY5jxzWZnh39bPHRzTaDgmRlydfBd7DJlIZlqJP96M2RZBE8vUyUz0rxHU-DrraAnlkI1hWdK0MCcSs6_5nLopJo7mE9uyCFINLzz95HtylpQqieX6nCa8ZrL7LL5k_mGaogfMdO9VZ5ESBMj1qBXVMO4a9CY18m-gJzA9BhiQ9KqtZlE0a-e8Y8sYX-eD5w_N7r1pMI3xr0sG9-pldkJNiLli"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Legal News</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 19, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                Sponsorship Rules for Small &amp; Mid-sized Enterprises
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                Exploring how smaller firms can navigate the complex landscape of international talent acquisition with ease.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Article Card 5 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="People at an airport terminal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkblHbx2FRphOsuQ8ZU_WOtubFfNYt7EuQTByaPRgAdlxMLtJJwtXrTL-98kh7DYzW-4ExXf9GO_6CRnJzMv3xJxcNM3nZjOGsioSE-d1Ls4BQtP25CfMeXoZC7taUfV70xhrr2tC8moDla3ulN8PwpERHMBXtTAuMIIH6Ek2vGwKFfIa8kB-HC_etpsr7FtrxVEpc8M3UQy2uXBPZST03CT6LQQ6X9vctoCXi9XWuGf1QKjiRvBUXkW8QMDrTH1dNvG5YDjo2jMSE"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Policy Change</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 18, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                Global Talent Stream: Major Expansion Areas
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                New tech roles and creative categories have been added to the fast-track processing list this month.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Article Card 6 -->
+<div class="group flex flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
+<div class="aspect-video w-full overflow-hidden">
+<img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Legal documents being signed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDleslLT31nF9jcWAIeVRdjHa-shz08oxL31JAtEzlYIIA5pUqQM41wF9udO7c4dpYHG9GoAVcHqm-3K2O35WF1kyb21T37LGEaieVZp8lKMnno_GWcVqQRAzM5lO_eVL8SjlDW-rMI_1ArYjoelBVSqeJ1oUnqP5Ux9MFnMU9UJysxcGQqALKuY3T-v5Zbi4POPZWtFEqFyRjQo4o9PpFkvYFuOuBpub_4K8gvbHdDqGUsCsMzJpNBOUMwCHZc4_5Nj2JyDPFpOl7u"/>
+</div>
+<div class="flex flex-1 flex-col p-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-2 py-1 rounded">Visa Updates</span>
+<span class="text-xs text-slate-400 dark:text-slate-500">Oct 15, 2026</span>
+</div>
+<h3 class="text-xl font-bold leading-snug text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                                Recent Court Rulings Affecting Permanent Residency
+                            </h3>
+<p class="mt-3 line-clamp-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                                Legal experts break down the implications of the landmark decision regarding long-term residency status.
+                            </p>
+<a class="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary" href="#">
+                                Read More <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex items-center justify-center gap-2">
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-base">chevron_left</span>
+</button>
+<button class="h-10 w-10 rounded-lg bg-primary text-sm font-bold text-white shadow-lg shadow-primary/20">1</button>
+<button class="h-10 w-10 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">2</button>
+<button class="h-10 w-10 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">3</button>
+<button class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="mt-20 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 py-16">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+<div class="mx-auto max-w-2xl">
+<span class="material-symbols-outlined text-4xl text-primary mb-4">mail</span>
+<h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">Stay Updated on Global Migration</h2>
+<p class="mt-4 text-lg text-slate-600 dark:text-slate-400">Get the latest immigration news, policy changes, and visa updates delivered directly to your inbox every week.</p>
+<form class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+<input class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-5 py-3 text-slate-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all sm:max-w-md" placeholder="Enter your email address" type="email"/>
+<button class="rounded-xl bg-primary px-8 py-3 font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all" type="submit">Subscribe</button>
+</form>
+<p class="mt-4 text-xs text-slate-500">We respect your privacy. Unsubscribe at any time.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 pt-16 pb-8">
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+<div class="col-span-2 lg:col-span-2">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-2xl font-bold">flight_takeoff</span>
+<h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">VisaFlow</h2>
+</div>
+<p class="mt-4 max-w-xs text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                            Empowering global professionals with seamless immigration solutions and up-to-the-minute policy news.
+                        </p>
+<div class="mt-6 flex gap-4">
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">language</span></a>
+<a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">group</span></a>
+</div>
+</div>
+<div>
+<h4 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">Solutions</h4>
+<ul class="mt-4 space-y-2 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Work Visas</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Study Permits</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Digital Nomads</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Corporate Relocation</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">Platform</h4>
+<ul class="mt-4 space-y-2 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Resources</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Case Studies</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Docs</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white">Company</h4>
+<ul class="mt-4 space-y-2 text-sm text-slate-500 dark:text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal &amp; Privacy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-16 border-t border-slate-100 dark:border-slate-800 pt-8 text-center text-xs text-slate-500">
+<p>Â© 2026 VisaFlow Inc. All rights reserved. Global Migration Simplified.</p>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

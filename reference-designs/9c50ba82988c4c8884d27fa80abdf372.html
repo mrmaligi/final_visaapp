@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaHelper | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="layout-container flex h-full flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-primary/10 bg-white dark:bg-slate-900 px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">travel_explore</span>
+</div>
+<h2 class="text-xl font-extrabold tracking-tight">VisaHelper</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-64 !h-10">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-400 flex items-center justify-center pl-4 rounded-l-xl">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-transparent focus:ring-0 placeholder:text-slate-400 px-4 text-sm" placeholder="Search applications, news, or lawyers..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Alex Thompson</p>
+<p class="text-xs text-slate-500">Pro Account</p>
+</div>
+<div class="bg-primary/20 rounded-full size-10 border-2 border-primary flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar male professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY3UwcqrZ-zQHL7uusk_fyy5MSfprtf3icWlwVQYW08s1ssI4cNoQzJRgnI3X_j0iXVmBQlHx7QxvPq9FE_4bgkKcsuMG94vqJLLEjJplw8jRIlCcO37obwDi1NmFqrFEWqTVUoAek6kAMftmcu8dCUy-_qIUAPH-JC-CH9ElUA2boq6ayHgeVJA7oQEsbsWw7ndQn_bYMk5qfmeawF3feoYYC2dHpNfuudRYZ2x_tZyWsBaW4im1EJ4ZUgMkrrpiZFXGGk9612Cdh"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full p-6 lg:p-10">
+<!-- Header Welcome -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+<div>
+<h1 class="text-3xl font-black tracking-tight">Welcome back, Alex!</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1">Here's what's happening with your visa applications today.</p>
+</div>
+<button class="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">add</span>
+<span>New Application</span>
+</button>
+</div>
+<!-- Quick Actions -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+<div class="group bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition-all cursor-pointer shadow-sm">
+<div class="size-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">public</span>
+</div>
+<h3 class="font-bold text-lg">Browse Visas</h3>
+<p class="text-slate-500 text-sm mt-1">Explore 50+ global visa options and eligibility criteria.</p>
+</div>
+<div class="group bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition-all cursor-pointer shadow-sm">
+<div class="size-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<h3 class="font-bold text-lg">Track Processing</h3>
+<p class="text-slate-500 text-sm mt-1">Real-time status updates on your submitted documents.</p>
+</div>
+<div class="group bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-primary transition-all cursor-pointer shadow-sm">
+<div class="size-12 rounded-lg bg-green-100 text-green-600 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<h3 class="font-bold text-lg">Find Lawyer</h3>
+<p class="text-slate-500 text-sm mt-1">Connect with verified immigration experts worldwide.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<!-- Left Content: Applications & News -->
+<div class="lg:col-span-2 space-y-10">
+<!-- My Visa Applications -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-extrabold tracking-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">description</span>
+                                My Visa Applications
+                            </h2>
+<button class="text-primary font-semibold text-sm hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- App Card 1 -->
+<div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Skilled Worker</span>
+<h3 class="font-bold text-lg mt-1">Subclass 189</h3>
+<p class="text-xs text-slate-500">Australia Permanent Residency</p>
+</div>
+<span class="text-primary font-bold">75%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mb-4">
+<div class="bg-primary h-full rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between items-center text-xs text-slate-500">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Updated 2h ago</span>
+<button class="text-primary font-bold">Continue</button>
+</div>
+</div>
+<!-- App Card 2 -->
+<div class="bg-white dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="bg-blue-100 text-blue-600 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">Education</span>
+<h3 class="font-bold text-lg mt-1">Student Visa 500</h3>
+<p class="text-xs text-slate-500">Higher Education Sector</p>
+</div>
+<span class="text-blue-600 font-bold">30%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full mb-4">
+<div class="bg-blue-600 h-full rounded-full" style="width: 30%"></div>
+</div>
+<div class="flex justify-between items-center text-xs text-slate-500">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Updated 3d ago</span>
+<button class="text-blue-600 font-bold">Upload Files</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent News Section -->
+<section>
+<h2 class="text-xl font-extrabold tracking-tight mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">newspaper</span>
+                            Immigration Updates
+                        </h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 group cursor-pointer shadow-sm">
+<div class="h-40 overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Australian parliament house landscape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQNkxDkMQ0spzz_FINkqyo2SG0Jbk5Illtc5Yqaz6d-OtIWjeHyrb53U2B7OFd5J1jfcD2sKmB5FwqevpOkDoOgfybGYE58u0kAShRLQ7oGMAEBzhXDPL7zs9TY13vS0CN79CaQsa4NEaBbM04z6J4-WOgHsZt8EIFJOV_DQgjM61hY1gaD9Rx8r7keZSO5i0XtASAieVdQQcryhETXxIsHMZOpf0uvWEnvkYK_OnUm6-TuN2lD_g_tk54NvSryjuGtB-m9jTzFGo0"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold">HOT</div>
+</div>
+<div class="p-4">
+<p class="text-primary text-[10px] font-bold uppercase mb-1">Australia</p>
+<h3 class="font-bold leading-tight group-hover:text-primary transition-colors">New point system changes for 189/190 visas starting 2024</h3>
+<p class="text-slate-500 text-xs mt-2">The Department of Home Affairs has announced a significant restructuring of the points test...</p>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 group cursor-pointer shadow-sm">
+<div class="h-40 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="New York City skyline with Statue of Liberty" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATdNGKAV_Iy4Vo-T2ZMzW6d9f1V6HZhbyWtb7gREkzyRL6ADmtcd8lG1OvH5x2LfncXrZoIm_1h7D7-IVtyO6Q853S6SE1oKT0EXuEP2-efSFdI1eybQIpt245rakwMqQCT312BbqNSyxYZaHuhUVOD4-nQrvPe2RAG7nWN02gebIOWcWkZ9FrIFu_P_Gt39JGUlh_1gX28imR-2T3KZ4i9S4_L9o9Ba2c-U9FXQx0J5C8AIp4w6QWlUkgsmeunLxowlR0s14dx3M5"/>
+</div>
+<div class="p-4">
+<p class="text-primary text-[10px] font-bold uppercase mb-1">USA</p>
+<h3 class="font-bold leading-tight group-hover:text-primary transition-colors">H1-B registration window and lottery dates confirmed</h3>
+<p class="text-slate-500 text-xs mt-2">Registration for the FY 2025 H-1B cap will open in March. Here's everything you need to know...</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar: Consultations & Timeline -->
+<div class="space-y-10">
+<!-- Upcoming Consultations -->
+<section>
+<h2 class="text-lg font-extrabold tracking-tight mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">event_upcoming</span>
+                            Consultations
+                        </h2>
+<div class="space-y-3">
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-sm">
+<img class="size-12 rounded-full object-cover ring-2 ring-primary/20" data-alt="Female professional immigration lawyer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDENH7AYB3sh-X8C-FLHngYf_n1Q1EhNhAbnkONExJGbhcxuA3hOTGS1ZhFJ36-rO0bVrbI5hkEocB8fNmbXoP2cXrK4RsH9XwoSA_OTKRjxipXQ-4Nn7fELu3Xm1OMEGh1hsPZ8Dln0wO5QeMckzTg1ytrCUjp_XgwLe6O-VsXmOqHbgjps2UfvuzWQkMx2NFJV_ZneS_lYR-U0nK8b91mLe-vNWL3XhG3hyQW-wjfRsvKg9zVcYOlfVJjffgrloaNVTGOO0PsX6c3"/>
+<div class="flex-1">
+<p class="font-bold text-sm">Sarah Jenkins, Esq.</p>
+<p class="text-xs text-slate-500">Tomorrow, 10:00 AM</p>
+</div>
+<button class="text-primary hover:bg-primary/10 size-8 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">videocam</span>
+</button>
+</div>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-4 shadow-sm">
+<img class="size-12 rounded-full object-cover ring-2 ring-slate-100" data-alt="Male professional immigration lawyer headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqkPzjc_K-DRB9Fs45mUNIQBD2GGwTN6vOPZyWNPJHiDgeWGrrEocE7NDp7cFAxfa6-RpJokzBTtZf0D_6c6dEngLA1U5mNWjjOzfZ14tHM8cYNEIXzGt5N28pCMrJRrS7KlOFpm9FeNxAf94H8Q-9lf8MMOr1y9KLyIsm4XiOgiM8HzRWpx9FcZ0Ux7p5fOD4yxYf1UzW7fenBFmw3wdv74YM9udEZzLBEhtATA5JAFwd8p_0mlaegBKqagXJba01HPlFlDvdnHzW"/>
+<div class="flex-1">
+<p class="font-bold text-sm">Michael Chen</p>
+<p class="text-xs text-slate-500">Friday, 2:30 PM</p>
+</div>
+<button class="text-slate-400 hover:bg-slate-100 size-8 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+</div>
+<button class="w-full py-2 text-sm text-slate-500 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl hover:border-primary hover:text-primary transition-all">
+                                Book New Session
+                            </button>
+</div>
+</section>
+<!-- Activity Timeline -->
+<section>
+<h2 class="text-lg font-extrabold tracking-tight mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                            Activity Feed
+                        </h2>
+<div class="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100 dark:before:bg-slate-700">
+<!-- Timeline Item 1 -->
+<div class="relative">
+<div class="absolute -left-[22px] top-1 size-3 rounded-full bg-primary ring-4 ring-background-light dark:ring-background-dark"></div>
+<p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Today, 09:12 AM</p>
+<p class="text-sm font-semibold mt-1">Document Verified</p>
+<p class="text-xs text-slate-500">Your Australian Birth Certificate was successfully verified by our team.</p>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative">
+<div class="absolute -left-[22px] top-1 size-3 rounded-full bg-slate-300 ring-4 ring-background-light dark:ring-background-dark"></div>
+<p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Yesterday</p>
+<p class="text-sm font-semibold mt-1">New Upload</p>
+<p class="text-xs text-slate-500">Alex T. uploaded 3 files to Student Visa 500 folder.</p>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative">
+<div class="absolute -left-[22px] top-1 size-3 rounded-full bg-slate-300 ring-4 ring-background-light dark:ring-background-dark"></div>
+<p class="text-xs text-slate-400 font-bold uppercase tracking-widest">Feb 12, 2024</p>
+<p class="text-sm font-semibold mt-1">Fee Paid</p>
+<p class="text-xs text-slate-500">Processing fee of $120.00 received for Subclass 189.</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer / Mobile Nav (Optional visual element) -->
+<footer class="mt-20 border-t border-slate-200 dark:border-slate-800 py-8 bg-white dark:bg-slate-900">
+<div class="max-w-7xl mx-auto px-6 text-center">
+<p class="text-sm text-slate-500">Â© 2024 VisaHelper. All rights reserved. Your privacy and security are our priority.</p>
+</div>
+</footer>
+</div>
+</body></html>

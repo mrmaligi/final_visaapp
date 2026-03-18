@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VisaFlow - Content Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec5b13",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221610",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav { background-color: rgba(236, 91, 19, 0.1); border-right: 3px solid #ec5b13; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+<span class="material-symbols-outlined">flight_takeoff</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">VisaFlow</h1>
+<p class="text-xs text-slate-500 uppercase font-semibold">Admin Portal</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-medium text-sm">Visa Management</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-primary/10 rounded-lg transition-colors border-r-4 border-primary" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-medium text-sm">Content Builder</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-medium text-sm">Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 bg-slate-50 dark:bg-slate-800 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-slate-300 overflow-hidden">
+<img alt="Admin user avatar" data-alt="Portrait of a smiling professional administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzPwiLw8y4ysCQh_JXBJMMg8nG68vqvNsxz1LIgbhcaNDfFP-aNS2zGsM8lC388mHFGnJDsb-hRfyJlS5FaiAFfsi9d5ypX_aQdJxG2RG-mOsY1h4KZnxwSx7jQIupZSkWXxCwjDiY0_BN8Wtk6zwg4l-Hxh2U0ETlcr5TLryy1voyYWmY-xj9gCuOkDzdt_E3bmW4OfsSvqR8VsE5Eo62nK23n0LpaE1uaRdN5uU5hFDWh_kun22sp31ZA8C-3Ss_NehWqgEdyjkB"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-bold truncate">Alex Morgan</p>
+<p class="text-[10px] text-slate-500">Super Admin</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 shrink-0">
+<div class="flex items-center gap-8">
+<h2 class="text-lg font-bold">Content Builder</h2>
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<a class="px-4 py-1.5 text-xs font-bold rounded-md bg-white dark:bg-slate-700 shadow-sm text-primary" href="#">Application Form</a>
+<a class="px-4 py-1.5 text-xs font-bold rounded-md text-slate-500 hover:text-slate-700 dark:hover:text-slate-300" href="#">Document Requirements</a>
+<a class="px-4 py-1.5 text-xs font-bold rounded-md text-slate-500 hover:text-slate-700 dark:hover:text-slate-300" href="#">Guides</a>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+                    Save Draft
+                </button>
+<button class="px-6 py-2 text-sm font-bold text-white bg-primary hover:bg-primary/90 rounded-lg shadow-lg shadow-primary/20 transition-all">
+                    Publish
+                </button>
+</div>
+</header>
+<!-- Builder Workspace Container -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Sidebar: Field Selector -->
+<div class="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col overflow-y-auto">
+<div class="p-6">
+<h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Field Components</h3>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab hover:border-primary transition-colors group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">text_fields</span>
+<span class="text-sm font-medium">Short Text</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab hover:border-primary transition-colors group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">mail</span>
+<span class="text-sm font-medium">Email Address</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab hover:border-primary transition-colors group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">calendar_today</span>
+<span class="text-sm font-medium">Date Picker</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab hover:border-primary transition-colors group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">cloud_upload</span>
+<span class="text-sm font-medium">File Upload</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab hover:border-primary transition-colors group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">check_box</span>
+<span class="text-sm font-medium">Checkbox Group</span>
+</div>
+</div>
+<div class="mt-8">
+<h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Form Structures</h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">view_quilt</span>
+<span class="text-sm font-medium">New Section</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-sm">drag_indicator</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg cursor-grab group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">format_list_numbered</span>
+<span class="text-sm font-medium">Multi-step Page</span>
+</div>
+<span class="material-symbols-outlined text-slate-300 text-sm">drag_indicator</span>
+</div>
+</div>
+</div>
+<div class="mt-8 bg-primary/5 p-4 rounded-xl border border-primary/20">
+<h4 class="text-sm font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-base">info</span>
+                            Pro Tip
+                        </h4>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Drag elements directly into the central canvas to start building your interactive visa application form.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Central Canvas: Drag and Drop -->
+<div class="flex-1 bg-background-light dark:bg-background-dark p-8 overflow-y-auto">
+<div class="max-w-3xl mx-auto space-y-6">
+<!-- Form Section 1 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group relative">
+<div class="absolute -left-12 top-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-md border border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-sm">drag_indicator</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 shadow-md border border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-400 hover:text-red-500">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-start mb-4">
+<input class="text-xl font-bold bg-transparent border-none focus:ring-0 p-0 w-full placeholder:text-slate-300" type="text" value="Personal Information"/>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded text-slate-500">SECTION 1</span>
+</div>
+<!-- Rich Text Toolbar -->
+<div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-50 dark:border-slate-800">
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500"><span class="material-symbols-outlined text-lg">format_bold</span></button>
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500"><span class="material-symbols-outlined text-lg">format_italic</span></button>
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500"><span class="material-symbols-outlined text-lg">link</span></button>
+<div class="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded text-slate-500"><span class="material-symbols-outlined text-lg">format_list_bulleted</span></button>
+</div>
+<textarea class="w-full text-sm text-slate-500 bg-transparent border-none focus:ring-0 p-0 resize-none h-12" placeholder="Provide instructions for this section...">Please ensure all details match your passport exactly to avoid delays in processing.</textarea>
+</div>
+<div class="p-6 space-y-4 bg-slate-50/50 dark:bg-slate-800/20">
+<!-- Draggable Field Item -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="material-symbols-outlined text-slate-300 cursor-grab">drag_indicator</span>
+<div class="flex-1">
+<label class="text-xs font-bold text-slate-400 block mb-1 uppercase tracking-tighter">Full Name (As per passport)</label>
+<div class="h-9 w-full bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700 flex items-center px-3">
+<span class="text-slate-400 text-sm italic">User input field</span>
+</div>
+</div>
+<button class="text-slate-300 hover:text-slate-600"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
+<span class="material-symbols-outlined text-slate-300 cursor-grab">drag_indicator</span>
+<div class="flex-1">
+<label class="text-xs font-bold text-slate-400 block mb-1 uppercase tracking-tighter">Date of Birth</label>
+<div class="h-9 w-full bg-slate-50 dark:bg-slate-800 rounded-md border border-slate-200 dark:border-slate-700 flex items-center px-3 justify-between">
+<span class="text-slate-400 text-sm italic">DD/MM/YYYY</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">calendar_month</span>
+</div>
+</div>
+<button class="text-slate-300 hover:text-slate-600"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+<button class="w-full py-3 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-lg text-slate-400 text-sm font-medium hover:border-primary hover:text-primary transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                                Drop a field here
+                            </button>
+</div>
+</div>
+<!-- Form Section 2 -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group relative">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-start mb-2">
+<input class="text-xl font-bold bg-transparent border-none focus:ring-0 p-0 w-full" type="text" value="Travel History"/>
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold rounded text-slate-500">SECTION 2</span>
+</div>
+<p class="text-sm text-slate-500">List all countries visited in the last 5 years.</p>
+</div>
+<div class="p-6 bg-slate-50/50 dark:bg-slate-800/20">
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm opacity-60">
+<span class="material-symbols-outlined text-slate-300">drag_indicator</span>
+<div class="flex-1">
+<label class="text-xs font-bold text-slate-400 block mb-1 uppercase tracking-tighter">Previous Visa Denials</label>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border border-slate-300"></div>
+<span class="text-sm">Yes</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border-4 border-primary"></div>
+<span class="text-sm">No</span>
+</div>
+</div>
+</div>
+<button class="text-slate-300"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined">add</span>
+                        Add New Form Section
+                    </button>
+</div>
+</div>
+<!-- Right Sidebar: Live Preview -->
+<div class="w-96 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">visibility</span>
+                        Live Preview
+                    </h3>
+<div class="flex gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="p-1.5 rounded-md bg-white dark:bg-slate-700 shadow-sm text-primary">
+<span class="material-symbols-outlined text-sm">laptop</span>
+</button>
+<button class="p-1.5 rounded-md text-slate-400 hover:text-slate-600">
+<span class="material-symbols-outlined text-sm">smartphone</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-6 bg-slate-50 dark:bg-slate-900/50">
+<!-- Preview Screen Mockup -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden min-h-full">
+<div class="h-1 bg-primary w-1/3"></div>
+<div class="p-6">
+<div class="mb-6">
+<h4 class="text-lg font-bold">Tourist Visa Application</h4>
+<p class="text-xs text-slate-400">Step 1 of 3: Personal Data</p>
+</div>
+<div class="space-y-5">
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-600 dark:text-slate-300">Full Name</label>
+<div class="w-full h-10 border border-slate-200 dark:border-slate-700 rounded-lg px-3 flex items-center text-slate-400 text-sm">
+                                        Type your name...
+                                    </div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-600 dark:text-slate-300">Date of Birth</label>
+<div class="w-full h-10 border border-slate-200 dark:border-slate-700 rounded-lg px-3 flex items-center justify-between text-slate-400 text-sm">
+<span>Select date</span>
+<span class="material-symbols-outlined text-base">calendar_today</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-bold text-slate-600 dark:text-slate-300">Passport Photo</label>
+<div class="w-full border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 text-center">
+<span class="material-symbols-outlined text-primary mb-1">cloud_upload</span>
+<p class="text-[10px] text-slate-400">Drag file or click to upload</p>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between">
+<button class="text-xs font-bold text-slate-400">Back</button>
+<button class="px-5 py-2 bg-primary text-white text-xs font-bold rounded-lg">Next Step</button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900">
+<div class="flex items-center gap-2 text-[10px] text-slate-400">
+<span class="w-2 h-2 rounded-full bg-green-500"></span>
+                        Auto-saving changes...
+                    </div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -12,7 +12,7 @@ const navLinks: NavLink[] = [
   { label: 'Visas', href: '/visas' },
   { label: 'Tracker', href: '/tracker' },
   { label: 'News', href: '/news' },
-  { label: 'For Lawyers', href: '/for-lawyers' },
+  { label: 'Lawyers', href: '/lawyers' },
 ];
 
 export default function Header(): JSX.Element {
