@@ -1,9 +1,12 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 import { Visa } from "@/types";
 
 export async function getVisas(category?: string): Promise<{ data: Visa[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     let query = supabase
       .from("visas")
       .select("*")
@@ -30,7 +33,10 @@ export async function getVisas(category?: string): Promise<{ data: Visa[] | null
 
 export async function getVisaById(id: string): Promise<{ data: Visa | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("visas")
       .select("*")
@@ -51,7 +57,10 @@ export async function getVisaById(id: string): Promise<{ data: Visa | null; erro
 
 export async function getUserApplications(userId: string): Promise<{ data: any[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("visa_purchases")
       .select(`
@@ -75,7 +84,10 @@ export async function getUserApplications(userId: string): Promise<{ data: any[]
 
 export async function getUserConsultations(userId: string): Promise<{ data: any[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("consultations")
       .select(`

@@ -18,7 +18,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
   protection: { bg: 'bg-red-100', text: 'text-red-700' },
 };
 
-export default function VisaCard({ visa, showPremiumBadge = true }: VisaCardProps): JSX.Element {
+export default function VisaCard({ visa, showPremiumBadge = true }: VisaCardProps): React.ReactElement {
   const colors = categoryColors[visa.category] || { bg: 'bg-gray-100', text: 'text-gray-700' };
 
   return (

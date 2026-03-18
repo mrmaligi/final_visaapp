@@ -1,18 +1,19 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Mail, Lock, Eye, EyeOff, Plane, User } from 'lucide-react';
-import { useAuth } from '@/components/auth/AuthProvider';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Mail, Lock, Eye, EyeOff, Plane, User } from "lucide-react";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
   const router = useRouter();
   const { signUp, signInWithGoogle } = useAuth();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,37 +26,43 @@ export default function SignUpPage() {
 
     // Validation
     if (!fullName.trim()) {
-      setError('Full name is required');
+      setError("Full name is required");
+      toast.error("Full name is required");
       setLoading(false);
       return;
     }
 
     if (!email.trim()) {
-      setError('Email is required');
+      setError("Email is required");
+      toast.error("Email is required");
       setLoading(false);
       return;
     }
 
     if (!password) {
-      setError('Password is required');
+      setError("Password is required");
+      toast.error("Password is required");
       setLoading(false);
       return;
     }
 
     if (password.length < 8) {
-      setError('Password must be at least 8 characters');
+      setError("Password must be at least 8 characters");
+      toast.error("Password must be at least 8 characters");
       setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       setLoading(false);
       return;
     }
 
     if (!agreedToTerms) {
-      setError('You must agree to the Terms and Privacy Policy');
+      setError("You must agree to the Terms and Privacy Policy");
+      toast.error("You must agree to the Terms and Privacy Policy");
       setLoading(false);
       return;
     }
@@ -66,11 +73,14 @@ export default function SignUpPage() {
       });
       if (error) {
         setError(error.message);
+        toast.error(error.message);
       } else {
-        router.push('/auth/verify-email');
+        toast.success("Account created! Please check your email to verify.");
+        router.push("/auth/verify-email");
       }
     } catch {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -84,11 +94,13 @@ export default function SignUpPage() {
       const { error } = await signInWithGoogle();
       if (error) {
         setError(error.message);
+        toast.error(error.message);
         setLoading(false);
       }
       // Redirect happens via OAuth callback
     } catch {
-      setError('An unexpected error occurred');
+      setError("An unexpected error occurred");
+      toast.error("An unexpected error occurred");
       setLoading(false);
     }
   };
@@ -110,13 +122,13 @@ export default function SignUpPage() {
             <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
               <Plane className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold tracking-tight">VisaFlow</h2>
+            <h2 className="text-3xl font-bold tracking-tight">VisaHelper</h2>
           </div>
           <h1 className="text-5xl font-black leading-tight">
             Start Your Journey Today.
           </h1>
           <p className="text-lg text-white/80 leading-relaxed">
-            Create your free account and join thousands of travelers who have simplified their visa and travel documentation process.
+            Create your free account and join thousands of travelers who have simplified their Australian visa applications.
           </p>
           <div className="mt-8 flex gap-4">
             <div className="flex -space-x-3">
@@ -136,14 +148,14 @@ export default function SignUpPage() {
         <div className="w-full max-w-[440px] flex flex-col gap-6">
           {/* Logo for Mobile */}
           <div className="md:hidden flex items-center gap-2 mb-4">
-            <Plane className="w-8 h-8 text-[#ec5b13]" />
-            <span className="text-2xl font-bold text-slate-900">VisaFlow</span>
+            <Plane className="w-8 h-8 text-[#0052cc]" />
+            <span className="text-2xl font-bold text-slate-900">VisaHelper</span>
           </div>
 
           <div className="flex flex-col gap-2">
             <h2 className="text-3xl font-extrabold text-slate-900">Create your account</h2>
             <p className="text-slate-500">
-              Get started with your free VisaFlow account.
+              Get started with your free VisaHelper account.
             </p>
           </div>
 
@@ -164,7 +176,7 @@ export default function SignUpPage() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#ec5b13] focus:ring-2 focus:ring-[#ec5b13]/20 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#0052cc] focus:ring-2 focus:ring-[#0052cc]/20 transition-all outline-none"
                   placeholder="John Doe"
                   required
                 />
@@ -181,7 +193,7 @@ export default function SignUpPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#ec5b13] focus:ring-2 focus:ring-[#ec5b13]/20 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#0052cc] focus:ring-2 focus:ring-[#0052cc]/20 transition-all outline-none"
                   placeholder="name@company.com"
                   required
                 />
@@ -198,7 +210,7 @@ export default function SignUpPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-11 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#ec5b13] focus:ring-2 focus:ring-[#ec5b13]/20 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-11 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#0052cc] focus:ring-2 focus:ring-[#0052cc]/20 transition-all outline-none"
                   placeholder="••••••••"
                   required
                   minLength={8}
@@ -230,7 +242,7 @@ export default function SignUpPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#ec5b13] focus:ring-2 focus:ring-[#ec5b13]/20 transition-all outline-none"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-[#0052cc] focus:ring-2 focus:ring-[#0052cc]/20 transition-all outline-none"
                   placeholder="••••••••"
                   required
                 />
@@ -243,15 +255,15 @@ export default function SignUpPage() {
                 id="terms"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-[#ec5b13] focus:ring-[#ec5b13]/20 mt-0.5"
+                className="h-4 w-4 rounded border-slate-300 text-[#0052cc] focus:ring-[#0052cc]/20 mt-0.5"
               />
               <label htmlFor="terms" className="text-sm text-slate-600">
                 I agree to the{' '}
-                <Link href="/terms" className="text-[#ec5b13] hover:underline font-medium">
+                <Link href="/terms" className="text-[#0052cc] hover:underline font-medium">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link href="/privacy" className="text-[#ec5b13] hover:underline font-medium">
+                <Link href="/privacy" className="text-[#0052cc] hover:underline font-medium">
                   Privacy Policy
                 </Link>
               </label>
@@ -260,7 +272,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-[#ec5b13] py-3.5 text-white font-bold text-lg shadow-lg shadow-[#ec5b13]/25 hover:bg-[#ec5b13]/90 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
+              className="w-full rounded-xl bg-[#0052cc] py-3.5 text-white font-bold text-lg shadow-lg shadow-[#0052cc]/25 hover:bg-[#0052cc]/90 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed mt-2"
             >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
@@ -293,7 +305,7 @@ export default function SignUpPage() {
             Already have an account?{' '}
             <Link 
               href="/auth/signin" 
-              className="font-bold text-[#ec5b13] hover:underline"
+              className="font-bold text-[#0052cc] hover:underline"
             >
               Sign in
             </Link>

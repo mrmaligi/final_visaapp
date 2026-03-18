@@ -57,7 +57,7 @@ export default function VisaCardDetailed({
   visa, 
   processingTime = 'TBD',
   isPremium = false 
-}: VisaCardDetailedProps): JSX.Element {
+}: VisaCardDetailedProps): React.ReactElement {
   const icon = categoryIcons[visa.category] || categoryIcons.work;
   const colorClass = categoryColors[visa.category] || 'bg-gray-100 text-gray-700';
 

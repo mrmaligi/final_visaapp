@@ -30,7 +30,7 @@ export default function PremiumTeaser({
   isUnlocked = false,
   onUnlock,
   href,
-}: PremiumTeaserProps): JSX.Element {
+}: PremiumTeaserProps): React.ReactElement {
   if (isUnlocked) {
     return (
       <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-6 text-white">

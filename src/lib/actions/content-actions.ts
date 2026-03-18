@@ -1,8 +1,11 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 
 export async function getNewsArticles(limit = 10): Promise<{ data: any[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("news_articles")
       .select("*")
@@ -24,7 +27,10 @@ export async function getNewsArticles(limit = 10): Promise<{ data: any[] | null;
 
 export async function getNewsById(id: string): Promise<{ data: any | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("news_articles")
       .select("*")
@@ -45,7 +51,10 @@ export async function getNewsById(id: string): Promise<{ data: any | null; error
 
 export async function getTrackerData(): Promise<{ data: any[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("tracker_entries")
       .select(`

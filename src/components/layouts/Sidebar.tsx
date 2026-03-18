@@ -160,7 +160,7 @@ const adminItems: SidebarItem[] = [
   },
 ];
 
-export default function Sidebar({ items, userRole = 'user' }: SidebarProps): JSX.Element {
+export default function Sidebar({ items, userRole = 'user' }: SidebarProps): React.ReactElement {
   const pathname = usePathname();
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
 

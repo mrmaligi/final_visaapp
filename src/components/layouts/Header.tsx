@@ -43,7 +43,7 @@ const adminNavLinks: NavLink[] = [
   { label: 'Visas', href: '/admin/visas' },
 ];
 
-export default function Header({ user, onSignOut }: HeaderProps): JSX.Element {
+export default function Header({ user, onSignOut }: HeaderProps): React.ReactElement {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const pathname = usePathname();

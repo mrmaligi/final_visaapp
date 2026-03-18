@@ -21,7 +21,7 @@ export default function VisaGrid({
   columns = 3,
   showPremiumBadge = true,
   emptyMessage = 'No visas found.',
-}: VisaGridProps): JSX.Element {
+}: VisaGridProps): React.ReactElement {
   if (visas.length === 0) {
     return (
       <div className="text-center py-12">

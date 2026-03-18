@@ -27,7 +27,7 @@ export default function Container({
   className = '',
   size = 'xl',
   padding = 'lg',
-}: ContainerProps): JSX.Element {
+}: ContainerProps): React.ReactElement {
   return (
     <div className={`mx-auto w-full ${sizeClasses[size]} ${paddingClasses[padding]} ${className}`}>
       {children}

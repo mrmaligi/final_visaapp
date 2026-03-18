@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@supabase/supabase-js";
 import { Lawyer } from "@/types";
 
 export async function getLawyers(filters?: {
@@ -7,7 +7,10 @@ export async function getLawyers(filters?: {
   language?: string;
 }): Promise<{ data: Lawyer[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     let query = supabase
       .from("lawyers")
       .select("*")
@@ -41,7 +44,10 @@ export async function getLawyers(filters?: {
 
 export async function getLawyerById(id: string): Promise<{ data: Lawyer | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("lawyers")
       .select("*")
@@ -62,7 +68,10 @@ export async function getLawyerById(id: string): Promise<{ data: Lawyer | null; 
 
 export async function getLawyerReviews(lawyerId: string): Promise<{ data: any[] | null; error: Error | null }> {
   try {
-    const supabase = createClient();
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    
     const { data, error } = await supabase
       .from("reviews")
       .select(`

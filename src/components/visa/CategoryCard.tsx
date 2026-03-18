@@ -28,7 +28,7 @@ export default function CategoryCard({
   icon,
   visaCount,
   color = 'blue',
-}: CategoryCardProps): JSX.Element {
+}: CategoryCardProps): React.ReactElement {
   return (
     <Link
       href={href}

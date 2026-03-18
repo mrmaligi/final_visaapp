@@ -22,7 +22,7 @@ export default function QuickFacts({
   facts,
   layout = 'horizontal',
   className = '',
-}: QuickFactsProps): JSX.Element {
+}: QuickFactsProps): React.ReactElement {
   return (
     <div className={`${layoutClasses[layout]} ${className}`}>
       {facts.map((fact, index) => (
