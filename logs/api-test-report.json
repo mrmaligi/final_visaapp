@@ -1,0 +1,209 @@
+{
+  "apiEndpoints": [
+    {
+      "timestamp": "2026-03-19T08:24:38.908Z",
+      "category": "API",
+      "name": "Auth Callback (no code)",
+      "status": "PASS",
+      "statusCode": 307,
+      "responseTime": 21,
+      "notes": "Redirects to: http://localhost:3000/auth/signin"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.922Z",
+      "category": "API",
+      "name": "Auth Callback (invalid code)",
+      "status": "PASS",
+      "statusCode": 307,
+      "responseTime": 14,
+      "notes": "Should redirect to signin with error"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.927Z",
+      "category": "API",
+      "name": "Auth Callback (with returnTo)",
+      "status": "PASS",
+      "statusCode": 307,
+      "responseTime": 5,
+      "notes": "Parameter preserved for post-auth redirect"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.931Z",
+      "category": "API",
+      "name": "Stripe Webhook Endpoint",
+      "status": "PASS",
+      "statusCode": 404,
+      "responseTime": 3,
+      "notes": "Webhook endpoint not implemented (expected for MVP)"
+    }
+  ],
+  "forms": [
+    {
+      "timestamp": "2026-03-19T08:24:38.935Z",
+      "category": "FORM",
+      "name": "Contact Form Page",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 2,
+      "notes": "Form present (email: true, submit: true)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.938Z",
+      "category": "FORM",
+      "name": "Newsletter Signup",
+      "status": "WARN",
+      "statusCode": 200,
+      "responseTime": 3,
+      "notes": "Newsletter signup not implemented (acceptable for MVP)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.942Z",
+      "category": "FORM",
+      "name": "Tracker Data Submission",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 4,
+      "notes": "Tracker contribution CTA found"
+    }
+  ],
+  "integrations": [
+    {
+      "timestamp": "2026-03-19T08:24:38.949Z",
+      "category": "INTEGRATION",
+      "name": "Google OAuth UI",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 7,
+      "notes": "Google OAuth button/link present"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.953Z",
+      "category": "INTEGRATION",
+      "name": "Supabase Auth Integration",
+      "status": "PASS",
+      "statusCode": 307,
+      "responseTime": 4,
+      "notes": "Supabase auth callback handles requests correctly"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.956Z",
+      "category": "INTEGRATION",
+      "name": "Stripe Payment Integration",
+      "status": "PASS",
+      "statusCode": 200,
+      "responseTime": 3,
+      "notes": "Payment/Pricing information present"
+    }
+  ],
+  "errors": [
+    {
+      "timestamp": "2026-03-19T08:24:38.958Z",
+      "category": "ERROR",
+      "name": "404 Page Handling",
+      "status": "PASS",
+      "statusCode": 404,
+      "responseTime": 2,
+      "notes": "Status: 404, Custom 404 content: true"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.960Z",
+      "category": "ERROR",
+      "name": "Error Boundary Present",
+      "status": "PASS",
+      "notes": "Error boundaries configured (error.tsx, global-error.tsx)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.962Z",
+      "category": "ERROR",
+      "name": "Invalid API Route Handling",
+      "status": "PASS",
+      "statusCode": 404,
+      "responseTime": 2,
+      "notes": "Returns 404 for non-existent API routes"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.966Z",
+      "category": "ERROR",
+      "name": "Method Not Allowed Handling",
+      "status": "PASS",
+      "statusCode": 405,
+      "notes": "Invalid HTTP methods handled appropriately"
+    }
+  ],
+  "performance": [
+    {
+      "timestamp": "2026-03-19T08:24:38.973Z",
+      "category": "PERFORMANCE",
+      "name": "Homepage Load Time",
+      "status": "PASS",
+      "responseTime": 2,
+      "minTime": 1,
+      "maxTime": 3,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.979Z",
+      "category": "PERFORMANCE",
+      "name": "Visas List Load Time",
+      "status": "PASS",
+      "responseTime": 2,
+      "minTime": 2,
+      "maxTime": 2,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.984Z",
+      "category": "PERFORMANCE",
+      "name": "Lawyers Directory Load Time",
+      "status": "PASS",
+      "responseTime": 2,
+      "minTime": 1,
+      "maxTime": 2,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:38.997Z",
+      "category": "PERFORMANCE",
+      "name": "Sign In Load Time",
+      "status": "PASS",
+      "responseTime": 4,
+      "minTime": 4,
+      "maxTime": 5,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:39.005Z",
+      "category": "PERFORMANCE",
+      "name": "Tracker Load Time",
+      "status": "PASS",
+      "responseTime": 3,
+      "minTime": 2,
+      "maxTime": 3,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:39.009Z",
+      "category": "PERFORMANCE",
+      "name": "Contact Load Time",
+      "status": "PASS",
+      "responseTime": 1,
+      "minTime": 1,
+      "maxTime": 1,
+      "notes": "Excellent (< 500ms) (avg of 3 runs)"
+    },
+    {
+      "timestamp": "2026-03-19T08:24:39.019Z",
+      "category": "PERFORMANCE",
+      "name": "API Response Time (Auth Callback)",
+      "status": "PASS",
+      "responseTime": 2,
+      "notes": "Average of 5 requests"
+    }
+  ],
+  "summary": {
+    "total": 21,
+    "passed": 20,
+    "failed": 0,
+    "warnings": 1
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "supabase": [
+    {
+      "timestamp": "2026-03-19T08:27:42.562Z",
+      "category": "SUPABASE",
+      "name": "Basic Connection",
+      "status": "PASS",
+      "responseTime": "463ms",
+      "notes": "Connected to Supabase project: ysfwurlzkihgezfegfog"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:42.832Z",
+      "category": "SUPABASE",
+      "name": "Visas Query",
+      "status": "PASS",
+      "responseTime": "270ms",
+      "notes": "Retrieved 5 active visas"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:43.078Z",
+      "category": "SUPABASE",
+      "name": "Lawyers Query",
+      "status": "PASS",
+      "responseTime": "246ms",
+      "notes": "Retrieved 0 lawyers"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:43.318Z",
+      "category": "SUPABASE",
+      "name": "Profiles Query",
+      "status": "PASS",
+      "responseTime": "240ms",
+      "notes": "Profiles table accessible"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:43.318Z",
+      "category": "SUPABASE",
+      "name": "Auth Configuration",
+      "status": "PASS",
+      "notes": "Auth service is operational"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:44.152Z",
+      "category": "SUPABASE",
+      "name": "Storage Buckets",
+      "status": "PASS",
+      "notes": "Found 0 storage buckets"
+    }
+  ],
+  "serverActions": [
+    {
+      "timestamp": "2026-03-19T08:27:44.407Z",
+      "category": "SERVER_ACTION",
+      "name": "getVisas Function",
+      "status": "PASS",
+      "responseTime": "254ms",
+      "notes": "Retrieved 20 visas"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:44.883Z",
+      "category": "SERVER_ACTION",
+      "name": "getVisaById Pattern",
+      "status": "PASS",
+      "responseTime": "242ms",
+      "notes": "Retrieved visa: Skilled Independent"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:45.111Z",
+      "category": "SERVER_ACTION",
+      "name": "getLawyers Function",
+      "status": "PASS",
+      "responseTime": "228ms",
+      "notes": "Retrieved 0 lawyers"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:45.359Z",
+      "category": "SERVER_ACTION",
+      "name": "getNewsArticles Function",
+      "status": "WARN",
+      "responseTime": "248ms",
+      "notes": "Error: column news_articles.is_published does not exist"
+    }
+  ],
+  "security": [
+    {
+      "timestamp": "2026-03-19T08:27:45.585Z",
+      "category": "SECURITY",
+      "name": "SQL Injection Protection",
+      "status": "PASS",
+      "notes": "Query sanitized, no injection possible"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:45.818Z",
+      "category": "SECURITY",
+      "name": "RLS on profiles",
+      "status": "WARN",
+      "notes": "Table accessible without authentication - verify RLS policies"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:46.049Z",
+      "category": "SECURITY",
+      "name": "RLS on visa_purchases",
+      "status": "WARN",
+      "notes": "Table accessible without authentication - verify RLS policies"
+    },
+    {
+      "timestamp": "2026-03-19T08:27:46.284Z",
+      "category": "SECURITY",
+      "name": "RLS on consultations",
+      "status": "WARN",
+      "notes": "Table accessible without authentication - verify RLS policies"
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passed": 10,
+    "failed": 0,
+    "warnings": 4
+  }
+}
