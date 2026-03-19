@@ -2,9 +2,15 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover',
-});
+let stripeClient: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
+    stripeClient = new Stripe(key, { apiVersion: '2026-02-25.clover' });
+  }
+  return stripeClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +69,7 @@ export async function POST(request: NextRequest) {
       ? Math.round(amount * 100) 
       : undefined;
 
-    const refund = await stripe.refunds.create({
+    const refund = await getStripe().refunds.create({
       payment_intent: payment.stripe_payment_intent_id,
       amount: refundAmount,
       reason: 'requested_by_customer',

@@ -7,9 +7,15 @@ import {
   getLawyerPricingForVisa 
 } from '@/lib/actions/consultation-actions';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-02-25.clover',
-});
+let stripeClient: Stripe | null = null;
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error('STRIPE_SECRET_KEY not configured');
+    stripeClient = new Stripe(key, { apiVersion: '2026-02-25.clover' });
+  }
+  return stripeClient;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -103,7 +109,7 @@ export async function POST(request: NextRequest) {
     }, amount);
 
     // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
+    const session = await getStripe().checkout.sessions.create({
       line_items: [
         {
           price_data: {
