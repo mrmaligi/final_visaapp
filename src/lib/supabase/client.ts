@@ -9,3 +9,8 @@ export const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey);
 export function createClient() {
   return createSupabaseClient(supabaseUrl, supabaseAnonKey);
 }
+
+// Export async version for server actions compatibility
+export async function createAsyncClient() {
+  return createSupabaseClient(supabaseUrl, supabaseAnonKey);
+}

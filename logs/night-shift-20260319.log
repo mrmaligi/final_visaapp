@@ -1,0 +1,96 @@
+========================================
+Night Shift Check - Thu Mar 19 22:30:04 AEDT 2026
+========================================
+
+1. Git Status:
+8b45cd2 chore: night shift setup - monitoring and dashboard
+268de9d fix: correct Stripe API version to match package
+a8aeacd fix: update Stripe API version
+6507dca docs: add critical fixes summary
+3c2167e feat: implement critical missing features
+
+2. Recent Commits:
+ CRITICAL_FIXES_SUMMARY.md            | 206 +++++++++++++++++++++++++++++
+ NIGHT_SHIFT_DASHBOARD.md             | 117 +++++++++++++++++
+ package-lock.json                    |   8 +-
+ package.json                         |   2 +-
+ scripts/create-missing-tables.js     | 136 +++++++++++++++++++
+ scripts/create-missing-tables.sql    | 100 ++++++++++++++
+ scripts/night-shift-monitor.sh       |  50 +++++++
+ src/app/api/documents/route.ts       | 248 +++++++++++++++++++++++++++++++++++
+ src/app/api/stripe/checkout/route.ts |  93 +++++++++++++
+ src/app/api/webhooks/stripe/route.ts | 100 ++++++++++++++
+ src/hooks/useDocumentUpload.ts       | 119 +++++++++++++++++
+ src/hooks/useStripeCheckout.ts       |  65 +++++++++
+ 12 files changed, 1239 insertions(+), 5 deletions(-)
+
+3. Application Health:
+Homepage: 200
+Visas: 200
+Auth: 200
+
+4. Files Modified (Last Hour):
+-rw-rw-r-- 1 manik manik 59503 Mar 19 22:29 src/app/user/documents/page.tsx
+-rw-rw-r-- 1 manik manik   613 Mar 19 22:29 src/lib/supabase/client.ts
+-rw-rw-r-- 1 manik manik  2167 Mar 19 22:29 src/app/api/payments/receipt/route.ts
+-rw-rw-r-- 1 manik manik  4005 Mar 19 22:29 src/app/api/payments/refund/route.ts
+-rw-rw-r-- 1 manik manik  6279 Mar 19 22:28 src/components/tracker/ProcessingTimeStats.tsx
+-rw-rw-r-- 1 manik manik  5384 Mar 19 22:28 src/components/tracker/ProcessingTimeTrends.tsx
+-rw-rw-r-- 1 manik manik 16373 Mar 19 22:28 src/components/tracker/TrackerSubmissionForm.tsx
+-rw-rw-r-- 1 manik manik  9204 Mar 19 22:28 src/app/admin/dashboard/page.tsx
+-rw-rw-r-- 1 manik manik  2521 Mar 19 22:28 src/app/api/lawyers/earnings/route.ts
+-rw-rw-r-- 1 manik manik  1252 Mar 19 22:28 src/app/api/payments/history/route.ts
+
+5. Pending Tasks (from TODO files):
+Open items: 0
+
+========================================
+
+========================================
+Night Shift Check - Thu Mar 19 23:00:04 AEDT 2026
+========================================
+
+1. Git Status:
+8b45cd2 chore: night shift setup - monitoring and dashboard
+268de9d fix: correct Stripe API version to match package
+a8aeacd fix: update Stripe API version
+6507dca docs: add critical fixes summary
+3c2167e feat: implement critical missing features
+
+2. Recent Commits:
+ CRITICAL_FIXES_SUMMARY.md            | 206 +++++++++++++++++++++++++++++
+ NIGHT_SHIFT_DASHBOARD.md             | 117 +++++++++++++++++
+ package-lock.json                    |   8 +-
+ package.json                         |   2 +-
+ scripts/create-missing-tables.js     | 136 +++++++++++++++++++
+ scripts/create-missing-tables.sql    | 100 ++++++++++++++
+ scripts/night-shift-monitor.sh       |  50 +++++++
+ src/app/api/documents/route.ts       | 248 +++++++++++++++++++++++++++++++++++
+ src/app/api/stripe/checkout/route.ts |  93 +++++++++++++
+ src/app/api/webhooks/stripe/route.ts | 100 ++++++++++++++
+ src/hooks/useDocumentUpload.ts       | 119 +++++++++++++++++
+ src/hooks/useStripeCheckout.ts       |  65 +++++++++
+ 12 files changed, 1239 insertions(+), 5 deletions(-)
+
+3. Application Health:
+Homepage: 200
+Visas: 200
+Auth: 200
+
+4. Files Modified (Last Hour):
+-rw-rw-r-- 1 manik manik 16753 Mar 19 22:58 src/app/admin/visas/[id]/edit/page.tsx
+-rw-rw-r-- 1 manik manik 26672 Mar 19 22:57 src/lib/actions/admin-actions.ts
+-rw-rw-r-- 1 manik manik 10396 Mar 19 22:57 src/app/admin/visas/[id]/content/page.tsx
+-rw-rw-r-- 1 manik manik   124 Mar 19 22:57 src/app/admin/visas/new/page.tsx
+-rw-rw-r-- 1 manik manik   175 Mar 19 22:56 src/app/admin/news/new/page.tsx
+-rw-rw-r-- 1 manik manik 11962 Mar 19 22:53 src/app/admin/news/[id]/edit/page.tsx
+-rw-rw-r-- 1 manik manik 12784 Mar 19 22:51 src/app/admin/users/[id]/page.tsx
+-rw-rw-r-- 1 manik manik 15530 Mar 19 22:49 src/app/admin/lawyers/[id]/page.tsx
+-rw-rw-r-- 1 manik manik   234 Mar 19 22:48 src/app/lawyer/layout.tsx
+-rw-rw-r-- 1 manik manik   230 Mar 19 22:48 src/app/user/layout.tsx
+
+5. Pending Tasks (from TODO files):
+Open items: 1
+
+========================================
+

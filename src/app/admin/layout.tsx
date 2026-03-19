@@ -1,9 +1,6 @@
-import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Admin Portal | VisaFlow',
-  description: 'Administrative dashboard for managing the VisaFlow platform',
-};
+// Force dynamic rendering for all admin routes
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default function AdminRootLayout({
   children,

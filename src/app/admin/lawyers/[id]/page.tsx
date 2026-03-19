@@ -1,574 +1,405 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useToast } from '@/components/ui/Toast';
+import { useConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import {
+  getLawyerById,
+  updateLawyerStatus,
+  type LawyerApplication
+} from '@/lib/actions/admin-actions';
 import {
   ArrowLeft,
   CheckCircle,
   XCircle,
-  Clock,
   Mail,
   Phone,
-  MapPin,
   Building2,
-  Award,
-  Calendar,
+  MapPin,
   Globe,
-  FileText,
-  MessageSquare,
-  UserCheck,
-  UserX,
-  AlertCircle,
-  Download,
-  ExternalLink,
-  MoreHorizontal,
-  Shield,
+  Calendar,
   Star,
-  CheckSquare,
-  Edit3
+  FileText,
+  ExternalLink,
+  Clock,
+  Award,
+  Languages,
+  Download
 } from 'lucide-react';
-
-// Mock lawyer data
-const mockLawyer = {
-  id: '1',
-  full_name: 'Dr. Emily Parker',
-  email: 'emily.parker@lawfirm.com',
-  phone: '+61 412 345 678',
-  firm_name: 'Parker Immigration Law',
-  firm_address: 'Level 12, 456 Collins Street, Melbourne VIC 3000',
-  registration_number: 'MARN 1801234',
-  years_experience: 12,
-  bio: 'Dr. Emily Parker is a registered migration agent with over 12 years of experience in Australian immigration law. She specializes in partner visas, skilled migration, and employer-sponsored visas. Emily has helped over 2,000 clients successfully navigate the Australian visa system.',
-  verification_status: 'pending' as const,
-  average_rating: 0,
-  total_consultations: 0,
-  total_reviews: 0,
-  languages: ['English', 'Mandarin'],
-  website: 'www.parkerimmigration.com.au',
-  submitted_at: '2024-03-18T10:30:00Z',
-  avatar: null,
-  specializations: ['Partner Visas', 'Skilled Migration', 'Employer Sponsorship', 'Student Visas'],
-};
-
-const documents = [
-  { id: '1', name: 'MARN Registration Certificate', type: 'PDF', size: '2.4 MB', uploaded_at: '2024-03-18T10:30:00Z' },
-  { id: '2', name: 'Professional Indemnity Insurance', type: 'PDF', size: '1.8 MB', uploaded_at: '2024-03-18T10:32:00Z' },
-  { id: '3', name: 'Passport Copy', type: 'PDF', size: '3.2 MB', uploaded_at: '2024-03-18T10:35:00Z' },
-  { id: '4', name: 'Academic Qualifications', type: 'PDF', size: '4.1 MB', uploaded_at: '2024-03-18T10:38:00Z' },
-];
-
-const verificationChecklist = [
-  { id: '1', item: 'MARN Registration Valid', checked: true, notes: '' },
-  { id: '2', item: 'Professional Indemnity Insurance Current', checked: true, notes: '' },
-  { id: '3', item: 'Identity Documents Verified', checked: true, notes: '' },
-  { id: '4', item: 'Qualifications Authenticated', checked: false, notes: 'Waiting for verification from issuing institution' },
-  { id: '5', item: 'No Disciplinary Actions', checked: true, notes: 'Clean record checked on OMARA register' },
-  { id: '6', item: 'Website & Contact Details Verified', checked: false, notes: '' },
-];
-
-const adminNotes = [
-  { id: '1', author: 'Admin User', timestamp: '2024-03-18T14:30:00Z', note: 'Initial application review. All documents appear to be in order. MARN registration verified through official register.' },
-  { id: '2', author: 'Admin User', timestamp: '2024-03-18T16:45:00Z', note: 'Attempted phone verification but no answer. Left voicemail requesting callback.' },
-];
-
-function StatusBanner({ status }: { status: 'pending' | 'approved' | 'rejected' }) {
-  const styles = {
-    pending: 'bg-amber-50 border-amber-200 text-amber-800',
-    approved: 'bg-green-50 border-green-200 text-green-800',
-    rejected: 'bg-red-50 border-red-200 text-red-800',
-  };
-
-  const icons = {
-    pending: Clock,
-    approved: CheckCircle,
-    rejected: XCircle,
-  };
-
-  const messages = {
-    pending: 'This application is awaiting review and verification.',
-    approved: 'This lawyer has been approved and is active on the platform.',
-    rejected: 'This application was rejected. Reason: Insufficient documentation.',
-  };
-
-  const Icon = icons[status];
-
-  return (
-    <div className={cn('border rounded-lg p-4 mb-6', styles[status])}>
-      <div className="flex items-start gap-3">
-        <Icon className="w-5 h-5 mt-0.5" />
-        <div>
-          <p className="font-medium">Application Status: {status.charAt(0).toUpperCase() + status.slice(1)}</p>
-          <p className="text-sm mt-1 opacity-90">{messages[status]}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function LawyerDetailPage() {
   const params = useParams();
-  const [activeTab, setActiveTab] = useState('details');
-  const [showApproveModal, setShowApproveModal] = useState(false);
-  const [showRejectModal, setShowRejectModal] = useState(false);
-  const [showRequestInfoModal, setShowRequestInfoModal] = useState(false);
-  const [newNote, setNewNote] = useState('');
+  const router = useRouter();
+  const { id } = params;
+  const { addToast } = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog();
+  
+  const [lawyer, setLawyer] = useState<LawyerApplication | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [processing, setProcessing] = useState(false);
 
-  const tabs = [
-    { id: 'details', label: 'Details', icon: UserCheck },
-    { id: 'documents', label: 'Documents', icon: FileText },
-    { id: 'verification', label: 'Verification', icon: Shield },
-    { id: 'notes', label: 'Notes', icon: MessageSquare },
-  ];
+  useEffect(() => {
+    if (id) {
+      loadLawyer();
+    }
+  }, [id]);
+
+  const loadLawyer = async () => {
+    try {
+      setLoading(true);
+      const result = await getLawyerById(id as string);
+      
+      if (result.error) {
+        addToast(result.error, 'error');
+        router.push('/admin/lawyers');
+      } else {
+        setLawyer(result.data);
+      }
+    } catch (error) {
+      addToast('Failed to load lawyer details', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApprove = async () => {
+    if (!lawyer) return;
+    
+    confirm({
+      title: 'Approve Lawyer Application',
+      message: `Are you sure you want to approve ${lawyer.full_name}'s application? They will be able to accept consultations.`,
+      confirmText: 'Approve',
+      type: 'success',
+      onConfirm: async () => {
+        setProcessing(true);
+        const result = await updateLawyerStatus(lawyer.id, 'approved');
+        setProcessing(false);
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Lawyer approved successfully', 'success');
+          loadLawyer();
+        }
+      }
+    });
+  };
+
+  const handleReject = async () => {
+    if (!lawyer) return;
+    
+    confirm({
+      title: 'Reject Lawyer Application',
+      message: `Are you sure you want to reject ${lawyer.full_name}'s application? This action cannot be undone.`,
+      confirmText: 'Reject',
+      type: 'danger',
+      onConfirm: async () => {
+        setProcessing(true);
+        const result = await updateLawyerStatus(lawyer.id, 'rejected');
+        setProcessing(false);
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Lawyer application rejected', 'success');
+          router.push('/admin/lawyers');
+        }
+      }
+    });
+  };
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+          <Skeleton className="h-8 w-32 mb-6" />
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <div className="flex items-start gap-6">
+              <Skeleton className="w-24 h-24 rounded-full" />
+              <div className="flex-1 space-y-4">
+                <Skeleton className="h-8 w-64" />
+                <Skeleton className="h-4 w-48" />
+                <div className="grid grid-cols-3 gap-4 mt-6">
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                  <Skeleton className="h-20" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (!lawyer) {
+    return (
+      <AdminLayout>
+        <div className="p-6 lg:p-8 text-center">
+          <p className="text-gray-500">Lawyer not found</p>
+          <Link href="/admin/lawyers" className="text-blue-600 hover:underline">
+            Back to Lawyers
+          </Link>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
-      <div className="p-6 lg:p-8">
-        {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-          <Link href="/admin/lawyers" className="hover:text-gray-700">Lawyers</Link>
-          <span>/</span>
-          <span className="text-gray-900">{mockLawyer.full_name}</span>
-        </nav>
+      <ConfirmDialogComponent />
+      <div className="p-6 lg:p-8 max-w-6xl mx-auto">
+        {/* Back Link */}
+        <Link 
+          href="/admin/lawyers"
+          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Lawyers
+        </Link>
 
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin/lawyers"
-              className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{mockLawyer.full_name}</h1>
-              <p className="text-gray-500">{mockLawyer.firm_name}</p>
+        {/* Header Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-8">
+            <div className="flex flex-col md:flex-row md:items-start gap-6">
+              {/* Avatar */}
+              <div className="flex-shrink-0">
+                {lawyer.profile_photo_url ? (
+                  <img
+                    src={lawyer.profile_photo_url}
+                    alt={lawyer.full_name}
+                    className="w-24 h-24 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-3xl font-bold">
+                    {lawyer.full_name.charAt(0)}
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="flex-1">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <h1 className="text-2xl font-bold text-gray-900">{lawyer.full_name}</h1>
+                    <p className="text-gray-500">{lawyer.firm_name || 'Independent Practitioner'}</p>
+                  </div>
+                  
+                  <div className="flex items-center gap-3">
+                    {lawyer.verification_status === 'pending' && (
+                      <>
+                        <button
+                          onClick={handleApprove}
+                          disabled={processing}
+                          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          Approve
+                        </button>
+                        <button
+                          onClick={handleReject}
+                          disabled={processing}
+                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Reject
+                        </button>
+                      </>
+                    )}
+                    
+                    {lawyer.verification_status === 'approved' && (
+                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                        ✓ Approved
+                      </span>
+                    )}
+                    
+                    {lawyer.verification_status === 'rejected' && (
+                      <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                        ✗ Rejected
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                      <Star className="w-4 h-4" />
+                      <span className="text-sm">Rating</span>
+                    </div>
+                    <p className="text-xl font-bold">{lawyer.average_rating || 0}/5</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                      <FileText className="w-4 h-4" />
+                      <span className="text-sm">Reviews</span>
+                    </div>
+                    <p className="text-xl font-bold">{lawyer.total_reviews || 0}</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                      <Calendar className="w-4 h-4" />
+                      <span className="text-sm">Consultations</span>
+                    </div>
+                    <p className="text-xl font-bold">{lawyer.total_consultations || 0}</p>
+                  </div>
+                  
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                      <Award className="w-4 h-4" />
+                      <span className="text-sm">Experience</span>
+                    </div>
+                    <p className="text-xl font-bold">{lawyer.years_experience || 0} years</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowRequestInfoModal(true)}
-              className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 font-medium"
-            >
-              Request Info
-            </button>
-            <button
-              onClick={() => setShowRejectModal(true)}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
-            >
-              Reject
-            </button>
-            <button
-              onClick={() => setShowApproveModal(true)}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-            >
-              Approve
-            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-2">
-            <StatusBanner status={mockLawyer.verification_status} />
+        <div className="grid md:grid-cols-3 gap-6 mt-6">
+          {/* Left Column - Details */}
+          <div className="md:col-span-2 space-y-6">
+            {/* About */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold mb-4">About</h2>
+              <p className="text-gray-600 whitespace-pre-wrap">
+                {lawyer.bio || 'No bio provided.'}
+              </p>
+            </div>
 
-            {/* Tabs */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200">
-              <div className="border-b border-gray-200">
-                <div className="flex overflow-x-auto">
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={cn(
-                          'flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 whitespace-nowrap transition-colors',
-                          activeTab === tab.id
-                            ? 'border-blue-600 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700'
-                        )}
+            {/* Verification Documents */}
+            {lawyer.verification_documents && lawyer.verification_documents.length > 0 && (
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-semibold mb-4">Verification Documents</h2>
+                
+                <div className="space-y-3">
+                  {lawyer.verification_documents.map((doc) => (
+                    <div key={doc.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-gray-400" />
+                        <div>
+                          <p className="font-medium">{doc.document_type}</p>
+                          <p className="text-sm text-gray-500">
+                            Uploaded {new Date(doc.uploaded_at).toLocaleDateString('en-AU')}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <a
+                        href={doc.document_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-blue-600 hover:bg-blue-50 rounded-lg text-sm font-medium"
                       >
-                        <Icon className="w-4 h-4" />
-                        {tab.label}
-                      </button>
-                    );
-                  })}
+                        <ExternalLink className="w-4 h-4" />
+                        View
+                      </a>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              <div className="p-6">
-                {activeTab === 'details' && (
-                  <div className="space-y-6">
-                    {/* Personal Information */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Full Name</p>
-                          <p className="font-medium">{mockLawyer.full_name}</p>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Email</p>
-                          <div className="flex items-center gap-2">
-                            <Mail className="w-4 h-4 text-gray-400" />
-                            <p className="font-medium">{mockLawyer.email}</p>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Phone</p>
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-gray-400" />
-                            <p className="font-medium">{mockLawyer.phone}</p>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Website</p>
-                          <div className="flex items-center gap-2">
-                            <Globe className="w-4 h-4 text-gray-400" />
-                            <a href={`https://${mockLawyer.website}`} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-600 hover:underline">
-                              {mockLawyer.website}
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Professional Information */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Professional Information</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Firm Name</p>
-                          <div className="flex items-center gap-2">
-                            <Building2 className="w-4 h-4 text-gray-400" />
-                            <p className="font-medium">{mockLawyer.firm_name}</p>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">MARN Registration</p>
-                          <div className="flex items-center gap-2">
-                            <Award className="w-4 h-4 text-gray-400" />
-                            <p className="font-medium">{mockLawyer.registration_number}</p>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Years of Experience</p>
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gray-400" />
-                            <p className="font-medium">{mockLawyer.years_experience} years</p>
-                          </div>
-                        </div>
-                        <div className="p-4 bg-gray-50 rounded-lg">
-                          <p className="text-sm text-gray-500">Languages</p>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {mockLawyer.languages.map((lang) => (
-                              <span key={lang} className="px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded">
-                                {lang}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Specializations */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Specializations</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {mockLawyer.specializations.map((spec) => (
-                          <span key={spec} className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
-                            {spec}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Biography</h3>
-                      <p className="text-gray-600 leading-relaxed">{mockLawyer.bio}</p>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 'documents' && (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Submitted Documents</h3>
-                    {documents.map((doc) => (
-                      <div key={doc.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
-                        <div className="flex items-center gap-4">
-                          <div className="p-3 bg-red-100 rounded-lg">
-                            <FileText className="w-6 h-6 text-red-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-900">{doc.name}</p>
-                            <p className="text-sm text-gray-500">{doc.type} • {doc.size}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <ExternalLink className="w-5 h-5" />
-                          </button>
-                          <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-                            <Download className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {activeTab === 'verification' && (
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Verification Checklist</h3>
-                      <div className="space-y-3">
-                        {verificationChecklist.map((item) => (
-                          <div key={item.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-                            <div className={cn(
-                              'w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5',
-                              item.checked ? 'bg-green-500' : 'bg-gray-300'
-                            )}>
-                              <CheckSquare className="w-4 h-4 text-white" />
-                            </div>
-                            <div className="flex-1">
-                              <p className={cn('font-medium', item.checked ? 'text-gray-900' : 'text-gray-500')}>
-                                {item.item}
-                              </p>
-                              {item.notes && (
-                                <p className="text-sm text-gray-500 mt-1">{item.notes}</p>
-                              )}
-                            </div>
-                            <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                              {item.checked ? 'Undo' : 'Verify'}
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                      <div className="flex items-start gap-3">
-                        <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-                        <div>
-                          <p className="font-medium text-blue-900">Verification Progress</p>
-                          <div className="mt-2 h-2 bg-blue-200 rounded-full overflow-hidden">
-                            <div className="h-full bg-blue-600 rounded-full" style={{ width: '66%' }} />
-                          </div>
-                          <p className="text-sm text-blue-700 mt-2">4 of 6 items verified</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 'notes' && (
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Note</h3>
-                      <textarea
-                        value={newNote}
-                        onChange={(e) => setNewNote(e.target.value)}
-                        placeholder="Add a note about this lawyer..."
-                        className="w-full p-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                        rows={4}
-                      />
-                      <div className="mt-3 flex justify-end">
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                          Add Note
-                        </button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Previous Notes</h3>
-                      <div className="space-y-4">
-                        {adminNotes.map((note) => (
-                          <div key={note.id} className="p-4 border border-gray-200 rounded-lg">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-medium">
-                                  {note.author.charAt(0)}
-                                </div>
-                                <span className="font-medium text-gray-900">{note.author}</span>
-                              </div>
-                              <span className="text-sm text-gray-500">
-                                {new Date(note.timestamp).toLocaleString('en-AU')}
-                              </span>
-                            </div>
-                            <p className="text-gray-600">{note.note}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            )}
           </div>
 
-          {/* Right Column - Decision Panel */}
+          {/* Right Column - Contact Info */}
           <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Decision</h3>
+              <h2 className="text-lg font-semibold mb-4">Contact Information</h2>
               
-              <div className="space-y-3">
-                <button
-                  onClick={() => setShowApproveModal(true)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-                >
-                  <CheckCircle className="w-5 h-5" />
-                  Approve Application
-                </button>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <a href={`mailto:${lawyer.email}`} className="text-blue-600 hover:underline">
+                      {lawyer.email}
+                    </a>
+                  </div>
+                </div>
                 
-                <button
-                  onClick={() => setShowRejectModal(true)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium"
-                >
-                  <XCircle className="w-5 h-5" />
-                  Reject Application
-                </button>
+                {lawyer.phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-5 h-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm text-gray-500">Phone</p>
+                      <a href={`tel:${lawyer.phone}`} className="text-blue-600 hover:underline">
+                        {lawyer.phone}
+                      </a>
+                    </div>
+                  </div>
+                )}
                 
-                <button
-                  onClick={() => setShowRequestInfoModal(true)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 font-medium"
-                >
-                  <Mail className="w-5 h-5" />
-                  Request More Info
-                </button>
+                {lawyer.firm_name && (
+                  <div className="flex items-center gap-3">
+                    <Building2 className="w-5 h-5 text-gray-400" />
+                    <div>
+                      <p className="text-sm text-gray-500">Firm</p>
+                      <p className="text-gray-900">{lawyer.firm_name}</p>
+                    </div>
+                  </div>
+                )}
+                
+                <div className="flex items-center gap-3">
+                  <Award className="w-5 h-5 text-gray-400" />
+                  <div>
+                    <p className="text-sm text-gray-500">Registration</p>
+                    <p className="text-gray-900">{lawyer.registration_number}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Application Timeline</h3>
-              <div className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium">Application Submitted</p>
-                    <p className="text-xs text-gray-500">18 Mar 2024, 10:30 AM</p>
-                  </div>
+              <h2 className="text-lg font-semibold mb-4">Languages</h2>
+              
+              <div className="flex flex-wrap gap-2">
+                {(lawyer.languages || []).map((lang) => (
+                  <span key={lang} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                    {lang}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold mb-4">Application Info</h2>
+              
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Submitted</span>
+                  <span>{new Date(lawyer.created_at).toLocaleDateString('en-AU')}</span>
                 </div>
-                <div className="flex gap-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium">Documents Uploaded</p>
-                    <p className="text-xs text-gray-500">18 Mar 2024, 10:38 AM</p>
-                  </div>
+                
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Status</span>
+                  <span className={cn(
+                    'font-medium',
+                    lawyer.verification_status === 'approved' && 'text-green-600',
+                    lawyer.verification_status === 'rejected' && 'text-red-600',
+                    lawyer.verification_status === 'pending' && 'text-amber-600'
+                  )}>
+                    {lawyer.verification_status.charAt(0).toUpperCase() + lawyer.verification_status.slice(1)}
+                  </span>
                 </div>
-                <div className="flex gap-3">
-                  <div className="w-2 h-2 bg-gray-300 rounded-full mt-2 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-400">Awaiting Review</p>
-                  </div>
+                
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Accepting Clients</span>
+                  <span>{lawyer.accepts_new_clients ? 'Yes' : 'No'}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Approve Modal */}
-      {showApproveModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-green-100 rounded-full">
-                <CheckCircle className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold">Approve Lawyer</h3>
-            </div>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to approve {mockLawyer.full_name}? They will be able to start accepting consultations immediately.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowApproveModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowApproveModal(false)}
-                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-              >
-                Approve
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reject Modal */}
-      {showRejectModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-red-100 rounded-full">
-                <XCircle className="w-6 h-6 text-red-600" />
-              </div>
-              <h3 className="text-lg font-semibold">Reject Application</h3>
-            </div>
-            <p className="text-gray-600 mb-4">Please provide a reason for rejecting this application:</p>
-            <textarea
-              className="w-full p-3 border border-gray-200 rounded-lg mb-6 resize-none"
-              rows={3}
-              placeholder="Enter rejection reason..."
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowRejectModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowRejectModal(false)}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-              >
-                Reject
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Request Info Modal */}
-      {showRequestInfoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Mail className="w-6 h-6 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold">Request Information</h3>
-            </div>
-            <p className="text-gray-600 mb-4">What additional information do you need from {mockLawyer.full_name}?</p>
-            <textarea
-              className="w-full p-3 border border-gray-200 rounded-lg mb-6 resize-none"
-              rows={3}
-              placeholder="Describe what information is needed..."
-            />
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowRequestInfoModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => setShowRequestInfoModal(false)}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                Send Request
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </AdminLayout>
   );
 }

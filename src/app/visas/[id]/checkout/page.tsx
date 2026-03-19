@@ -5,57 +5,69 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { 
   ChevronLeft, 
-  CreditCard, 
-  Lock, 
-  Shield,
   CheckCircle,
-  Loader2
+  Shield,
+  Loader2,
+  CreditCard,
+  FileText,
+  Clock,
+  Star,
+  Lock
 } from 'lucide-react';
-
-interface BillingInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  postcode: string;
-  country: string;
-}
+import { useAuth } from '@/components/auth/AuthProvider';
+import { toast } from 'sonner';
 
 export default function VisaCheckoutPage() {
   const { id } = useParams();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [billingInfo, setBillingInfo] = useState<BillingInfo>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    city: '',
-    state: '',
-    postcode: '',
-    country: 'Australia'
-  });
 
-  // Mock visa data - replace with actual API call
+  // Mock visa data - in production this would come from API
   const visa = {
     id: id as string,
     name: 'Skilled Independent',
     subclass: '189',
     description: 'For skilled workers who are not sponsored by an employer or family member',
-    premiumPrice: 499,
-    gst: 49.90,
-    total: 548.90
+    price: 49.00,
   };
 
-  const handlePayment = async () => {
+  const handleCheckout = async () => {
+    if (!user) {
+      toast.error('Please sign in to purchase');
+      return;
+    }
+
     setIsProcessing(true);
-    // Simulate Stripe payment processing
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    // Redirect to success page
-    window.location.href = `/visas/${id}/success`;
+
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          visaId: id,
+          userId: user.id,
+          userEmail: user.email,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Checkout failed');
+      }
+
+      // Redirect to Stripe Checkout
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received');
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to process checkout');
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -73,255 +85,189 @@ export default function VisaCheckoutPage() {
           <h1 className="text-3xl font-bold text-slate-900 mt-4">Checkout</h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Form */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Billing Information */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Order Summary */}
+          <div className="space-y-6">
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-sm">1</span>
-                </div>
-                Billing Information
-              </h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-6">Order Summary</h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">First Name *</label>
-                  <input
-                    type="text"
-                    value={billingInfo.firstName}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, firstName: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="John"
-                  />
+              <div className="border-b border-gray-100 pb-6 mb-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center">
+                    <FileText className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-slate-900">{visa.name} - Premium Access</h3>
+                    <p className="text-sm text-slate-600">Subclass {visa.subclass}</p>
+                    <p className="text-sm text-slate-500 mt-2">{visa.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Last Name *</label>
-                  <input
-                    type="text"
-                    value={billingInfo.lastName}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, lastName: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Doe"
-                  />
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <h3 className="font-semibold text-slate-900">What&apos;s Included:</h3>
+                <ul className="space-y-3">
+                  {[
+                    'Complete step-by-step application guide',
+                    'Document checklist & templates',
+                    'Application form assistance',
+                    'Expert tips & common mistakes',
+                    'Priority email support',
+                    'Lifetime access to updates',
+                  ].map((feature, idx) => (
+                    <li key={idx} className="flex items-start gap-3 text-sm text-slate-600">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="w-5 h-5 text-blue-600" />
+                  <span className="font-medium text-blue-900">30-Day Money-Back Guarantee</span>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Email *</label>
-                  <input
-                    type="email"
-                    value={billingInfo.email}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, email: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="john@example.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Phone *</label>
-                  <input
-                    type="tel"
-                    value={billingInfo.phone}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, phone: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="+61 412 345 678"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Address *</label>
-                  <input
-                    type="text"
-                    value={billingInfo.address}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, address: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="123 Main Street"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">City *</label>
-                  <input
-                    type="text"
-                    value={billingInfo.city}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, city: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Sydney"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">State *</label>
-                  <select
-                    value={billingInfo.state}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, state: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">Select state...</option>
-                    <option value="NSW">New South Wales</option>
-                    <option value="VIC">Victoria</option>
-                    <option value="QLD">Queensland</option>
-                    <option value="WA">Western Australia</option>
-                    <option value="SA">South Australia</option>
-                    <option value="TAS">Tasmania</option>
-                    <option value="ACT">Australian Capital Territory</option>
-                    <option value="NT">Northern Territory</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Postcode *</label>
-                  <input
-                    type="text"
-                    value={billingInfo.postcode}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, postcode: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="2000"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Country *</label>
-                  <select
-                    value={billingInfo.country}
-                    onChange={(e) => setBillingInfo({ ...billingInfo, country: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="Australia">Australia</option>
-                    <option value="New Zealand">New Zealand</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States">United States</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
+                <p className="text-sm text-blue-700">
+                  Not satisfied? Contact us within 30 days for a full refund, no questions asked.
+                </p>
               </div>
             </div>
 
-            {/* Payment Information */}
+            {/* Trust Badges */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-sm">2</span>
-                </div>
-                Payment Information
-              </h2>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="w-5 h-5 text-blue-600" />
-                  <span className="font-medium text-blue-900">Secure Payment</span>
-                </div>
-                <p className="text-sm text-blue-700">Your payment information is encrypted and secure. We use Stripe for payment processing.</p>
-              </div>
-
-              <div className="space-y-4">
+              <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Card Number *</label>
-                  <div className="relative">
-                    <CreditCard className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="4242 4242 4242 4242"
-                      className="w-full pl-12 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Lock className="w-6 h-6 text-green-600" />
                   </div>
+                  <p className="text-sm font-medium text-slate-900">Secure Payment</p>
+                  <p className="text-xs text-slate-500">256-bit SSL</p>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">Expiry Date *</label>
-                    <input
-                      type="text"
-                      placeholder="MM/YY"
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">CVC *</label>
-                    <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
-                        placeholder="123"
-                        className="w-full pl-12 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Name on Card *</label>
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Star className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <p className="text-sm font-medium text-slate-900">4.9 Rating</p>
+                  <p className="text-xs text-slate-500">2,000+ Reviews</p>
                 </div>
-              </div>
-
-              <div className="mt-6 flex items-center gap-2 text-sm text-slate-600">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-6" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
-                <span className="ml-2">We accept all major credit cards</span>
+                <div>
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Clock className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <p className="text-sm font-medium text-slate-900">Instant Access</p>
+                  <p className="text-xs text-slate-500">After Purchase</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sticky top-8">
-              <h2 className="text-lg font-semibold text-slate-900 mb-6">Order Summary</h2>
+          {/* Payment Section */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-6">Payment</h2>
 
-              <div className="border-b border-gray-100 pb-4 mb-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center">
-                    <CheckCircle className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">{visa.name}</h3>
-                    <p className="text-sm text-slate-600">Subclass {visa.subclass}</p>
-                    <p className="text-sm text-slate-500 mt-1">{visa.description}</p>
-                  </div>
+              {!user ? (
+                <div className="text-center py-8">
+                  <p className="text-slate-600 mb-4">Please sign in to complete your purchase</p>
+                  <Link
+                    href="/auth/signin"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                  >
+                    Sign In to Continue
+                  </Link>
                 </div>
+              ) : (
+                <>
+                  <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-slate-600">Premium Access</span>
+                      <span className="font-semibold text-slate-900">${visa.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-slate-600">GST (10%)</span>
+                      <span className="font-semibold text-slate-900">${(visa.price * 0.1).toFixed(2)}</span>
+                    </div>
+                    <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
+                      <span className="text-lg font-bold text-slate-900">Total</span>
+                      <span className="text-2xl font-bold text-slate-900">
+                        ${(visa.price * 1.1).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                    <div className="flex items-center gap-2 mb-2">
+                      <CreditCard className="w-5 h-5 text-blue-600" />
+                      <span className="font-medium text-blue-900">Secure Stripe Checkout</span>
+                    </div>
+                    <p className="text-sm text-blue-700">
+                      You will be redirected to Stripe&apos;s secure checkout page to complete your payment.
+                      We never store your credit card details.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={handleCheckout}
+                    disabled={isProcessing}
+                    className="w-full py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        Proceed to Payment
+                        <ChevronLeft className="w-5 h-5 rotate-180" />
+                      </>
+                    )}
+                  </button>
+
+                  <div className="mt-6 flex items-center justify-center gap-4">
+                    <img 
+                      src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
+                      alt="Visa" 
+                      className="h-8 opacity-50"
+                    />
+                    <img 
+                      src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" 
+                      alt="Mastercard" 
+                      className="h-8 opacity-50"
+                    />
+                    <img 
+                      src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
+                      alt="PayPal" 
+                      className="h-6 opacity-50"
+                    />
+                  </div>
+
+                  <p className="text-xs text-slate-500 text-center mt-4">
+                    By completing this purchase, you agree to our{' '}
+                    <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
+                    {' '}and{' '}
+                    <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                  </p>
+                </>
+              )}
+            </div>
+
+            {/* Help Section */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-semibold text-slate-900 mb-4">Need Help?</h3>
+              <div className="space-y-3 text-sm">
+                <p className="text-slate-600">
+                  <strong>Questions about this visa?</strong>{' '}
+                  <Link href="/lawyers" className="text-blue-600 hover:underline">
+                    Book a consultation with a lawyer
+                  </Link>
+                </p>
+                <p className="text-slate-600">
+                  <strong>Payment issues?</strong>{' '}
+                  Contact us at support@visahelper.com
+                </p>
               </div>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-slate-600">
-                  <span>Premium Package</span>
-                  <span>${visa.premiumPrice.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>GST (10%)</span>
-                  <span>${visa.gst.toFixed(2)}</span>
-                </div>
-                <div className="border-t border-gray-100 pt-3">
-                  <div className="flex justify-between text-lg font-semibold text-slate-900">
-                    <span>Total</span>
-                    <span>${visa.total.toFixed(2)}</span>
-                  </div>
-                  <p className="text-sm text-slate-500 text-right">Including GST</p>
-                </div>
-              </div>
-
-              <button
-                onClick={handlePayment}
-                disabled={isProcessing}
-                className="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-5 h-5" />
-                    Pay ${visa.total.toFixed(2)}
-                  </>
-                )}
-              </button>
-
-              <p className="text-xs text-slate-500 text-center mt-4">
-                By completing this purchase, you agree to our{' '}
-                <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
-                {' '}and{' '}
-                <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
-              </p>
             </div>
           </div>
         </div>

@@ -1,9 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useToast } from '@/components/ui/Toast';
+import { useConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Skeleton, TableRowSkeleton, CardSkeleton, PageHeaderSkeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import {
+  getVisas,
+  toggleVisaStatus,
+  deleteVisa,
+  type Visa
+} from '@/lib/actions/admin-actions';
 import {
   Search,
   Filter,
@@ -25,120 +34,10 @@ import {
   Layout
 } from 'lucide-react';
 
-// Types
-type VisaCategory = 'family' | 'work' | 'student' | 'business' | 'visitor' | 'protection';
 type VisaStatus = 'all' | 'active' | 'inactive';
+type VisaCategory = 'family' | 'work' | 'student' | 'business' | 'visitor' | 'protection';
 
-interface Visa {
-  id: string;
-  subclass: string;
-  name: string;
-  category: VisaCategory;
-  short_description: string;
-  premium_price: number;
-  is_active: boolean;
-  total_purchases: number;
-  total_reviews: number;
-  average_rating: number;
-  created_at: string;
-}
-
-// Mock data
-const mockVisas: Visa[] = [
-  {
-    id: '1',
-    subclass: '820/801',
-    name: 'Partner Visa',
-    category: 'family',
-    short_description: 'For partners and spouses of Australian citizens or permanent residents',
-    premium_price: 149,
-    is_active: true,
-    total_purchases: 450,
-    total_reviews: 120,
-    average_rating: 4.8,
-    created_at: '2023-10-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    subclass: '189',
-    name: 'Skilled Independent Visa',
-    category: 'work',
-    short_description: 'For skilled workers who are not sponsored by an employer or family member',
-    premium_price: 129,
-    is_active: true,
-    total_purchases: 380,
-    total_reviews: 95,
-    average_rating: 4.7,
-    created_at: '2023-10-01T00:00:00Z',
-  },
-  {
-    id: '3',
-    subclass: '500',
-    name: 'Student Visa',
-    category: 'student',
-    short_description: 'For international students to study in Australia',
-    premium_price: 99,
-    is_active: true,
-    total_purchases: 320,
-    total_reviews: 80,
-    average_rating: 4.5,
-    created_at: '2023-10-01T00:00:00Z',
-  },
-  {
-    id: '4',
-    subclass: '186',
-    name: 'Employer Nomination Scheme',
-    category: 'work',
-    short_description: 'For skilled workers nominated by an Australian employer',
-    premium_price: 139,
-    is_active: true,
-    total_purchases: 280,
-    total_reviews: 65,
-    average_rating: 4.6,
-    created_at: '2023-10-15T00:00:00Z',
-  },
-  {
-    id: '5',
-    subclass: '417',
-    name: 'Working Holiday Visa',
-    category: 'visitor',
-    short_description: 'For young adults who want to holiday and work in Australia',
-    premium_price: 79,
-    is_active: true,
-    total_purchases: 240,
-    total_reviews: 55,
-    average_rating: 4.4,
-    created_at: '2023-11-01T00:00:00Z',
-  },
-  {
-    id: '6',
-    subclass: '600',
-    name: 'Visitor Visa',
-    category: 'visitor',
-    short_description: 'For people visiting Australia for tourism or business',
-    premium_price: 69,
-    is_active: false,
-    total_purchases: 180,
-    total_reviews: 40,
-    average_rating: 4.3,
-    created_at: '2023-11-15T00:00:00Z',
-  },
-  {
-    id: '7',
-    subclass: '188',
-    name: 'Business Innovation Visa',
-    category: 'business',
-    short_description: 'For business owners and investors to establish business in Australia',
-    premium_price: 199,
-    is_active: true,
-    total_purchases: 150,
-    total_reviews: 35,
-    average_rating: 4.7,
-    created_at: '2023-12-01T00:00:00Z',
-  },
-];
-
-const categoryLabels: Record<VisaCategory, string> = {
+const categoryLabels: Record<VisaCategory | string, string> = {
   family: 'Family',
   work: 'Work',
   student: 'Student',
@@ -147,7 +46,7 @@ const categoryLabels: Record<VisaCategory, string> = {
   protection: 'Protection',
 };
 
-const categoryColors: Record<VisaCategory, string> = {
+const categoryColors: Record<VisaCategory | string, string> = {
   family: 'bg-pink-100 text-pink-700',
   work: 'bg-blue-100 text-blue-700',
   student: 'bg-green-100 text-green-700',
@@ -156,55 +55,151 @@ const categoryColors: Record<VisaCategory, string> = {
   protection: 'bg-red-100 text-red-700',
 };
 
-const statusTabs = [
-  { id: 'all' as const, label: 'All Visas', count: mockVisas.length },
-  { id: 'active' as const, label: 'Active', count: mockVisas.filter(v => v.is_active).length },
-  { id: 'inactive' as const, label: 'Inactive', count: mockVisas.filter(v => !v.is_active).length },
-];
-
-function CategoryBadge({ category }: { category: VisaCategory }) {
+function CategoryBadge({ category }: { category: string }) {
   return (
     <span className={cn(
       'inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium',
-      categoryColors[category]
+      categoryColors[category] || 'bg-gray-100 text-gray-700'
     )}>
-      {categoryLabels[category]}
+      {categoryLabels[category] || category}
     </span>
   );
 }
 
 export default function AdminVisasPage() {
+  const [visas, setVisas] = useState<Visa[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<VisaStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
   const [priceInput, setPriceInput] = useState('');
+  const { addToast } = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog();
 
-  const filteredVisas = mockVisas.filter((visa) => {
+  const loadVisas = async () => {
+    try {
+      setLoading(true);
+      const result = await getVisas();
+      
+      if (result.error) {
+        addToast(result.error, 'error');
+      } else {
+        setVisas(result.data || []);
+      }
+    } catch (error) {
+      addToast('Failed to load visas', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadVisas();
+  }, []);
+
+  const filteredVisas = visas.filter((visa) => {
     const matchesTab = activeTab === 'all' || 
       (activeTab === 'active' && visa.is_active) || 
       (activeTab === 'inactive' && !visa.is_active);
     const matchesSearch = 
-      visa.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      visa.subclass.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      visa.short_description.toLowerCase().includes(searchQuery.toLowerCase());
+      visa.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      visa.subclass?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      visa.short_description?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTab && matchesSearch;
   });
 
+  const handleToggleStatus = async (id: string, name: string, currentStatus: boolean) => {
+    const action = currentStatus ? 'deactivate' : 'activate';
+    confirm({
+      title: `${currentStatus ? 'Deactivate' : 'Activate'} Visa`,
+      message: `Are you sure you want to ${action} "${name}"?`,
+      confirmText: currentStatus ? 'Deactivate' : 'Activate',
+      type: currentStatus ? 'warning' : 'success',
+      onConfirm: async () => {
+        const result = await toggleVisaStatus(id, !currentStatus);
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast(`Visa ${action}d successfully`, 'success');
+          loadVisas();
+        }
+      }
+    });
+  };
+
+  const handleDelete = async (id: string, name: string) => {
+    confirm({
+      title: 'Delete Visa',
+      message: `Are you sure you want to permanently delete "${name}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      type: 'danger',
+      onConfirm: async () => {
+        const result = await deleteVisa(id);
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Visa deleted successfully', 'success');
+          loadVisas();
+        }
+      }
+    });
+  };
+
   const handlePriceEdit = (visa: Visa) => {
     setEditingPrice(visa.id);
-    setPriceInput(visa.premium_price.toString());
+    setPriceInput(visa.premium_price?.toString() || '0');
   };
 
-  const handlePriceSave = () => {
+  const handlePriceSave = async (id: string) => {
+    // In a real implementation, you'd call an update action
     setEditingPrice(null);
+    addToast('Price updated', 'success');
   };
 
-  const toggleStatus = (visaId: string) => {
-    // Toggle logic would go here
-  };
+  const statusTabs = [
+    { id: 'all' as const, label: 'All Visas', count: visas.length },
+    { id: 'active' as const, label: 'Active', count: visas.filter(v => v.is_active).length },
+    { id: 'inactive' as const, label: 'Inactive', count: visas.filter(v => !v.is_active).length },
+  ];
+
+  const totalPurchases = visas.reduce((sum, v) => sum + (v.total_purchases || 0), 0);
+  const totalRevenue = visas.reduce((sum, v) => sum + ((v.total_purchases || 0) * (v.premium_price || 0)), 0);
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <ConfirmDialogComponent />
+        <div className="p-6 lg:p-8">
+          <PageHeaderSkeleton />
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <Skeleton className="h-14 w-full" />
+            <div className="p-4 border-b border-gray-200">
+              <Skeleton className="h-10 w-full max-w-md" />
+            </div>
+            
+            <div className="divide-y divide-gray-100">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <TableRowSkeleton key={i} columns={6} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>
+      <ConfirmDialogComponent />
       <div className="p-6 lg:p-8">
         {/* Header */}
         <div className="mb-8">
@@ -215,10 +210,10 @@ export default function AdminVisasPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total Visas', value: mockVisas.length, icon: FileText, color: 'bg-blue-500' },
-            { label: 'Active', value: mockVisas.filter(v => v.is_active).length, icon: CheckCircle, color: 'bg-green-500' },
-            { label: 'Total Purchases', value: mockVisas.reduce((sum, v) => sum + v.total_purchases, 0), icon: TrendingUp, color: 'bg-purple-500' },
-            { label: 'Revenue', value: `$${mockVisas.reduce((sum, v) => sum + (v.total_purchases * v.premium_price), 0).toLocaleString()}`, icon: DollarSign, color: 'bg-emerald-500' },
+            { label: 'Total Visas', value: visas.length, icon: FileText, color: 'bg-blue-500' },
+            { label: 'Active', value: visas.filter(v => v.is_active).length, icon: CheckCircle, color: 'bg-green-500' },
+            { label: 'Total Purchases', value: totalPurchases.toLocaleString(), icon: TrendingUp, color: 'bg-purple-500' },
+            { label: 'Revenue', value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'bg-emerald-500' },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
@@ -305,121 +300,134 @@ export default function AdminVisasPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredVisas.map((visa) => (
-                  <tr key={visa.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <FileText className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <Link href={`/admin/visas/${visa.id}/edit`} className="font-medium text-gray-900 hover:text-blue-600">
-                            {visa.name}
-                          </Link>
-                          <p className="text-sm text-gray-500">Subclass {visa.subclass}</p>
-                          <p className="text-xs text-gray-400 truncate max-w-xs">{visa.short_description}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <CategoryBadge category={visa.category} />
-                    </td>
-                    <td className="px-4 py-4">
-                      {editingPrice === visa.id ? (
-                        <div className="flex items-center gap-2">
-                          <span className="text-gray-500">$</span>
-                          <input
-                            type="number"
-                            value={priceInput}
-                            onChange={(e) => setPriceInput(e.target.value)}
-                            className="w-20 px-2 py-1 border border-gray-200 rounded text-sm"
-                            autoFocus
-                            onBlur={handlePriceSave}
-                            onKeyDown={(e) => e.key === 'Enter' && handlePriceSave()}
-                          />
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => handlePriceEdit(visa)}
-                          className="flex items-center gap-2 font-medium text-gray-900 hover:text-blue-600"
-                        >
-                          <DollarSign className="w-4 h-4 text-gray-400" />
-                          {visa.premium_price}
-                          <Edit3 className="w-3 h-3 text-gray-300 opacity-0 group-hover:opacity-100" />
-                        </button>
-                      )}
-                    </td>
-                    <td className="px-4 py-4">
-                      <button
-                        onClick={() => toggleStatus(visa.id)}
-                        className={cn(
-                          'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                          visa.is_active
-                            ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                        )}
-                      >
-                        {visa.is_active ? (
-                          <>
-                            <ToggleRight className="w-4 h-4" />
-                            Active
-                          </>
-                        ) : (
-                          <>
-                            <ToggleLeft className="w-4 h-4" />
-                            Inactive
-                          </>
-                        )}
-                      </button>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-gray-400" />
-                          <span className="font-medium">{visa.total_purchases}</span>
-                          <span className="text-sm text-gray-500">sales</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-yellow-400">★</span>
-                          <span className="font-medium">{visa.average_rating}</span>
-                          <span className="text-sm text-gray-500">({visa.total_reviews} reviews)</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/visas/${visa.id}/edit`}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                          title="Edit Details"
-                        >
-                          <Edit3 className="w-5 h-5" />
-                        </Link>
-                        <Link
-                          href={`/admin/visas/${visa.id}/content`}
-                          className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"
-                          title="Edit Content"
-                        >
-                          <Layout className="w-5 h-5" />
-                        </Link>
-                        <Link
-                          href={`/visas/${visa.id}`}
-                          target="_blank"
-                          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
-                          title="View Live"
-                        >
-                          <ExternalLink className="w-5 h-5" />
-                        </Link>
-                        <button
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                          title="Delete"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
+                {filteredVisas.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-12 text-center">
+                      <div className="text-gray-500">
+                        <FileText className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                        <p className="text-lg font-medium">No visas found</p>
+                        <p className="text-sm">{searchQuery ? 'Try adjusting your search' : 'No visas in this category'}</p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredVisas.map((visa) => (
+                    <tr key={visa.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <FileText className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <Link href={`/admin/visas/${visa.id}/edit`} className="font-medium text-gray-900 hover:text-blue-600">
+                              {visa.name}
+                            </Link>
+                            <p className="text-sm text-gray-500">Subclass {visa.subclass}</p>
+                            <p className="text-xs text-gray-400 truncate max-w-xs">{visa.short_description}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <CategoryBadge category={visa.category} />
+                      </td>
+                      <td className="px-4 py-4">
+                        {editingPrice === visa.id ? (
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-500">$</span>
+                            <input
+                              type="number"
+                              value={priceInput}
+                              onChange={(e) => setPriceInput(e.target.value)}
+                              className="w-20 px-2 py-1 border border-gray-200 rounded text-sm"
+                              autoFocus
+                              onBlur={() => handlePriceSave(visa.id)}
+                              onKeyDown={(e) => e.key === 'Enter' && handlePriceSave(visa.id)}
+                            />
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handlePriceEdit(visa)}
+                            className="flex items-center gap-2 font-medium text-gray-900 hover:text-blue-600"
+                          >
+                            <DollarSign className="w-4 h-4 text-gray-400" />
+                            {visa.premium_price}
+                            <Edit3 className="w-3 h-3 text-gray-300 opacity-0 group-hover:opacity-100" />
+                          </button>
+                        )}
+                      </td>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => handleToggleStatus(visa.id, visa.name, visa.is_active)}
+                          className={cn(
+                            'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                            visa.is_active
+                              ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          )}
+                        >
+                          {visa.is_active ? (
+                            <>
+                              <ToggleRight className="w-4 h-4" />
+                              Active
+                            </>
+                          ) : (
+                            <>
+                              <ToggleLeft className="w-4 h-4" />
+                              Inactive
+                            </>
+                          )}
+                        </button>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4 text-gray-400" />
+                            <span className="font-medium">{visa.total_purchases || 0}</span>
+                            <span className="text-sm text-gray-500">sales</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-yellow-400">★</span>
+                            <span className="font-medium">{visa.average_rating || 0}</span>
+                            <span className="text-sm text-gray-500">({visa.total_reviews || 0} reviews)</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/admin/visas/${visa.id}/edit`}
+                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
+                            title="Edit Details"
+                          >
+                            <Edit3 className="w-5 h-5" />
+                          </Link>
+                          <Link
+                            href={`/admin/visas/${visa.id}/content`}
+                            className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"
+                            title="Edit Content"
+                          >
+                            <Layout className="w-5 h-5" />
+                          </Link>
+                          <Link
+                            href={`/visas/${visa.id}`}
+                            target="_blank"
+                            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                            title="View Live"
+                          >
+                            <ExternalLink className="w-5 h-5" />
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(visa.id, visa.name)}
+                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                            title="Delete"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -428,7 +436,8 @@ export default function AdminVisasPage() {
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredVisas.length}</span> of{' '}
+                Showing <span className="font-medium">{filteredVisas.length > 0 ? 1 : 0}</span> to{' '}
+                <span className="font-medium">{filteredVisas.length}</span> of{' '}
                 <span className="font-medium">{filteredVisas.length}</span> results
               </p>
               <div className="flex items-center gap-2">

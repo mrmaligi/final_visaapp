@@ -1,177 +1,122 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { 
   CheckCircle, 
   FileText, 
-  ArrowRight,
-  Download,
-  Mail,
-  Calendar
+  Download, 
+  BookOpen,
+  Home,
+  ChevronRight,
+  Clock,
+  Shield
 } from 'lucide-react';
+import { toast } from 'sonner';
 
-export default function VisaSuccessPage() {
+export default function VisaPremiumSuccessPage() {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock order data - replace with actual data from API
-  const order = {
-    id: 'ORD-2026-001234',
-    date: new Date().toLocaleDateString('en-AU', { 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    }),
-    visa: {
-      name: 'Skilled Independent',
-      subclass: '189',
-      description: 'For skilled workers who are not sponsored by an employer or family member'
-    },
-    amount: 548.90,
-    paymentMethod: 'Visa ending in 4242'
-  };
+  useEffect(() => {
+    // Simulate processing
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      toast.success('Premium access unlocked successfully!');
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-slate-600">Activating your premium access...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-2xl mx-auto px-4">
-        {/* Success Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           {/* Success Header */}
-          <div className="bg-gradient-to-br from-green-500 to-green-600 p-8 text-center">
+          <div className="bg-green-500 p-8 text-center">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-10 h-10 text-green-600" />
+              <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            <h1 className="text-2xl font-bold text-white mb-2">Payment Successful!</h1>
-            <p className="text-green-100">Your order has been confirmed and processed</p>
+            <h1 className="text-2xl font-bold text-white mb-2">Premium Access Unlocked!</h1>
+            <p className="text-green-100">You now have lifetime access to premium content.</p>
           </div>
 
-          {/* Order Details */}
           <div className="p-8">
-            <div className="bg-gray-50 rounded-xl p-6 mb-6">
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
-                <span className="text-slate-600">Order ID</span>
-                <span className="font-mono font-medium text-slate-900">{order.id}</span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
-                <span className="text-slate-600">Date</span>
-                <span className="text-slate-900">{order.date}</span>
-              </div>
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
-                <span className="text-slate-600">Payment Method</span>
-                <span className="text-slate-900">{order.paymentMethod}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-600">Total Amount</span>
-                <span className="text-xl font-bold text-slate-900">${order.amount.toFixed(2)}</span>
-              </div>
-            </div>
-
-            {/* Visa Details */}
-            <div className="border border-gray-200 rounded-xl p-6 mb-6">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center">
-                  <FileText className="w-7 h-7 text-blue-600" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">
-                    {order.visa.name} ({order.visa.subclass})
-                  </h2>
-                  <p className="text-slate-600 mt-1">{order.visa.description}</p>
-                  <div className="flex items-center gap-2 mt-3">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      Premium Access
-                    </span>
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      12 Months Validity
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* What's Next */}
+            {/* What You Get */}
             <div className="mb-8">
-              <h3 className="text-lg font-semibold text-slate-900 mb-4">What&apos;s Next?</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-blue-600 font-bold text-sm">1</span>
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Your Premium Benefits</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  { icon: FileText, label: 'Complete Document Checklist', desc: 'Step-by-step requirements' },
+                  { icon: BookOpen, label: 'Full Application Guide', desc: 'Detailed walkthrough' },
+                  { icon: Download, label: 'Document Templates', desc: 'Ready-to-use forms' },
+                  { icon: Shield, label: 'Expert Tips', desc: 'Avoid common mistakes' },
+                  { icon: Clock, label: 'Processing Tracker', desc: 'Real-time updates' },
+                  { icon: ChevronRight, label: 'Priority Support', desc: 'Fast email responses' },
+                ].map((benefit, idx) => (
+                  <div key={idx} className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="font-medium text-slate-900">{benefit.label}</p>
+                      <p className="text-sm text-slate-600">{benefit.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium text-slate-900">Start Your Application</p>
-                    <p className="text-sm text-slate-600">Access the premium application wizard to begin your visa journey</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-blue-600 font-bold text-sm">2</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-slate-900">Gather Documents</p>
-                    <p className="text-sm text-slate-600">Check your document checklist and start uploading required files</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-blue-600 font-bold text-sm">3</span>
-                  </div>
-                  <div>
-                    <p className="font-medium text-slate-900">Book a Consultation</p>
-                    <p className="text-sm text-slate-600">Get expert help from verified immigration lawyers</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* CTA Buttons */}
+            {/* Action Buttons */}
             <div className="space-y-3">
               <Link
                 href={`/visas/${id}/premium`}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
               >
-                Start Application
-                <ArrowRight className="w-5 h-5" />
+                <BookOpen className="w-5 h-5" />
+                Access Premium Content
               </Link>
 
-              <div className="grid grid-cols-2 gap-3">
-                <Link
-                  href="/user/visas"
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  <FileText className="w-5 h-5" />
-                  View My Visas
-                </Link>
-                <button
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  <Download className="w-5 h-5" />
-                  Receipt
-                </button>
-              </div>
+              <Link
+                href={`/visas/${id}`}
+                className="flex items-center justify-center gap-2 w-full py-3 bg-gray-100 text-slate-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                <FileText className="w-5 h-5" />
+                Back to Visa Details
+              </Link>
+
+              <Link
+                href="/user/dashboard"
+                className="flex items-center justify-center gap-2 w-full py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                <Home className="w-5 h-5" />
+                Go to Dashboard
+              </Link>
             </div>
 
-            {/* Email Confirmation */}
-            <div className="mt-8 p-4 bg-blue-50 rounded-xl flex items-center gap-3">
-              <Mail className="w-5 h-5 text-blue-600" />
-              <p className="text-sm text-blue-800">
-                A confirmation email has been sent to your registered email address.
+            {/* Receipt */}
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <p className="text-sm text-slate-600 text-center">
+                A receipt has been sent to your email.{' '}
+                <Link href="/user/payments" className="text-blue-600 hover:underline">
+                  View payment history
+                </Link>
               </p>
             </div>
           </div>
-        </div>
-
-        {/* Additional Actions */}
-        <div className="mt-6 text-center">
-          <p className="text-slate-600 mb-4">Need help with your application?</p>
-          <Link
-            href="/lawyers"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-          >
-            <Calendar className="w-5 h-5" />
-            Book a consultation with an immigration lawyer
-          </Link>
         </div>
       </div>
     </div>

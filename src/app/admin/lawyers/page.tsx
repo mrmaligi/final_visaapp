@@ -1,9 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useToast } from '@/components/ui/Toast';
+import { useConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Skeleton, TableRowSkeleton, CardSkeleton, PageHeaderSkeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import {
+  getLawyers,
+  updateLawyerStatus,
+  bulkUpdateLawyerStatus,
+  type LawyerApplication
+} from '@/lib/actions/admin-actions';
 import {
   Search,
   Filter,
@@ -11,7 +20,6 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Download,
@@ -21,146 +29,14 @@ import {
   Scale,
   Star,
   Calendar,
-  Building2
+  Building2,
+  AlertTriangle,
+  FileText
 } from 'lucide-react';
 
-// Types
 type LawyerStatus = 'all' | 'pending' | 'approved' | 'rejected';
 
-interface Lawyer {
-  id: string;
-  full_name: string;
-  email: string;
-  phone: string;
-  firm_name: string;
-  registration_number: string;
-  years_experience: number;
-  verification_status: 'pending' | 'approved' | 'rejected';
-  average_rating: number;
-  total_consultations: number;
-  total_reviews: number;
-  languages: string[];
-  submitted_at: string;
-  avatar?: string;
-}
-
-// Mock data
-const mockLawyers: Lawyer[] = [
-  {
-    id: '1',
-    full_name: 'Dr. Emily Parker',
-    email: 'emily.parker@lawfirm.com',
-    phone: '+61 412 345 678',
-    firm_name: 'Parker Immigration Law',
-    registration_number: 'MARN 1801234',
-    years_experience: 12,
-    verification_status: 'pending',
-    average_rating: 0,
-    total_consultations: 0,
-    total_reviews: 0,
-    languages: ['English', 'Mandarin'],
-    submitted_at: '2024-03-18T10:30:00Z',
-  },
-  {
-    id: '2',
-    full_name: 'James Wilson',
-    email: 'j.wilson@migration.com.au',
-    phone: '+61 423 456 789',
-    firm_name: 'Wilson Migration Services',
-    registration_number: 'MARN 1805678',
-    years_experience: 8,
-    verification_status: 'pending',
-    average_rating: 0,
-    total_consultations: 0,
-    total_reviews: 0,
-    languages: ['English'],
-    submitted_at: '2024-03-17T14:15:00Z',
-  },
-  {
-    id: '3',
-    full_name: 'Sarah Johnson',
-    email: 'sarah.j@visalaw.com.au',
-    phone: '+61 434 567 890',
-    firm_name: 'Johnson & Associates',
-    registration_number: 'MARN 1709012',
-    years_experience: 15,
-    verification_status: 'approved',
-    average_rating: 4.8,
-    total_consultations: 132,
-    total_reviews: 89,
-    languages: ['English', 'Hindi', 'Punjabi'],
-    submitted_at: '2023-11-05T09:00:00Z',
-  },
-  {
-    id: '4',
-    full_name: 'Michael Chen',
-    email: 'm.chen@chenlegal.com.au',
-    phone: '+61 445 678 901',
-    firm_name: 'Chen Legal Group',
-    registration_number: 'MARN 1712345',
-    years_experience: 10,
-    verification_status: 'approved',
-    average_rating: 4.9,
-    total_consultations: 145,
-    total_reviews: 112,
-    languages: ['English', 'Cantonese', 'Mandarin'],
-    submitted_at: '2023-10-20T16:30:00Z',
-  },
-  {
-    id: '5',
-    full_name: 'Lisa Anderson',
-    email: 'lisa@andersonvisa.com',
-    phone: '+61 456 789 012',
-    firm_name: 'Anderson Visa Consulting',
-    registration_number: 'MARN 1903456',
-    years_experience: 5,
-    verification_status: 'pending',
-    average_rating: 0,
-    total_consultations: 0,
-    total_reviews: 0,
-    languages: ['English', 'French'],
-    submitted_at: '2024-03-15T11:45:00Z',
-  },
-  {
-    id: '6',
-    full_name: 'David Kim',
-    email: 'david.kim@kimlegal.com.au',
-    phone: '+61 467 890 123',
-    firm_name: 'Kim Legal Solutions',
-    registration_number: 'MARN 1707890',
-    years_experience: 14,
-    verification_status: 'approved',
-    average_rating: 4.7,
-    total_consultations: 128,
-    total_reviews: 95,
-    languages: ['English', 'Korean'],
-    submitted_at: '2023-12-01T08:00:00Z',
-  },
-  {
-    id: '7',
-    full_name: 'Robert Martinez',
-    email: 'r.martinez@visalex.com.au',
-    phone: '+61 478 901 234',
-    firm_name: 'Martinez Visa Experts',
-    registration_number: 'MARN 1901234',
-    years_experience: 3,
-    verification_status: 'rejected',
-    average_rating: 0,
-    total_consultations: 0,
-    total_reviews: 0,
-    languages: ['English', 'Spanish'],
-    submitted_at: '2024-02-28T13:20:00Z',
-  },
-];
-
-const statusTabs = [
-  { id: 'all' as const, label: 'All Lawyers', count: mockLawyers.length },
-  { id: 'pending' as const, label: 'Pending', count: mockLawyers.filter(l => l.verification_status === 'pending').length },
-  { id: 'approved' as const, label: 'Approved', count: mockLawyers.filter(l => l.verification_status === 'approved').length },
-  { id: 'rejected' as const, label: 'Rejected', count: mockLawyers.filter(l => l.verification_status === 'rejected').length },
-];
-
-function StatusBadge({ status }: { status: Lawyer['verification_status'] }) {
+function StatusBadge({ status }: { status: LawyerApplication['verification_status'] }) {
   const styles = {
     pending: 'bg-amber-100 text-amber-700 border-amber-200',
     approved: 'bg-green-100 text-green-700 border-green-200',
@@ -187,20 +63,44 @@ function StatusBadge({ status }: { status: Lawyer['verification_status'] }) {
 }
 
 export default function AdminLawyersPage() {
+  const [lawyers, setLawyers] = useState<LawyerApplication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<LawyerStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLawyers, setSelectedLawyers] = useState<Set<string>>(new Set());
-  const [sortBy, setSortBy] = useState('submitted_at');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [processing, setProcessing] = useState<Set<string>>(new Set());
+  const { addToast } = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog();
 
-  const filteredLawyers = mockLawyers.filter((lawyer) => {
-    const matchesTab = activeTab === 'all' || lawyer.verification_status === activeTab;
+  const loadLawyers = async () => {
+    try {
+      setLoading(true);
+      const status = activeTab === 'all' ? undefined : activeTab;
+      const result = await getLawyers(status);
+      
+      if (result.error) {
+        addToast(result.error, 'error');
+      } else {
+        setLawyers(result.data || []);
+      }
+    } catch (error) {
+      addToast('Failed to load lawyers', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadLawyers();
+  }, [activeTab]);
+
+  const filteredLawyers = lawyers.filter((lawyer) => {
     const matchesSearch = 
-      lawyer.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lawyer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lawyer.firm_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      lawyer.registration_number.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
+      lawyer.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lawyer.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lawyer.firm_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lawyer.registration_number?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   const toggleSelectAll = () => {
@@ -221,8 +121,142 @@ export default function AdminLawyersPage() {
     setSelectedLawyers(newSelected);
   };
 
+  const handleApprove = async (id: string, name: string) => {
+    confirm({
+      title: 'Approve Lawyer Application',
+      message: `Are you sure you want to approve ${name}'s application? They will be able to accept consultations.`,
+      confirmText: 'Approve',
+      type: 'success',
+      onConfirm: async () => {
+        setProcessing(prev => new Set(prev).add(id));
+        const result = await updateLawyerStatus(id, 'approved');
+        setProcessing(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Lawyer approved successfully', 'success');
+          loadLawyers();
+        }
+      }
+    });
+  };
+
+  const handleReject = async (id: string, name: string) => {
+    confirm({
+      title: 'Reject Lawyer Application',
+      message: `Are you sure you want to reject ${name}'s application? This action cannot be undone.`,
+      confirmText: 'Reject',
+      type: 'danger',
+      onConfirm: async () => {
+        setProcessing(prev => new Set(prev).add(id));
+        const result = await updateLawyerStatus(id, 'rejected');
+        setProcessing(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Lawyer application rejected', 'success');
+          loadLawyers();
+        }
+      }
+    });
+  };
+
+  const handleBulkApprove = async () => {
+    const ids = Array.from(selectedLawyers);
+    confirm({
+      title: 'Bulk Approve Applications',
+      message: `Are you sure you want to approve ${ids.length} lawyer application${ids.length !== 1 ? 's' : ''}?`,
+      confirmText: 'Approve All',
+      type: 'success',
+      onConfirm: async () => {
+        setProcessing(new Set(ids));
+        const result = await bulkUpdateLawyerStatus(ids, 'approved');
+        setProcessing(new Set());
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast(`${result.updatedCount} lawyers approved successfully`, 'success');
+          setSelectedLawyers(new Set());
+          loadLawyers();
+        }
+      }
+    });
+  };
+
+  const handleBulkReject = async () => {
+    const ids = Array.from(selectedLawyers);
+    confirm({
+      title: 'Bulk Reject Applications',
+      message: `Are you sure you want to reject ${ids.length} lawyer application${ids.length !== 1 ? 's' : ''}? This action cannot be undone.`,
+      confirmText: 'Reject All',
+      type: 'danger',
+      onConfirm: async () => {
+        setProcessing(new Set(ids));
+        const result = await bulkUpdateLawyerStatus(ids, 'rejected');
+        setProcessing(new Set());
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast(`${result.updatedCount} applications rejected`, 'success');
+          setSelectedLawyers(new Set());
+          loadLawyers();
+        }
+      }
+    });
+  };
+
+  const statusTabs = [
+    { id: 'all' as const, label: 'All Lawyers', count: lawyers.length },
+    { id: 'pending' as const, label: 'Pending', count: lawyers.filter(l => l.verification_status === 'pending').length },
+    { id: 'approved' as const, label: 'Approved', count: lawyers.filter(l => l.verification_status === 'approved').length },
+    { id: 'rejected' as const, label: 'Rejected', count: lawyers.filter(l => l.verification_status === 'rejected').length },
+  ];
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <ConfirmDialogComponent />
+        <div className="p-6 lg:p-8">
+          <PageHeaderSkeleton />
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <Skeleton className="h-14 w-full" />
+            <div className="p-4 border-b border-gray-200">
+              <Skeleton className="h-10 w-full max-w-md" />
+            </div>
+            
+            <div className="divide-y divide-gray-100">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <TableRowSkeleton key={i} columns={7} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
+      <ConfirmDialogComponent />
       <div className="p-6 lg:p-8">
         {/* Header */}
         <div className="mb-8">
@@ -233,9 +267,9 @@ export default function AdminLawyersPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total Lawyers', value: mockLawyers.length, icon: Scale, color: 'bg-blue-500' },
-            { label: 'Pending Approval', value: mockLawyers.filter(l => l.verification_status === 'pending').length, icon: Clock, color: 'bg-amber-500' },
-            { label: 'Approved', value: mockLawyers.filter(l => l.verification_status === 'approved').length, icon: CheckCircle, color: 'bg-green-500' },
+            { label: 'Total Lawyers', value: lawyers.length, icon: Scale, color: 'bg-blue-500' },
+            { label: 'Pending Approval', value: lawyers.filter(l => l.verification_status === 'pending').length, icon: Clock, color: 'bg-amber-500' },
+            { label: 'Approved', value: lawyers.filter(l => l.verification_status === 'approved').length, icon: CheckCircle, color: 'bg-green-500' },
             { label: 'Avg Rating', value: '4.8', icon: Star, color: 'bg-purple-500' },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -302,11 +336,19 @@ export default function AdminLawyersPage() {
               <div className="flex items-center gap-3">
                 {selectedLawyers.size > 0 && (
                   <>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    <button 
+                      onClick={handleBulkApprove}
+                      disabled={processing.size > 0}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                    >
                       <UserCheck className="w-4 h-4" />
                       Approve ({selectedLawyers.size})
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    <button 
+                      onClick={handleBulkReject}
+                      disabled={processing.size > 0}
+                      className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                    >
                       <UserX className="w-4 h-4" />
                       Reject
                     </button>
@@ -342,97 +384,121 @@ export default function AdminLawyersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredLawyers.map((lawyer) => (
-                  <tr key={lawyer.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedLawyers.has(lawyer.id)}
-                        onChange={() => toggleSelectLawyer(lawyer.id)}
-                        className="rounded border-gray-300"
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium">
-                          {lawyer.full_name.charAt(0)}
-                        </div>
-                        <div>
-                          <Link href={`/admin/lawyers/${lawyer.id}`} className="font-medium text-gray-900 hover:text-blue-600">
-                            {lawyer.full_name}
-                          </Link>
-                          <p className="text-sm text-gray-500">{lawyer.email}</p>
-                          <p className="text-xs text-gray-400">{lawyer.phone}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Building2 className="w-4 h-4" />
-                        {lawyer.firm_name}
-                      </div>
-                      <p className="text-sm text-gray-500 mt-1">{lawyer.registration_number}</p>
-                      <p className="text-xs text-gray-400 mt-1">{lawyer.years_experience} years experience</p>
-                    </td>
-                    <td className="px-4 py-4">
-                      <StatusBadge status={lawyer.verification_status} />
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {lawyer.languages.map((lang) => (
-                          <span key={lang} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      {lawyer.verification_status === 'approved' ? (
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                            <span className="font-medium">{lawyer.average_rating}</span>
-                            <span className="text-sm text-gray-500">({lawyer.total_reviews} reviews)</span>
-                          </div>
-                          <p className="text-sm text-gray-600">{lawyer.total_consultations} consultations</p>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-gray-400">—</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Calendar className="w-4 h-4" />
-                        {new Date(lawyer.submitted_at).toLocaleDateString('en-AU', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/admin/lawyers/${lawyer.id}`}
-                          className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                        >
-                          View
-                        </Link>
-                        {lawyer.verification_status === 'pending' && (
-                          <>
-                            <button className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg">
-                              <CheckCircle className="w-5 h-5" />
-                            </button>
-                            <button className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg">
-                              <XCircle className="w-5 h-5" />
-                            </button>
-                          </>
-                        )}
-                        <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
-                          <MoreHorizontal className="w-5 h-5" />
-                        </button>
+                {filteredLawyers.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-12 text-center">
+                      <div className="text-gray-500">
+                        <Scale className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                        <p className="text-lg font-medium">No lawyers found</p>
+                        <p className="text-sm">{searchQuery ? 'Try adjusting your search' : 'No lawyers in this category'}</p>
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredLawyers.map((lawyer) => (
+                    <tr key={lawyer.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedLawyers.has(lawyer.id)}
+                          onChange={() => toggleSelectLawyer(lawyer.id)}
+                          className="rounded border-gray-300"
+                        />
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-medium">
+                            {lawyer.full_name?.charAt(0) || '?'}
+                          </div>
+                          <div>
+                            <Link href={`/admin/lawyers/${lawyer.id}`} className="font-medium text-gray-900 hover:text-blue-600">
+                              {lawyer.full_name}
+                            </Link>
+                            <p className="text-sm text-gray-500">{lawyer.email}</p>
+                            <p className="text-xs text-gray-400">{lawyer.phone}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Building2 className="w-4 h-4" />
+                          {lawyer.firm_name || 'N/A'}
+                        </div>
+                        <p className="text-sm text-gray-500 mt-1">{lawyer.registration_number}</p>
+                        <p className="text-xs text-gray-400 mt-1">{lawyer.years_experience || 0} years experience</p>
+                      </td>
+                      <td className="px-4 py-4">
+                        <StatusBadge status={lawyer.verification_status} />
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {(lawyer.languages || []).map((lang) => (
+                            <span key={lang} className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+                              {lang}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        {lawyer.verification_status === 'approved' ? (
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                              <span className="font-medium">{lawyer.average_rating || 0}</span>
+                              <span className="text-sm text-gray-500">({lawyer.total_reviews || 0} reviews)</span>
+                            </div>
+                            <p className="text-sm text-gray-600">{lawyer.total_consultations || 0} consultations</p>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-gray-400">—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          {new Date(lawyer.created_at).toLocaleDateString('en-AU', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            href={`/admin/lawyers/${lawyer.id}`}
+                            className="px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          >
+                            View
+                          </Link>
+                          
+                          {lawyer.verification_status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => handleApprove(lawyer.id, lawyer.full_name)}
+                                disabled={processing.has(lawyer.id)}
+                                className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg disabled:opacity-50"
+                                title="Approve"
+                              >
+                                <CheckCircle className="w-5 h-5" />
+                              </button>
+                              <button
+                                onClick={() => handleReject(lawyer.id, lawyer.full_name)}
+                                disabled={processing.has(lawyer.id)}
+                                className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                                title="Reject"
+                              >
+                                <XCircle className="w-5 h-5" />
+                              </button>
+                            </>
+                          )}
+                          
+                          <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">
+                            <MoreHorizontal className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -441,7 +507,8 @@ export default function AdminLawyersPage() {
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredLawyers.length}</span> of{' '}
+                Showing <span className="font-medium">{filteredLawyers.length > 0 ? 1 : 0}</span> to{' '}
+                <span className="font-medium">{filteredLawyers.length}</span> of{' '}
                 <span className="font-medium">{filteredLawyers.length}</span> results
               </p>
               <div className="flex items-center gap-2">
@@ -449,8 +516,6 @@ export default function AdminLawyersPage() {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button className="px-3 py-2 bg-blue-600 text-white rounded-lg">1</button>
-                <button className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">2</button>
-                <button className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">3</button>
                 <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50">
                   <ChevronRight className="w-4 h-4" />
                 </button>

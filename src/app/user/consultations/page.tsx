@@ -1,512 +1,294 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  Calendar,
+  Calendar, 
+  ArrowLeft, 
   Clock,
-  Video,
-  Star,
-  ChevronRight,
-  X,
-  MessageSquare,
-  RefreshCw,
-  MoreVertical,
   User,
   CheckCircle,
-  AlertCircle
+  XCircle,
+  Clock3,
+  Video,
+  MessageSquare,
+  ChevronRight
 } from 'lucide-react';
-
-type FilterTab = 'upcoming' | 'past' | 'cancelled';
+import { useAuth } from '@/components/auth/AuthProvider';
+import { toast } from 'sonner';
 
 interface Consultation {
   id: string;
-  lawyerName: string;
-  lawyerImage?: string;
-  date: string;
-  time: string;
-  duration: number;
-  status: 'upcoming' | 'completed' | 'cancelled';
-  meetingLink?: string;
-  price: number;
-  review?: {
-    rating: number;
-    comment: string;
+  visa_type: string;
+  duration_minutes: number;
+  scheduled_at: string;
+  status: 'pending_payment' | 'confirmed' | 'completed' | 'cancelled' | 'refunded';
+  amount_paid: number;
+  meeting_link: string | null;
+  client_notes: string | null;
+  lawyer: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+    email: string;
   };
 }
 
 export default function UserConsultationsPage() {
-  const [activeFilter, setActiveFilter] = useState<FilterTab>('upcoming');
-  const [reviewModalOpen, setReviewModalOpen] = useState(false);
-  const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
-  const [cancelModalOpen, setCancelModalOpen] = useState(false);
-  const [selectedConsultation, setSelectedConsultation] = useState<Consultation | null>(null);
-  const [reviewRating, setReviewRating] = useState(0);
-  const [reviewComment, setReviewComment] = useState('');
+  const { user } = useAuth();
+  const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState<'all' | 'upcoming' | 'completed' | 'cancelled'>('all');
 
-  // Mock data
-  const consultations: Consultation[] = [
-    {
-      id: '1',
-      lawyerName: 'Sarah Mitchell',
-      date: '2026-03-25',
-      time: '14:00',
-      duration: 60,
-      status: 'upcoming',
-      meetingLink: 'https://meet.visaflow.com/abc123',
-      price: 200
-    },
-    {
-      id: '2',
-      lawyerName: 'James Chen',
-      date: '2026-03-10',
-      time: '10:30',
-      duration: 30,
-      status: 'completed',
-      price: 150,
-      review: {
-        rating: 5,
-        comment: 'Very helpful and knowledgeable. Highly recommended!'
-      }
-    },
-    {
-      id: '3',
-      lawyerName: 'Emma Rodriguez',
-      date: '2026-02-28',
-      time: '15:00',
-      duration: 60,
-      status: 'cancelled',
-      price: 250
+  useEffect(() => {
+    if (user) {
+      fetchConsultations();
     }
-  ];
+  }, [user]);
 
-  const filteredConsultations = consultations.filter(c => {
-    if (activeFilter === 'upcoming') return c.status === 'upcoming';
-    if (activeFilter === 'past') return c.status === 'completed';
-    if (activeFilter === 'cancelled') return c.status === 'cancelled';
+  const fetchConsultations = async () => {
+    try {
+      const response = await fetch(`/api/user/consultations?userId=${user?.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setConsultations(data.consultations);
+      }
+    } catch (error) {
+      console.error('Error fetching consultations:', error);
+      toast.error('Failed to load consultations');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'completed':
+        return <CheckCircle className="w-5 h-5 text-blue-500" />;
+      case 'cancelled':
+      case 'refunded':
+        return <XCircle className="w-5 h-5 text-red-500" />;
+      case 'pending_payment':
+        return <Clock3 className="w-5 h-5 text-amber-500" />;
+      default:
+        return <Clock className="w-5 h-5 text-gray-400" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'confirmed':
+        return 'bg-green-100 text-green-800';
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+      case 'refunded':
+        return 'bg-red-100 text-red-800';
+      case 'pending_payment':
+        return 'bg-amber-100 text-amber-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case 'pending_payment':
+        return 'Payment Pending';
+      case 'confirmed':
+        return 'Confirmed';
+      case 'completed':
+        return 'Completed';
+      case 'cancelled':
+        return 'Cancelled';
+      case 'refunded':
+        return 'Refunded';
+      default:
+        return status;
+    }
+  };
+
+  const filteredConsultations = consultations.filter(consultation => {
+    if (filter === 'all') return true;
+    if (filter === 'upcoming') return ['confirmed', 'pending_payment'].includes(consultation.status);
+    if (filter === 'completed') return consultation.status === 'completed';
+    if (filter === 'cancelled') return ['cancelled', 'refunded'].includes(consultation.status);
     return true;
   });
 
-  const handleReviewSubmit = () => {
-    console.log('Submitting review:', { rating: reviewRating, comment: reviewComment });
-    setReviewModalOpen(false);
-    setReviewRating(0);
-    setReviewComment('');
-  };
+  const upcomingCount = consultations.filter(c => ['confirmed', 'pending_payment'].includes(c.status)).length;
+  const completedCount = consultations.filter(c => c.status === 'completed').length;
 
-  const handleReschedule = () => {
-    console.log('Rescheduling consultation:', selectedConsultation?.id);
-    setRescheduleModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    console.log('Cancelling consultation:', selectedConsultation?.id);
-    setCancelModalOpen(false);
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'upcoming':
-        return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-            <Clock className="w-3.5 h-3.5" />
-            Upcoming
-          </span>
-        );
-      case 'completed':
-        return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-            <CheckCircle className="w-3.5 h-3.5" />
-            Completed
-          </span>
-        );
-      case 'cancelled':
-        return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-            <AlertCircle className="w-3.5 h-3.5" />
-            Cancelled
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const renderStars = (rating: number, interactive = false, onRate?: (r: number) => void) => {
+  if (!user) {
     return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => interactive && onRate?.(star)}
-            className={`${interactive ? 'hover:scale-110 transition-transform cursor-pointer' : 'cursor-default'}`}
-          >
-            <Star 
-              className={`w-5 h-5 ${
-                star <= rating 
-                  ? 'fill-yellow-400 text-yellow-400' 
-                  : 'text-gray-300'
-              }`} 
-            />
-          </button>
-        ))}
-      </div>
-    );
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 text-sm text-slate-600 mb-4">
-            <Link href="/user/dashboard" className="hover:text-blue-600">Dashboard</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-slate-900">Consultations</span>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">My Consultations</h1>
-              <p className="text-slate-600 mt-1">Manage your appointments with immigration lawyers</p>
-            </div>
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+            <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">Sign In Required</h2>
+            <p className="text-slate-600 mb-6">Please sign in to view your consultations.</p>
             <Link
-              href="/lawyers"
-              className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
+              href="/auth/signin"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
             >
-              <Calendar className="w-5 h-5 mr-2" />
-              Book New Consultation
+              Sign In
             </Link>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        {/* Filter Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 mb-6">
-          <div className="flex gap-2">
-            {(['upcoming', 'past', 'cancelled'] as FilterTab[]).map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  activeFilter === filter
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-slate-600 hover:bg-gray-100'
-                }`}
-              >
-                {filter.charAt(0).toUpperCase() + filter.slice(1)}
-                <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                  activeFilter === filter ? 'bg-blue-200 text-blue-800' : 'bg-gray-200 text-gray-700'
-                }`}>
-                  {consultations.filter(c => {
-                    if (filter === 'upcoming') return c.status === 'upcoming';
-                    if (filter === 'past') return c.status === 'completed';
-                    return c.status === 'cancelled';
-                  }).length}
-                </span>
-              </button>
-            ))}
+  return (
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8">
+          <Link 
+            href="/user/dashboard"
+            className="inline-flex items-center text-slate-600 hover:text-blue-600 transition-colors mb-4"
+          >
+            <ArrowLeft className="w-5 h-5 mr-1" />
+            Back to Dashboard
+          </Link>
+          <h1 className="text-3xl font-bold text-slate-900">My Consultations</h1>
+          <p className="text-slate-600 mt-2">Manage your upcoming and past consultations.</p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <p className="text-sm text-slate-600 mb-1">Upcoming</p>
+            <p className="text-2xl font-bold text-slate-900">{upcomingCount}</p>
           </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <p className="text-sm text-slate-600 mb-1">Completed</p>
+            <p className="text-2xl font-bold text-slate-900">{completedCount}</p>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <p className="text-sm text-slate-600 mb-1">Total</p>
+            <p className="text-2xl font-bold text-slate-900">{consultations.length}</p>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex items-center gap-2 mb-6">
+          {(['all', 'upcoming', 'completed', 'cancelled'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                filter === f
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-slate-600 hover:bg-gray-50 border border-gray-200'
+              }`}
+            >
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </button>
+          ))}
         </div>
 
         {/* Consultations List */}
-        <div className="space-y-4">
-          {filteredConsultations.length > 0 ? (
-            filteredConsultations.map((consultation) => (
-              <div 
-                key={consultation.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          {isLoading ? (
+            <div className="p-12 text-center">
+              <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-slate-600">Loading consultations...</p>
+            </div>
+          ) : filteredConsultations.length === 0 ? (
+            <div className="p-12 text-center">
+              <Calendar className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">No Consultations Found</h3>
+              <p className="text-slate-600 mb-6">You haven&apos;t booked any consultations yet.</p>
+              <Link
+                href="/lawyers"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
               >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
-                      <User className="w-8 h-8 text-blue-600" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-3 mb-1">
-                        <h3 className="text-lg font-semibold text-slate-900">{consultation.lawyerName}</h3>
-                        {getStatusBadge(consultation.status)}
+                Find a Lawyer
+              </Link>
+            </div>
+          ) : (
+            <div className="divide-y divide-gray-100">
+              {filteredConsultations.map((consultation) => (
+                <div key={consultation.id} className="p-6 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                        {getStatusIcon(consultation.status)}
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-slate-600">
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{new Date(consultation.date).toLocaleDateString('en-AU', { 
-                            weekday: 'long', 
-                            day: 'numeric', 
-                            month: 'long', 
-                            year: 'numeric' 
-                          })}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          <span>{consultation.time} ({consultation.duration} min)</span>
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          Consultation with {consultation.lawyer?.full_name || 'Lawyer'}
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          {consultation.visa_type} • {consultation.duration_minutes} minutes
+                        </p>
+                        <p className="text-sm text-slate-600 mt-1">
+                          {new Date(consultation.scheduled_at).toLocaleDateString('en-AU', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(consultation.status)}`}>
+                            {getStatusLabel(consultation.status)}
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-3">
-                    {consultation.status === 'upcoming' && (
-                      <>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-slate-900">
+                        ${consultation.amount_paid.toFixed(2)}
+                      </p>
+                      
+                      {consultation.status === 'confirmed' && consultation.meeting_link && (
                         <a
-                          href={consultation.meetingLink}
+                          href={consultation.meeting_link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center px-5 py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
+                          className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mt-2"
                         >
-                          <Video className="w-4 h-4 mr-2" />
-                          Join Meeting
+                          <Video className="w-4 h-4" />
+                          Join Call
                         </a>
-                        <button
-                          onClick={() => {
-                            setSelectedConsultation(consultation);
-                            setRescheduleModalOpen(true);
-                          }}
-                          className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                          title="Reschedule"
-                        >
-                          <RefreshCw className="w-5 h-5 text-slate-600" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSelectedConsultation(consultation);
-                            setCancelModalOpen(true);
-                          }}
-                          className="p-2.5 border border-gray-200 rounded-lg hover:bg-red-50 transition-colors"
-                          title="Cancel"
-                        >
-                          <X className="w-5 h-5 text-red-600" />
-                        </button>
-                      </>
-                    )}
-
-                    {consultation.status === 'completed' && (
-                      <>
-                        {consultation.review ? (
-                          <div className="flex items-center gap-3">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              <span className="font-medium text-slate-900">{consultation.review.rating}</span>
-                            </div>
-                            <p className="text-sm text-slate-600 max-w-xs truncate">&quot;{consultation.review.comment}&quot;</p>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setSelectedConsultation(consultation);
-                              setReviewModalOpen(true);
-                            }}
-                            className="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                          >
-                            <Star className="w-4 h-4 mr-2" />
-                            Write Review
-                          </button>
-                        )}
-                      </>
-                    )}
-
-                    {consultation.status === 'cancelled' && (
+                      )}
+                      
                       <Link
-                        href={`/lawyers`}
-                        className="inline-flex items-center px-5 py-2.5 border border-gray-200 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+                        href={`/user/consultations/${consultation.id}`}
+                        className="flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900 mt-2"
                       >
-                        Book Again
+                        Details
+                        <ChevronRight className="w-4 h-4" />
                       </Link>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="w-10 h-10 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                No {activeFilter} consultations
-              </h3>
-              <p className="text-slate-600 mb-6">
-                {activeFilter === 'upcoming' 
-                  ? 'Book a consultation with an immigration lawyer to get started'
-                  : activeFilter === 'past'
-                    ? 'You haven\'t completed any consultations yet'
-                    : 'No cancelled consultations'
-                }
-              </p>
-              {activeFilter === 'upcoming' && (
-                <Link
-                  href="/lawyers"
-                  className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
-                >
-                  Find a Lawyer
-                </Link>
-              )}
+              ))}
             </div>
           )}
         </div>
+
+        {/* Help Section */}
+        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+          <h3 className="font-semibold text-blue-900 mb-2">Need to Reschedule?</h3>
+          <p className="text-sm text-blue-700 mb-4">
+            Contact support at least 24 hours before your consultation to reschedule or cancel.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 text-sm font-medium text-blue-700 hover:text-blue-800"
+          >
+            Contact Support
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
-
-      {/* Review Modal */}
-      {reviewModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-slate-900">Write a Review</h2>
-              <button 
-                onClick={() => setReviewModalOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-
-            <div className="mb-6">
-              <p className="text-sm text-slate-600 mb-2">How was your consultation with {selectedConsultation?.lawyerName}?</p>
-              <div className="flex justify-center">
-                {renderStars(reviewRating, true, setReviewRating)}
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">Your Review</label>
-              <textarea
-                value={reviewComment}
-                onChange={(e) => setReviewComment(e.target.value)}
-                placeholder="Share your experience..."
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setReviewModalOpen(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReviewSubmit}
-                disabled={reviewRating === 0}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Submit Review
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reschedule Modal */}
-      {rescheduleModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-slate-900">Reschedule Consultation</h2>
-              <button 
-                onClick={() => setRescheduleModalOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-
-            <p className="text-slate-600 mb-6">
-              Select a new date and time for your consultation with {selectedConsultation?.lawyerName}.
-            </p>
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">New Date</label>
-                <input
-                  type="date"
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">New Time</label>
-                <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option>Select a time slot...</option>
-                  <option>09:00 AM</option>
-                  <option>10:00 AM</option>
-                  <option>11:00 AM</option>
-                  <option>02:00 PM</option>
-                  <option>03:00 PM</option>
-                  <option>04:00 PM</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setRescheduleModalOpen(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleReschedule}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Confirm Reschedule
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Cancel Modal */}
-      {cancelModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-slate-900">Cancel Consultation</h2>
-              <button 
-                onClick={() => setCancelModalOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-4 mb-6 p-4 bg-red-50 rounded-xl">
-              <AlertCircle className="w-8 h-8 text-red-600" />
-              <div>
-                <p className="font-medium text-red-900">Are you sure?</p>
-                <p className="text-sm text-red-700">This action cannot be undone.</p>
-              </div>
-            </div>
-
-            <p className="text-slate-600 mb-6">
-              You are about to cancel your consultation with {selectedConsultation?.lawyerName} scheduled for {' '}
-              {selectedConsultation && new Date(selectedConsultation.date).toLocaleDateString('en-AU', { 
-                day: 'numeric', 
-                month: 'long' 
-              })} at {selectedConsultation?.time}.
-            </p>
-
-            <div className="bg-gray-50 rounded-lg p-4 mb-6">
-              <p className="text-sm text-slate-600">
-                <strong>Refund Policy:</strong> Cancellations made 24 hours before the scheduled time are eligible for a full refund.
-              </p>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setCancelModalOpen(false)}
-                className="flex-1 px-4 py-2 border border-gray-200 text-slate-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Keep Appointment
-              </button>
-              <button
-                onClick={handleCancel}
-                className="flex-1 px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Cancel Consultation
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

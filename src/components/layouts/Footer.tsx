@@ -44,9 +44,9 @@ const footerSections: FooterSection[] = [
   {
     title: 'Legal',
     links: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Cookie Policy', href: '/cookies' },
+      { label: 'Privacy Policy', href: '/legal/privacy' },
+      { label: 'Terms of Service', href: '/legal/terms' },
+      { label: 'Cookie Policy', href: '/legal/cookies' },
     ],
   },
 ];
@@ -155,10 +155,10 @@ export default function Footer(): React.ReactElement {
             {new Date().getFullYear()} VisaHelper. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="text-slate-400 hover:text-white text-sm transition-colors">
+            <Link href="/legal/privacy" className="text-slate-400 hover:text-white text-sm transition-colors">
               Privacy
             </Link>
-            <Link href="/terms" className="text-slate-400 hover:text-white text-sm transition-colors">
+            <Link href="/legal/terms" className="text-slate-400 hover:text-white text-sm transition-colors">
               Terms
             </Link>
             <Link href="/contact" className="text-slate-400 hover:text-white text-sm transition-colors">

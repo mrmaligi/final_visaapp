@@ -1,8 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useToast } from '@/components/ui/Toast';
+import { useConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Skeleton, PageHeaderSkeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import {
+  getPlatformSettings,
+  updatePlatformSettings,
+  type PlatformSettings
+} from '@/lib/actions/admin-actions';
 import {
   Save,
   CheckCircle,
@@ -25,10 +33,18 @@ import {
   Plus,
   MoreHorizontal,
   LogOut,
-  UserPlus
+  UserPlus,
+  DollarSign,
+  Wrench
 } from 'lucide-react';
 
-// Types
+const tabs = [
+  { id: 'general', label: 'General', icon: Globe },
+  { id: 'payment', label: 'Payment', icon: CreditCard },
+  { id: 'email', label: 'Email', icon: Mail },
+  { id: 'notifications', label: 'Notifications', icon: Bell },
+];
+
 interface AdminAccount {
   id: string;
   name: string;
@@ -38,71 +54,98 @@ interface AdminAccount {
   is_active: boolean;
 }
 
-// Mock data
 const mockAdminAccounts: AdminAccount[] = [
   { id: '1', name: 'Super Admin', email: 'admin@visaflow.com', role: 'super_admin', last_login: '2024-03-18T20:00:00Z', is_active: true },
   { id: '2', name: 'John Doe', email: 'john@visaflow.com', role: 'admin', last_login: '2024-03-17T14:30:00Z', is_active: true },
-  { id: '3', name: 'Jane Smith', email: 'jane@visaflow.com', role: 'admin', last_login: '2024-03-10T09:15:00Z', is_active: false },
-];
-
-const backupHistory = [
-  { id: '1', date: '2024-03-18T00:00:00Z', size: '245 MB', type: 'Automatic', status: 'completed' },
-  { id: '2', date: '2024-03-17T00:00:00Z', size: '242 MB', type: 'Automatic', status: 'completed' },
-  { id: '3', date: '2024-03-16T12:00:00Z', size: '240 MB', type: 'Manual', status: 'completed' },
-  { id: '4', date: '2024-03-15T00:00:00Z', size: '238 MB', type: 'Automatic', status: 'completed' },
-];
-
-const tabs = [
-  { id: 'general', label: 'General', icon: Globe },
-  { id: 'payment', label: 'Payment', icon: CreditCard },
-  { id: 'email', label: 'Email', icon: Mail },
-  { id: 'notifications', label: 'Notifications', icon: Bell },
-  { id: 'security', label: 'Security', icon: Shield },
-  { id: 'backups', label: 'Backups', icon: Database },
 ];
 
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState('general');
   const [isSaving, setIsSaving] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { addToast } = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog();
 
-  // Form states
-  const [generalSettings, setGeneralSettings] = useState({
-    platform_name: 'VisaFlow',
+  // Settings state
+  const [settings, setSettings] = useState<Partial<PlatformSettings>>({
+    default_visa_price: 99,
+    platform_fee_percent: 10,
+    maintenance_mode: false,
     support_email: 'support@visaflow.com',
-    timezone: 'Australia/Sydney',
-    date_format: 'DD/MM/YYYY',
+    email_templates: {
+      welcome: '',
+      lawyer_approved: '',
+      lawyer_rejected: '',
+      purchase_confirmation: '',
+    },
   });
 
-  const [paymentSettings, setPaymentSettings] = useState({
-    stripe_public_key: 'pk_test_...',
-    stripe_secret_key: 'sk_...',
-    currency: 'AUD',
-    payout_schedule: 'weekly',
-  });
+  // Load settings on mount
+  useEffect(() => {
+    loadSettings();
+  }, []);
 
-  const [emailSettings, setEmailSettings] = useState({
-    provider: 'sendgrid',
-    api_key: 'SG.****',
-    from_email: 'noreply@visaflow.com',
-    from_name: 'VisaFlow',
-  });
-
-  const [notificationSettings, setNotificationSettings] = useState({
-    new_user_alert: true,
-    new_lawyer_alert: true,
-    low_balance_alert: true,
-    daily_summary: true,
-    weekly_report: false,
-  });
+  const loadSettings = async () => {
+    try {
+      setLoading(true);
+      const result = await getPlatformSettings();
+      
+      if (result.error) {
+        // Settings may not exist yet, that's ok
+        console.log('No settings found, using defaults');
+      } else if (result.data) {
+        setSettings(result.data);
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const result = await updatePlatformSettings(settings);
+    
     setIsSaving(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+    
+    if (result.error) {
+      addToast(result.error, 'error');
+    } else {
+      addToast('Settings saved successfully', 'success');
+    }
+  };
+
+  const handleMaintenanceToggle = () => {
+    const newMode = !settings.maintenance_mode;
+    if (newMode) {
+      confirm({
+        title: 'Enable Maintenance Mode',
+        message: 'Are you sure you want to enable maintenance mode? The site will be inaccessible to regular users.',
+        confirmText: 'Enable',
+        type: 'warning',
+        onConfirm: async () => {
+          setSettings(prev => ({ ...prev, maintenance_mode: true }));
+          const result = await updatePlatformSettings({ ...settings, maintenance_mode: true });
+          if (result.error) {
+            addToast(result.error, 'error');
+          } else {
+            addToast('Maintenance mode enabled', 'warning');
+          }
+        }
+      });
+    } else {
+      setSettings(prev => ({ ...prev, maintenance_mode: false }));
+      updatePlatformSettings({ ...settings, maintenance_mode: false })
+        .then(result => {
+          if (result.error) {
+            addToast(result.error, 'error');
+          } else {
+            addToast('Maintenance mode disabled', 'success');
+          }
+        });
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -115,8 +158,29 @@ export default function AdminSettingsPage() {
     });
   };
 
+  if (loading) {
+    return (
+      <AdminLayout>
+        <ConfirmDialogComponent />
+        <div className="p-6 lg:p-8">
+          <PageHeaderSkeleton />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-1">
+              <Skeleton className="h-64 w-full" />
+            </div>
+            <div className="lg:col-span-3">
+              <Skeleton className="h-96 w-full" />
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
+      <ConfirmDialogComponent />
       <div className="p-6 lg:p-8">
         {/* Header */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-8">
@@ -124,23 +188,14 @@ export default function AdminSettingsPage() {
             <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
             <p className="text-gray-500">Configure platform settings and preferences</p>
           </div>
-          <div className="flex items-center gap-3">
-            {showSuccess && (
-              <div className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg">
-                <CheckCircle className="w-5 h-5" />
-                Settings saved
-              </div>
-            )}
-            
-            <button
-              onClick={handleSave}
-              disabled={isSaving}
-              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
-            >
-              <Save className="w-4 h-4" />
-              {isSaving ? 'Saving...' : 'Save Changes'}
-            </button>
-          </div>
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50"
+          >
+            <Save className="w-4 h-4" />
+            {isSaving ? 'Saving...' : 'Save Changes'}
+          </button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -185,49 +240,36 @@ export default function AdminSettingsPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Platform Name</label>
-                      <input
-                        type="text"
-                        value={generalSettings.platform_name}
-                        onChange={(e) => setGeneralSettings({ ...generalSettings, platform_name: e.target.value })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-
-                    <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Support Email</label>
                       <input
                         type="email"
-                        value={generalSettings.support_email}
-                        onChange={(e) => setGeneralSettings({ ...generalSettings, support_email: e.target.value })}
+                        value={settings.support_email}
+                        onChange={(e) => setSettings({ ...settings, support_email: e.target.value })}
                         className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Default Timezone</label>
-                      <select
-                        value={generalSettings.timezone}
-                        onChange={(e) => setGeneralSettings({ ...generalSettings, timezone: e.target.value })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="Australia/Sydney">Australia/Sydney</option>
-                        <option value="Australia/Melbourne">Australia/Melbourne</option>
-                        <option value="Australia/Perth">Australia/Perth</option>
-                      </select>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Default Visa Price ($)</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="number"
+                          value={settings.default_visa_price}
+                          onChange={(e) => setSettings({ ...settings, default_visa_price: Number(e.target.value) })}
+                          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Date Format</label>
-                      <select
-                        value={generalSettings.date_format}
-                        onChange={(e) => setGeneralSettings({ ...generalSettings, date_format: e.target.value })}
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Platform Fee (%)</label>
+                      <input
+                        type="number"
+                        value={settings.platform_fee_percent}
+                        onChange={(e) => setSettings({ ...settings, platform_fee_percent: Number(e.target.value) })}
                         className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                      </select>
+                      />
                     </div>
                   </div>
 
@@ -238,15 +280,28 @@ export default function AdminSettingsPage() {
                         <p className="text-sm text-gray-500">Temporarily disable the site for maintenance</p>
                       </div>
                       <button
-                        onClick={() => setMaintenanceMode(!maintenanceMode)}
+                        onClick={handleMaintenanceToggle}
                         className={cn(
                           'p-2 rounded-lg transition-colors',
-                          maintenanceMode ? 'text-amber-600 bg-amber-50' : 'text-gray-400 hover:text-gray-600'
+                          settings.maintenance_mode ? 'text-amber-600 bg-amber-50' : 'text-gray-400 hover:text-gray-600'
                         )}
                       >
-                        {maintenanceMode ? <ToggleRight className="w-8 h-8" /> : <ToggleLeft className="w-8 h-8" />}
+                        {settings.maintenance_mode ? <ToggleRight className="w-8 h-8" /> : <ToggleLeft className="w-8 h-8" />}
                       </button>
                     </div>
+                    
+                    {settings.maintenance_mode && (
+                      <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div className="flex items-start gap-3">
+                          <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+                          <div>
+                            <p className="text-sm text-amber-800">
+                              <strong>Maintenance mode is enabled.</strong> Only administrators can access the site.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -277,8 +332,7 @@ export default function AdminSettingsPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Stripe Public Key</label>
                         <input
                           type="text"
-                          value={paymentSettings.stripe_public_key}
-                          onChange={(e) => setPaymentSettings({ ...paymentSettings, stripe_public_key: e.target.value })}
+                          placeholder="pk_test_..."
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
@@ -287,19 +341,14 @@ export default function AdminSettingsPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">Stripe Secret Key</label>
                         <input
                           type="password"
-                          value={paymentSettings.stripe_secret_key}
-                          onChange={(e) => setPaymentSettings({ ...paymentSettings, stripe_secret_key: e.target.value })}
+                          placeholder="sk_..."
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Default Currency</label>
-                        <select
-                          value={paymentSettings.currency}
-                          onChange={(e) => setPaymentSettings({ ...paymentSettings, currency: e.target.value })}
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                           <option value="AUD">AUD - Australian Dollar</option>
                           <option value="USD">USD - US Dollar</option>
                           <option value="EUR">EUR - Euro</option>
@@ -308,11 +357,7 @@ export default function AdminSettingsPage() {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Payout Schedule</label>
-                        <select
-                          value={paymentSettings.payout_schedule}
-                          onChange={(e) => setPaymentSettings({ ...paymentSettings, payout_schedule: e.target.value })}
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                           <option value="daily">Daily</option>
                           <option value="weekly">Weekly</option>
                           <option value="monthly">Monthly</option>
@@ -337,11 +382,7 @@ export default function AdminSettingsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">Email Provider</label>
-                        <select
-                          value={emailSettings.provider}
-                          onChange={(e) => setEmailSettings({ ...emailSettings, provider: e.target.value })}
-                          className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
+                        <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                           <option value="sendgrid">SendGrid</option>
                           <option value="mailgun">Mailgun</option>
                           <option value="ses">Amazon SES</option>
@@ -353,8 +394,7 @@ export default function AdminSettingsPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">API Key</label>
                         <input
                           type="password"
-                          value={emailSettings.api_key}
-                          onChange={(e) => setEmailSettings({ ...emailSettings, api_key: e.target.value })}
+                          placeholder="SG.****"
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
@@ -363,8 +403,7 @@ export default function AdminSettingsPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">From Email</label>
                         <input
                           type="email"
-                          value={emailSettings.from_email}
-                          onChange={(e) => setEmailSettings({ ...emailSettings, from_email: e.target.value })}
+                          defaultValue="noreply@visaflow.com"
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
@@ -373,11 +412,31 @@ export default function AdminSettingsPage() {
                         <label className="block text-sm font-medium text-gray-700 mb-2">From Name</label>
                         <input
                           type="text"
-                          value={emailSettings.from_name}
-                          onChange={(e) => setEmailSettings({ ...emailSettings, from_name: e.target.value })}
+                          defaultValue="VisaFlow"
                           className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
+                    </div>
+
+                    <div className="pt-6 border-t border-gray-200">
+                      <h3 className="font-medium mb-4">Email Templates</h3>
+                      
+                      {[
+                        { id: 'welcome', label: 'Welcome Email' },
+                        { id: 'lawyer_approved', label: 'Lawyer Approved' },
+                        { id: 'lawyer_rejected', label: 'Lawyer Rejected' },
+                        { id: 'purchase_confirmation', label: 'Purchase Confirmation' },
+                      ].map((template) => (
+                        <div key={template.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-3">
+                          <div className="flex items-center gap-3">
+                            <Mail className="w-5 h-5 text-gray-400" />
+                            <span className="font-medium">{template.label}</span>
+                          </div>
+                          <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                            Edit Template
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -406,151 +465,11 @@ export default function AdminSettingsPage() {
                           <p className="font-medium">{item.label}</p>
                           <p className="text-sm text-gray-500">{item.description}</p>
                         </div>
-                        <button
-                          onClick={() => setNotificationSettings(prev => ({
-                            ...prev,
-                            [item.id]: !prev[item.id as keyof typeof notificationSettings]
-                          }))}
-                          className={cn(
-                            'p-2 rounded-lg transition-colors',
-                            notificationSettings[item.id as keyof typeof notificationSettings]
-                              ? 'text-blue-600 bg-blue-100'
-                              : 'text-gray-400 hover:text-gray-600'
-                          )}
-                        >
-                          {notificationSettings[item.id as keyof typeof notificationSettings] ? (
-                            <ToggleRight className="w-8 h-8" />
-                          ) : (
-                            <ToggleLeft className="w-8 h-8" />
-                          )}
+                        <button className="text-gray-400 hover:text-blue-600">
+                          <ToggleLeft className="w-8 h-8" />
                         </button>
                       </div>
                     ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Security Settings */}
-              {activeTab === 'security' && (
-                <div className="p-6 space-y-6">
-                  <div className="flex items-center justify-between pb-6 border-b border-gray-200">
-                    <div>
-                      <h2 className="text-lg font-semibold">Security</h2>
-                      <p className="text-sm text-gray-500">Admin accounts and security logs</p>
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                      <UserPlus className="w-4 h-4" />
-                      Add Admin
-                    </button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="font-medium">Admin Accounts</h3>
-                    
-                    {mockAdminAccounts.map((admin) => (
-                      <div key={admin.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">
-                            {admin.name.charAt(0)}
-                          </div>
-                          <div>
-                            <p className="font-medium">{admin.name}</p>
-                            <p className="text-sm text-gray-500">{admin.email}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className={cn(
-                                'text-xs px-2 py-0.5 rounded-full',
-                                admin.role === 'super_admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
-                              )}>
-                                {admin.role.replace('_', ' ')}
-                              </span>
-                              {admin.is_active ? (
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700">Active</span>
-                              ) : (
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">Inactive</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <p className="text-sm text-gray-500">Last login: {formatDate(admin.last_login)}</p>
-                          <button className="p-2 text-gray-400 hover:text-gray-600">
-                            <MoreHorizontal className="w-5 h-5" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Backups Settings */}
-              {activeTab === 'backups' && (
-                <div className="p-6 space-y-6">
-                  <div className="flex items-center justify-between pb-6 border-b border-gray-200">
-                    <div>
-                      <h2 className="text-lg font-semibold">Backup & Restore</h2>
-                      <p className="text-sm text-gray-500">Manage database backups and restoration</p>
-                    </div>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                      <RefreshCw className="w-4 h-4" />
-                      Create Backup
-                    </button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="font-medium">Backup History</h3>
-                    
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead className="bg-gray-50">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                          {backupHistory.map((backup) => (
-                            <tr key={backup.id} className="hover:bg-gray-50">
-                              <td className="px-4 py-4">
-                                <div className="flex items-center gap-2">
-                                  <Database className="w-4 h-4 text-gray-400" />
-                                  {formatDate(backup.date)}
-                                </div>
-                              </td>
-                              <td className="px-4 py-4">
-                                <span className={cn(
-                                  'text-xs px-2 py-1 rounded-full',
-                                  backup.type === 'Manual' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                                )}>
-                                  {backup.type}
-                                </span>
-                              </td>
-                              <td className="px-4 py-4">{backup.size}</td>
-                              <td className="px-4 py-4">
-                                <span className="flex items-center gap-1 text-green-600">
-                                  <CheckCircle className="w-4 h-4" />
-                                  Completed
-                                </span>
-                              </td>
-                              <td className="px-4 py-4">
-                                <div className="flex items-center justify-end gap-2">
-                                  <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg">
-                                    <Download className="w-4 h-4" />
-                                  </button>
-                                  <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
-                                    <Trash2 className="w-4 h-4" />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </div>
               )}

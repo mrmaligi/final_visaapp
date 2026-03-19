@@ -18,6 +18,7 @@ export { default as LawyerCardDetailed } from './lawyer/LawyerCardDetailed';
 export { default as StarRating } from './lawyer/StarRating';
 export { default as AvailabilityCalendar } from './lawyer/AvailabilityCalendar';
 export { default as ConsultationCard } from './lawyer/ConsultationCard';
+export { default as LawyerQASection } from './lawyer/LawyerQASection';
 
 // Form Components
 export { default as FormInput } from './forms/FormInput';
@@ -47,3 +48,18 @@ export { default as Button } from './ui/Button';
 export { default as Modal } from './ui/Modal';
 export { default as Alert } from './ui/Alert';
 export { default as EmptyState } from './ui/EmptyState';
+
+// News Components
+export { default as LawyerComments } from './news/LawyerComments';
+export { default as UserQuestions } from './news/UserQuestions';
+export { default as RelatedArticles } from './news/RelatedArticles';
+
+// Tracker Components
+export { default as TrackerSubmissionForm } from './tracker/TrackerSubmissionForm';
+export { default as ProcessingTimeStats } from './tracker/ProcessingTimeStats';
+export { default as ProcessingTimeTrends } from './tracker/ProcessingTimeTrends';
+
+// Social Components
+export { default as ShareButtons } from './social/ShareButtons';
+export { default as BookmarkButton } from './social/BookmarkButton';
+export { SavedItemsList } from './social/BookmarkButton';

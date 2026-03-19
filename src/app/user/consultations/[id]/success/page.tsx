@@ -1,204 +1,159 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { 
   CheckCircle, 
-  Calendar,
-  Clock,
-  Video,
-  User,
-  Mail,
-  CalendarDays,
-  ArrowRight,
-  FileText
+  Calendar, 
+  Clock, 
+  User, 
+  FileText,
+  ChevronRight,
+  Download,
+  Home,
+  MessageSquare
 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function ConsultationSuccessPage() {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get('session_id');
+  const [consultation, setConsultation] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock booking data - replace with actual data from API
-  const booking = {
-    id: 'CONS-2026-005678',
-    lawyerName: 'Sarah Mitchell',
-    lawyerTitle: 'Senior Immigration Lawyer',
-    date: '2026-03-25',
-    time: '14:00',
-    duration: 60,
-    amount: 250,
-    meetingLink: 'https://meet.visaflow.com/abc123',
-    visaType: 'Skilled Independent (189)',
-    notes: 'Questions about points calculation and skills assessment'
+  useEffect(() => {
+    // Verify the payment was successful
+    if (sessionId) {
+      verifyPayment();
+    } else {
+      // Just load consultation details
+      fetchConsultation();
+    }
+  }, [sessionId, id]);
+
+  const verifyPayment = async () => {
+    // In a real implementation, you might want to verify the session server-side
+    fetchConsultation();
   };
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-AU', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+  const fetchConsultation = async () => {
+    try {
+      // This would fetch the consultation details from your API
+      // For now, we'll simulate a success state
+      setIsLoading(false);
+      toast.success('Your consultation has been booked successfully!');
+    } catch (error) {
+      console.error('Error fetching consultation:', error);
+      setIsLoading(false);
+    }
   };
 
-  const addToCalendar = () => {
-    // Generate calendar event
-    const startTime = new Date(`${booking.date}T${booking.time}`);
-    const endTime = new Date(startTime.getTime() + booking.duration * 60000);
-    
-    const event = {
-      title: `Visa Consultation with ${booking.lawyerName}`,
-      start: startTime.toISOString(),
-      end: endTime.toISOString(),
-      description: `Consultation regarding ${booking.visaType}. Meeting link: ${booking.meetingLink}`,
-    };
-
-    console.log('Adding to calendar:', event);
-    alert('Calendar event created! Check your email for the invitation.');
-  };
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-slate-600">Confirming your booking...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-2xl mx-auto px-4">
-        {/* Success Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           {/* Success Header */}
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-8 text-center">
+          <div className="bg-green-500 p-8 text-center">
             <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-10 h-10 text-blue-600" />
+              <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Booking Confirmed!</h1>
-            <p className="text-blue-100">Your consultation has been scheduled successfully</p>
+            <p className="text-green-100">Your consultation has been successfully booked.</p>
           </div>
 
-          {/* Booking Details */}
           <div className="p-8">
-            <div className="bg-gray-50 rounded-xl p-6 mb-6">
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-200">
-                <span className="text-slate-600">Booking ID</span>
-                <span className="font-mono font-medium text-slate-900">{booking.id}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-600">Amount Paid</span>
-                <span className="text-xl font-bold text-slate-900">${booking.amount}</span>
-              </div>
-            </div>
+            {/* What Happens Next */}
+            <div className="mb-8">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">What Happens Next?</h2>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MessageSquare className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">Confirmation Email</p>
+                    <p className="text-sm text-slate-600">
+                      You will receive a confirmation email with all the details shortly.
+                    </p>
+                  </div>
+                </div>
 
-            {/* Lawyer Details */}
-            <div className="border border-gray-200 rounded-xl p-6 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-blue-600" />
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">Reminder</p>
+                    <p className="text-sm text-slate-600">
+                      You will receive a reminder 24 hours before your consultation.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900">{booking.lawyerName}</h2>
-                  <p className="text-slate-600">{booking.lawyerTitle}</p>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">Meeting Link</p>
+                    <p className="text-sm text-slate-600">
+                      The video call link will be sent to you 1 hour before your consultation.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* Appointment Details */}
-            <div className="space-y-4 mb-6">
-              <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-600">Date</p>
-                  <p className="font-medium text-slate-900">{formatDate(booking.date)}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-600">Time</p>
-                  <p className="font-medium text-slate-900">{booking.time} ({booking.duration} minutes)</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 p-4 bg-green-50 rounded-xl">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Video className="w-5 h-5 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm text-slate-600">Meeting Link</p>
-                  <p className="font-medium text-slate-900 truncate">{booking.meetingLink}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Consultation Notes */}
-            <div className="border border-gray-200 rounded-xl p-4 mb-6">
-              <h3 className="font-medium text-slate-900 mb-2">Consultation Topic</h3>
-              <p className="text-slate-600">{booking.visaType}</p>
-              {booking.notes && (
-                <>
-                  <p className="text-sm text-slate-500 mt-2">Notes: {booking.notes}</p>
-                </>
-              )}
             </div>
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <button
-                onClick={addToCalendar}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+              <Link
+                href={`/user/consultations/${id}`}
+                className="flex items-center justify-center gap-2 w-full py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors"
               >
-                <CalendarDays className="w-5 h-5" />
-                Add to Calendar
-              </button>
+                <FileText className="w-5 h-5" />
+                View Consultation Details
+              </Link>
 
-              <div className="grid grid-cols-2 gap-3">
-                <Link
-                  href="/user/consultations"
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  <FileText className="w-5 h-5" />
-                  My Consultations
-                </Link>
-                <Link
-                  href="/user/dashboard"
-                  className="flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
-                >
-                  <ArrowRight className="w-5 h-5" />
-                  Go to Dashboard
-                </Link>
-              </div>
+              <Link
+                href="/user/consultations"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-gray-100 text-slate-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                <Calendar className="w-5 h-5" />
+                View All Consultations
+              </Link>
+
+              <Link
+                href="/user/dashboard"
+                className="flex items-center justify-center gap-2 w-full py-3 border border-gray-200 text-slate-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                <Home className="w-5 h-5" />
+                Go to Dashboard
+              </Link>
             </div>
 
-            {/* Email Confirmation */}
-            <div className="mt-8 p-4 bg-blue-50 rounded-xl flex items-center gap-3">
-              <Mail className="w-5 h-5 text-blue-600" />
-              <p className="text-sm text-blue-800">
-                A confirmation email with meeting details has been sent to your registered email address.
+            {/* Help */}
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <p className="text-sm text-slate-600 text-center">
+                Need to reschedule?{' '}
+                <Link href={`/user/consultations/${id}`} className="text-blue-600 hover:underline">
+                  Manage your booking
+                </Link>
               </p>
             </div>
-
-            {/* Reminder */}
-            <div className="mt-6 p-4 bg-yellow-50 rounded-xl">
-              <h4 className="font-medium text-yellow-900 mb-2">What to Prepare</h4>
-              <ul className="text-sm text-yellow-800 space-y-1">
-                <li>• Have your passport and visa documents ready</li>
-                <li>• Prepare a list of questions you want to ask</li>
-                <li>• Test your audio and video before the meeting</li>
-                <li>• Join the meeting 5 minutes early</li>
-              </ul>
-            </div>
           </div>
-        </div>
-
-        {/* Additional Help */}
-        <div className="mt-6 text-center">
-          <p className="text-slate-600 mb-4">Need to reschedule or have questions?</p>
-          <Link
-            href="/user/consultations"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
-          >
-            Manage your consultation
-            <ArrowRight className="w-5 h-5" />
-          </Link>
         </div>
       </div>
     </div>

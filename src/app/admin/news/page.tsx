@@ -1,9 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useToast } from '@/components/ui/Toast';
+import { useConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Skeleton, TableRowSkeleton, CardSkeleton, PageHeaderSkeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import {
+  getNewsArticles,
+  publishNewsArticle,
+  deleteNewsArticle,
+  type NewsArticle
+} from '@/lib/actions/admin-actions';
 import {
   Search,
   Filter,
@@ -24,132 +33,66 @@ import {
   Newspaper
 } from 'lucide-react';
 
-// Types
-type ArticleStatus = 'all' | 'published' | 'draft' | 'scheduled';
+type ArticleStatus = 'all' | 'published' | 'draft';
 
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  status: 'published' | 'draft' | 'scheduled';
-  author: string;
-  published_at: string | null;
-  created_at: string;
-  views: number;
-  featured_image?: string;
-  category: string;
-}
-
-// Mock data
-const mockArticles: Article[] = [
-  {
-    id: '1',
-    title: 'Changes to Partner Visa Requirements in 2024',
-    slug: 'partner-visa-changes-2024',
-    excerpt: 'The Australian government has announced significant changes to partner visa requirements effective from July 2024.',
-    status: 'published',
-    author: 'Admin User',
-    published_at: '2024-03-15T10:00:00Z',
-    created_at: '2024-03-14T14:30:00Z',
-    views: 1245,
-    category: 'Policy Updates',
-  },
-  {
-    id: '2',
-    title: 'New Skilled Occupation List Released',
-    slug: 'new-skilled-occupation-list-2024',
-    excerpt: 'The updated skilled occupation list includes 15 new occupations eligible for skilled migration visas.',
-    status: 'published',
-    author: 'Admin User',
-    published_at: '2024-03-12T09:00:00Z',
-    created_at: '2024-03-11T16:00:00Z',
-    views: 892,
-    category: 'News',
-  },
-  {
-    id: '3',
-    title: 'Student Visa Work Rights: What You Need to Know',
-    slug: 'student-visa-work-rights',
-    excerpt: 'Understanding your work rights as an international student in Australia.',
-    status: 'draft',
-    author: 'Admin User',
-    published_at: null,
-    created_at: '2024-03-18T11:00:00Z',
-    views: 0,
-    category: 'Guides',
-  },
-  {
-    id: '4',
-    title: 'Visa Processing Times Update - March 2024',
-    slug: 'visa-processing-times-march-2024',
-    excerpt: 'Latest updates on visa processing times across all major visa categories.',
-    status: 'scheduled',
-    author: 'Admin User',
-    published_at: '2024-03-25T08:00:00Z',
-    created_at: '2024-03-18T13:00:00Z',
-    views: 0,
-    category: 'Updates',
-  },
-  {
-    id: '5',
-    title: 'How to Prepare for Your Visa Interview',
-    slug: 'visa-interview-preparation',
-    excerpt: 'Essential tips and strategies for successfully navigating your visa interview.',
-    status: 'published',
-    author: 'Admin User',
-    published_at: '2024-03-08T10:30:00Z',
-    created_at: '2024-03-07T15:00:00Z',
-    views: 2134,
-    category: 'Guides',
-  },
-];
-
-const statusTabs = [
-  { id: 'all' as const, label: 'All Articles', count: mockArticles.length },
-  { id: 'published' as const, label: 'Published', count: mockArticles.filter(a => a.status === 'published').length },
-  { id: 'draft' as const, label: 'Drafts', count: mockArticles.filter(a => a.status === 'draft').length },
-  { id: 'scheduled' as const, label: 'Scheduled', count: mockArticles.filter(a => a.status === 'scheduled').length },
-];
-
-function StatusBadge({ status }: { status: Article['status'] }) {
-  const styles = {
-    published: 'bg-green-100 text-green-700 border-green-200',
-    draft: 'bg-gray-100 text-gray-700 border-gray-200',
-    scheduled: 'bg-blue-100 text-blue-700 border-blue-200',
-  };
-
-  const icons = {
-    published: CheckCircle,
-    draft: XCircle,
-    scheduled: Clock,
-  };
-
-  const Icon = icons[status];
-
+function StatusBadge({ status, publishedAt }: { status: boolean; publishedAt?: string }) {
+  if (status) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-green-100 text-green-700 border-green-200">
+        <CheckCircle className="w-3.5 h-3.5" />
+        Published
+      </span>
+    );
+  }
   return (
-    <span className={cn(
-      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border',
-      styles[status]
-    )}>
-      <Icon className="w-3.5 h-3.5" />
-      {status.charAt(0).toUpperCase() + status.slice(1)}
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-700 border-gray-200">
+      <XCircle className="w-3.5 h-3.5" />
+      Draft
     </span>
   );
 }
 
 export default function AdminNewsPage() {
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<ArticleStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArticles, setSelectedArticles] = useState<Set<string>>(new Set());
+  const [processing, setProcessing] = useState<Set<string>>(new Set());
+  const { addToast } = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirmDialog();
 
-  const filteredArticles = mockArticles.filter((article) => {
-    const matchesTab = activeTab === 'all' || article.status === activeTab;
+  const loadArticles = async () => {
+    try {
+      setLoading(true);
+      let status: 'published' | 'draft' | undefined;
+      if (activeTab === 'published') status = 'published';
+      else if (activeTab === 'draft') status = 'draft';
+
+      const result = await getNewsArticles(status);
+      
+      if (result.error) {
+        addToast(result.error, 'error');
+      } else {
+        setArticles(result.data || []);
+      }
+    } catch (error) {
+      addToast('Failed to load articles', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadArticles();
+  }, [activeTab]);
+
+  const filteredArticles = articles.filter((article) => {
     const matchesSearch = 
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.category.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
+      article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.category?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   const toggleSelectAll = () => {
@@ -170,7 +113,130 @@ export default function AdminNewsPage() {
     setSelectedArticles(newSelected);
   };
 
-  const formatDate = (dateString: string | null) => {
+  const handlePublish = async (id: string, title: string) => {
+    confirm({
+      title: 'Publish Article',
+      message: `Are you sure you want to publish "${title}"? It will be visible to all users.`,
+      confirmText: 'Publish',
+      type: 'success',
+      onConfirm: async () => {
+        setProcessing(prev => new Set(prev).add(id));
+        const result = await publishNewsArticle(id, true);
+        setProcessing(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Article published successfully', 'success');
+          loadArticles();
+        }
+      }
+    });
+  };
+
+  const handleUnpublish = async (id: string, title: string) => {
+    confirm({
+      title: 'Unpublish Article',
+      message: `Are you sure you want to unpublish "${title}"? It will no longer be visible to users.`,
+      confirmText: 'Unpublish',
+      type: 'warning',
+      onConfirm: async () => {
+        setProcessing(prev => new Set(prev).add(id));
+        const result = await publishNewsArticle(id, false);
+        setProcessing(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Article unpublished successfully', 'success');
+          loadArticles();
+        }
+      }
+    });
+  };
+
+  const handleDelete = async (id: string, title: string) => {
+    confirm({
+      title: 'Delete Article',
+      message: `Are you sure you want to permanently delete "${title}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      type: 'danger',
+      onConfirm: async () => {
+        setProcessing(prev => new Set(prev).add(id));
+        const result = await deleteNewsArticle(id);
+        setProcessing(prev => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        
+        if (result.error) {
+          addToast(result.error, 'error');
+        } else {
+          addToast('Article deleted successfully', 'success');
+          loadArticles();
+        }
+      }
+    });
+  };
+
+  const handleBulkPublish = async () => {
+    const ids = Array.from(selectedArticles);
+    confirm({
+      title: 'Bulk Publish Articles',
+      message: `Are you sure you want to publish ${ids.length} article${ids.length !== 1 ? 's' : ''}?`,
+      confirmText: 'Publish All',
+      type: 'success',
+      onConfirm: async () => {
+        setProcessing(new Set(ids));
+        let successCount = 0;
+        
+        for (const id of ids) {
+          const result = await publishNewsArticle(id, true);
+          if (!result.error) successCount++;
+        }
+        
+        setProcessing(new Set());
+        addToast(`${successCount} articles published successfully`, 'success');
+        setSelectedArticles(new Set());
+        loadArticles();
+      }
+    });
+  };
+
+  const handleBulkUnpublish = async () => {
+    const ids = Array.from(selectedArticles);
+    confirm({
+      title: 'Bulk Unpublish Articles',
+      message: `Are you sure you want to unpublish ${ids.length} article${ids.length !== 1 ? 's' : ''}?`,
+      confirmText: 'Unpublish All',
+      type: 'warning',
+      onConfirm: async () => {
+        setProcessing(new Set(ids));
+        let successCount = 0;
+        
+        for (const id of ids) {
+          const result = await publishNewsArticle(id, false);
+          if (!result.error) successCount++;
+        }
+        
+        setProcessing(new Set());
+        addToast(`${successCount} articles unpublished successfully`, 'success');
+        setSelectedArticles(new Set());
+        loadArticles();
+      }
+    });
+  };
+
+  const formatDate = (dateString?: string) => {
     if (!dateString) return '—';
     return new Date(dateString).toLocaleDateString('en-AU', {
       day: 'numeric',
@@ -179,8 +245,47 @@ export default function AdminNewsPage() {
     });
   };
 
+  const statusTabs = [
+    { id: 'all' as const, label: 'All Articles', count: articles.length },
+    { id: 'published' as const, label: 'Published', count: articles.filter(a => a.is_published).length },
+    { id: 'draft' as const, label: 'Drafts', count: articles.filter(a => !a.is_published).length },
+  ];
+
+  const totalViews = 0; // Views tracking not implemented yet
+
+  if (loading) {
+    return (
+      <AdminLayout>
+        <ConfirmDialogComponent />
+        <div className="p-6 lg:p-8">
+          <PageHeaderSkeleton />
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+            <Skeleton className="h-14 w-full" />
+            <div className="p-4 border-b border-gray-200">
+              <Skeleton className="h-10 w-full max-w-md" />
+            </div>
+            
+            <div className="divide-y divide-gray-100">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <TableRowSkeleton key={i} columns={7} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
   return (
     <AdminLayout>
+      <ConfirmDialogComponent />
       <div className="p-6 lg:p-8">
         {/* Header */}
         <div className="mb-8">
@@ -191,10 +296,10 @@ export default function AdminNewsPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Total Articles', value: mockArticles.length, icon: Newspaper, color: 'bg-blue-500' },
-            { label: 'Published', value: mockArticles.filter(a => a.status === 'published').length, icon: CheckCircle, color: 'bg-green-500' },
-            { label: 'Total Views', value: mockArticles.reduce((sum, a) => sum + a.views, 0).toLocaleString(), icon: Eye, color: 'bg-purple-500' },
-            { label: 'Drafts', value: mockArticles.filter(a => a.status === 'draft').length, icon: Clock, color: 'bg-amber-500' },
+            { label: 'Total Articles', value: articles.length, icon: Newspaper, color: 'bg-blue-500' },
+            { label: 'Published', value: articles.filter(a => a.is_published).length, icon: CheckCircle, color: 'bg-green-500' },
+            { label: 'Total Views', value: totalViews.toLocaleString(), icon: Eye, color: 'bg-purple-500' },
+            { label: 'Drafts', value: articles.filter(a => !a.is_published).length, icon: Clock, color: 'bg-amber-500' },
           ].map((stat) => (
             <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
@@ -260,11 +365,19 @@ export default function AdminNewsPage() {
               <div className="flex items-center gap-3">
                 {selectedArticles.size > 0 && (
                   <>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                    <button 
+                      onClick={handleBulkPublish}
+                      disabled={processing.size > 0}
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                    >
                       <CheckCircle className="w-4 h-4" />
                       Publish
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700">
+                    <button 
+                      onClick={handleBulkUnpublish}
+                      disabled={processing.size > 0}
+                      className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50"
+                    >
                       <EyeOff className="w-4 h-4" />
                       Unpublish
                     </button>
@@ -297,115 +410,122 @@ export default function AdminNewsPage() {
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Article</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Author</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Views</th>
                   <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredArticles.map((article) => (
-                  <tr key={article.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-4">
-                      <input
-                        type="checkbox"
-                        checked={selectedArticles.has(article.id)}
-                        onChange={() => toggleSelectArticle(article.id)}
-                        className="rounded border-gray-300"
-                      />
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-start gap-3">
-                        <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
-                          <Newspaper className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <Link href={`/admin/news/${article.id}/edit`} className="font-medium text-gray-900 hover:text-blue-600">
-                            {article.title}
-                          </Link>
-                          <p className="text-sm text-gray-500 line-clamp-2 max-w-md">{article.excerpt}</p>
-                          <span className="text-xs text-gray-400">{article.category}</span>
-                        </div>
+                {filteredArticles.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-12 text-center">
+                      <div className="text-gray-500">
+                        <Newspaper className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                        <p className="text-lg font-medium">No articles found</p>
+                        <p className="text-sm">{searchQuery ? 'Try adjusting your search' : 'Get started by creating a new article'}</p>
                       </div>
                     </td>
-                    <td className="px-4 py-4">
-                      <StatusBadge status={article.status} />
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <User className="w-4 h-4" />
-                        {article.author}
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="text-sm text-gray-600">
-                        {article.status === 'scheduled' ? (
-                          <>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4 text-blue-500" />
-                              <span>Scheduled</span>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">{formatDate(article.published_at)}</p>
-                          </>
-                        ) : article.status === 'published' ? (
-                          <>
+                  </tr>
+                ) : (
+                  filteredArticles.map((article) => (
+                    <tr key={article.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-4">
+                        <input
+                          type="checkbox"
+                          checked={selectedArticles.has(article.id)}
+                          onChange={() => toggleSelectArticle(article.id)}
+                          className="rounded border-gray-300"
+                        />
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-start gap-3">
+                          <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
+                            <Newspaper className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <Link href={`/admin/news/${article.id}/edit`} className="font-medium text-gray-900 hover:text-blue-600">
+                              {article.title}
+                            </Link>
+                            <p className="text-sm text-gray-500 line-clamp-2 max-w-md">{article.excerpt}</p>
+                            <span className="text-xs text-gray-400">{article.category}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <StatusBadge status={article.is_published} publishedAt={article.published_at} />
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="text-sm text-gray-600">
+                          {article.is_published ? (
                             <div className="flex items-center gap-2">
                               <Calendar className="w-4 h-4" />
-                              <span>{formatDate(article.published_at)}</span>
+                              <span>Published {formatDate(article.published_at)}</span>
                             </div>
-                          </>
-                        ) : (
-                          <>
+                          ) : (
                             <div className="flex items-center gap-2">
                               <Clock className="w-4 h-4" />
                               <span>Created {formatDate(article.created_at)}</span>
                             </div>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-gray-400" />
-                        <span className="font-medium">{article.views.toLocaleString()}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="flex items-center justify-end gap-2">
-                        {article.status === 'published' ? (
-                          <button className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg">
-                            <EyeOff className="w-5 h-5" />
-                          </button>
-                        ) : (
-                          <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg">
-                            <CheckCircle className="w-5 h-5" />
-                          </button>
-                        )}
-                        
-                        <Link
-                          href={`/admin/news/${article.id}/edit`}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                        >
-                          <Edit3 className="w-5 h-5" />
-                        </Link>
-                        
-                        {article.status === 'published' && (
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center gap-2">
+                          <Eye className="w-4 h-4 text-gray-400" />
+                          <span className="font-medium">0</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4">
+                        <div className="flex items-center justify-end gap-2">
+                          {article.is_published ? (
+                            <button 
+                              onClick={() => handleUnpublish(article.id, article.title)}
+                              disabled={processing.has(article.id)}
+                              className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg disabled:opacity-50"
+                              title="Unpublish"
+                            >
+                              <EyeOff className="w-5 h-5" />
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={() => handlePublish(article.id, article.title)}
+                              disabled={processing.has(article.id)}
+                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg disabled:opacity-50"
+                              title="Publish"
+                            >
+                              <CheckCircle className="w-5 h-5" />
+                            </button>
+                          )}
+                          
                           <Link
-                            href={`/news/${article.slug}`}
-                            target="_blank"
-                            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                            href={`/admin/news/${article.id}/edit`}
+                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
                           >
-                            <ExternalLink className="w-5 h-5" />
+                            <Edit3 className="w-5 h-5" />
                           </Link>
-                        )}
-                        
-                        <button className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                          
+                          {article.is_published && (
+                            <Link
+                              href={`/news/${article.slug}`}
+                              target="_blank"
+                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg"
+                            >
+                              <ExternalLink className="w-5 h-5" />
+                            </Link>
+                          )}
+                          
+                          <button 
+                            onClick={() => handleDelete(article.id, article.title)}
+                            disabled={processing.has(article.id)}
+                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -414,7 +534,8 @@ export default function AdminNewsPage() {
           <div className="p-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
-                Showing <span className="font-medium">1</span> to <span className="font-medium">{filteredArticles.length}</span> of{' '}
+                Showing <span className="font-medium">{filteredArticles.length > 0 ? 1 : 0}</span> to{' '}
+                <span className="font-medium">{filteredArticles.length}</span> of{' '}
                 <span className="font-medium">{filteredArticles.length}</span> results
               </p>
               <div className="flex items-center gap-2">
@@ -422,8 +543,6 @@ export default function AdminNewsPage() {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button className="px-3 py-2 bg-blue-600 text-white rounded-lg">1</button>
-                <button className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">2</button>
-                <button className="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-50">3</button>
                 <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50">
                   <ChevronRight className="w-4 h-4" />
                 </button>
