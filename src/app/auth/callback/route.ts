@@ -53,14 +53,22 @@ export async function GET(request: NextRequest) {
         console.log('Auth callback - session created for user:', session.user.email);
         
         // Check user role to determine redirect destination
-        const { data: userData } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
-
-        const role = userData?.role || 'user';
-        console.log('Auth callback - user role:', role);
+        // New users via OAuth might not have a profile yet, so handle errors gracefully
+        let role = 'user';
+        try {
+          const { data: userData, error: profileError } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+          
+          if (!profileError && userData) {
+            role = userData.role;
+          }
+          console.log('Auth callback - user role:', role);
+        } catch (e) {
+          console.log('Auth callback - no profile found, defaulting to user role');
+        }
 
         // Redirect based on role or returnTo parameter
         let redirectPath: string;
@@ -69,6 +77,8 @@ export async function GET(request: NextRequest) {
           redirectPath = returnTo;
         } else if (role === 'lawyer') {
           redirectPath = '/lawyer/dashboard';
+        } else if (role === 'admin') {
+          redirectPath = '/admin/dashboard';
         } else {
           redirectPath = '/user/dashboard';
         }
